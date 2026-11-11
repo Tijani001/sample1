@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Investigating AI Harms, Bias &amp; Accountability</title>
+<meta name="description" content="Reporting tips for African journalists through the lens of HumAngle / Pulitzer Center's Drone Wars investigations. By Ibrahim Adeyemi, HumAngle Media.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0d1015;overflow:hidden;font-family:'Public Sans',Arial,sans-serif}
+h1,h2,h3,p,ul,ol{margin:0}
+#viewport{position:fixed;inset:0 0 56px 0;display:flex;align-items:center;justify-content:center}
+#stage{width:1920px;height:1080px;position:relative;flex:none;transform-origin:center center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#stage>section{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s}
+#stage>section.active{opacity:1;visibility:visible}
+section aside{display:none}
+[data-build-in]{transition:opacity .5s ease,transform .5s ease}
+[data-build-in].pending{opacity:0!important}
+[data-build-in^="rise"].pending{transform:translateY(40px)}
+[data-build-in^="pop"].pending{transform:scale(.85)}
+#bar{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#15191F;color:#C9CED6;font-size:14px;border-top:1px solid #2a3039}
+#bar button{background:#232933;color:#F5F1E8;border:1px solid #3A414C;border-radius:8px;height:36px;min-width:40px;padding:0 12px;font:inherit;cursor:pointer}
+#bar button:hover,#bar button:focus-visible{background:#C8641E;border-color:#C8641E;color:#15191F;outline:none}
+#count{min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+#title{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;opacity:.8}
+#progress{position:fixed;left:0;bottom:56px;height:3px;background:#C8641E;transition:width .3s}
+#notes{position:fixed;right:16px;bottom:72px;width:min(440px,calc(100% - 32px));max-height:45vh;overflow:auto;background:#F5F1E8;color:#15191F;border-radius:12px;padding:20px;font-size:16px;line-height:1.55;box-shadow:0 10px 40px rgba(0,0,0,.4);display:none}
+#notes.open{display:block}
+#notes h4{margin:0 0 8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#A44F14}
+#overview{position:fixed;inset:0 0 56px 0;background:#0d1015f2;overflow:auto;padding:24px;display:none;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;align-content:start}
+#overview.open{display:grid}
+#overview button{all:unset;cursor:pointer;color:#C9CED6;font-size:14px;display:flex;flex-direction:column;gap:6px}
+#overview .thumb{aspect-ratio:16/9;width:100%;overflow:hidden;position:relative;border-radius:6px;border:2px solid transparent}
+#overview button.current .thumb,#overview button:hover .thumb{border-color:#C8641E}
+#overview .thumb section{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;pointer-events:none}
+#overview .thumb [data-build-in]{opacity:1!important;transform:none!important}
+@media (max-width:600px){#title,.wide{display:none}}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+<section id="cover" data-transition="fade" style="background:#15191F;color:#F5F1E8;font-family:'Public Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<svg aria-label="" width="560" height="560" viewBox="0 0 560 560" style="position:absolute;left:1232px;top:260px;width:560px;height:560px;opacity:0.9"><g fill="none" stroke="#E8954F" stroke-width="2"><circle cx="280" cy="280" r="270" stroke-opacity="0.25"/><circle cx="280" cy="280" r="200" stroke-opacity="0.4" stroke-dasharray="6 10"/><circle cx="280" cy="280" r="120" stroke-opacity="0.6"/><circle cx="280" cy="280" r="40" stroke-opacity="0.9"/><line x1="280" y1="0" x2="280" y2="210" stroke-opacity="0.5"/><line x1="280" y1="350" x2="280" y2="560" stroke-opacity="0.5"/><line x1="0" y1="280" x2="210" y2="280" stroke-opacity="0.5"/><line x1="350" y1="280" x2="560" y2="280" stroke-opacity="0.5"/></g><circle cx="280" cy="280" r="7" fill="#E8954F"/><path d="M150 150 h40 M150 150 v40 M410 150 h-40 M410 150 v40 M150 410 h40 M150 410 v-40 M410 410 h-40 M410 410 v-40" stroke="#F5F1E8" stroke-opacity="0.55" stroke-width="3" fill="none"/></svg>
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E8954F">Reporting tips for African journalists</p>
+<h1 style="font-family:'Libre Baskerville', Georgia, serif;font-size:104px;font-weight:700;line-height:1.1;width:1080px">Investigating AI Harms, Bias &amp; Accountability</h1>
+<p style="font-size:30px;line-height:1.5;color:#C9CED6;width:980px">Through the lens of HumAngle / Pulitzer Center’s <i>Drone Wars</i> investigations</p>
+<div style="display:flex;flex-direction:column;gap:6px;border-left:4px solid #E8954F;padding:4px 0 4px 28px">
+<p style="font-size:30px;font-weight:700">Ibrahim Adeyemi</p>
+<p style="font-size:24px;color:#9AA1AB">Investigations Editor, HumAngle Media</p>
+</div>
+<aside>Welcome everyone. This session draws on HumAngle and the Pulitzer Center’s Drone Wars investigations to offer practical reporting tips for African journalists who want to investigate AI harms, bias and accountability.</aside>
+</section>
+<section id="roadmap" data-transition="fade" style="background:#F5F1E8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">Session roadmap</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">What we’ll cover</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;column-gap:64px;row-gap:0px">
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">01</p>
+<p style="font-size:30px;font-weight:600">Uncovering local bias &amp; harm</p>
+</div>
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">02</p>
+<p style="font-size:30px;font-weight:600">Following the tech &amp; trade across borders</p>
+</div>
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">03</p>
+<p style="font-size:30px;font-weight:600">Conducting investigations on AI harms &amp; bias</p>
+</div>
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">04</p>
+<p style="font-size:30px;font-weight:600">Three key techniques for reporting on AI systems</p>
+</div>
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">05</p>
+<p style="font-size:30px;font-weight:600">What to report next: unexplored AI beats</p>
+</div>
+<div style="display:flex;gap:32px;align-items:baseline;border-top:2px solid #15191F;padding:32px 0">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;color:#A44F14">06</p>
+<p style="font-size:30px;font-weight:600">Owning the narrative on African tech harms</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#5E636B">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#5E636B">02</p></div>
+<aside>Six parts: first how to spot and explain local bias, then how to follow the technology and money across borders, then concrete methods and techniques, and finally the beats we haven’t covered yet and a discussion on how we own this narrative together.</aside>
+</section>
+<section id="bias" data-transition="fade" style="background:#F5F1E8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">01 · Key takeaways</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">Uncovering Local Bias &amp; Harm</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Identify the tech &amp; the mechanism</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Research the AI technology in question and track how the automated system’s logic interprets human activities.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Explain context blind spots</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Demystify the technical problem behind every bias through close observation and experts who know how the model was built — e.g. why systems trained outside Africa miss local human patterns, off-grid settings and cultural context.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Probe institutional denial</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Document official silence and denial. What authorities refuse to say is part of the story.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#5E636B">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#5E636B">03</p></div>
+<aside>Three takeaways. First, identify the technology and the mechanism: research the AI system and track how its automated logic interprets human activity. Second, explain the context blind spots: demystify the technical problem behind each bias by observing closely and speaking to experts who understand how the model was made. For instance, AI drone systems trained outside Africa can fail to recognise local human patterns, off-grid environments and cultural contexts. Third, probe institutional denial: document official silence and denial as evidence in itself.</aside>
+</section>
+<section id="case" data-transition="fade" style="background:#C8641E;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#15191F">Case in point · Drone Wars</p>
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;line-height:1.3;width:1560px">“I spent months examining how the TB2 drone’s automated targeting systems <b>misinterpreted a civilian religious procession as terrorist activity.</b>”</p>
+<div style="display:flex;gap:24px;align-items:center">
+<div style="width:64px;height:4px;background:#15191F"></div>
+<p style="font-size:30px;font-weight:600">Ibrahim Adeyemi, Investigations Editor, HumAngle Media</p>
+</div>
+<aside>This is the anchor case for everything that follows. It took months of looking at how the Bayraktar TB2’s automated targeting interpreted what it saw, and how a civilian religious procession came to be read as terrorist activity. Pause here and let the audience sit with the human cost.</aside>
+</section>
+<section id="trade" data-transition="fade" style="background:#ECE6D8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:grid;grid-template-columns:600px 1fr;gap:96px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:28px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">02 · Key takeaways</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">Following the Tech &amp; Trade Across Borders</h2>
+<p style="font-size:30px;line-height:1.5;color:#3D4450">AI-assisted weapons such as the Turkish Bayraktar TB2 are spreading fast across the continent.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<p style="font-size:24px;font-weight:600;background:#15191F;color:#F5F1E8;padding:10px 22px;border-radius:999px">West Africa</p>
+<p style="font-size:24px;font-weight:600;background:#15191F;color:#F5F1E8;padding:10px 22px;border-radius:999px">East Africa</p>
+<p style="font-size:24px;font-weight:600;background:#15191F;color:#F5F1E8;padding:10px 22px;border-radius:999px">North Africa</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;gap:32px;border-top:2px solid #15191F;padding:36px 0">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Track proliferation</h3>
+<p style="font-size:28px;line-height:1.45;color:#3D4450">Investigate the influx of AI-assisted technology, such as Turkish Bayraktar TB2s, across West, East and North Africa.</p>
+</div>
+</div>
+<div style="display:flex;gap:32px;border-top:2px solid #15191F;padding:36px 0">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Question operator readiness</h3>
+<p style="font-size:28px;line-height:1.45;color:#3D4450">Report on how rapid procurement can lead local forces to over-rely on automated target recognition.</p>
+</div>
+</div>
+<div style="display:flex;gap:32px;border-top:2px solid #15191F;border-bottom:2px solid #15191F;padding:36px 0">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Humanise harm</h3>
+<p style="font-size:28px;line-height:1.45;color:#3D4450">Centre the rural, pastoralist and marginalised communities bearing the human cost of untested systems.</p>
+</div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#5E636B">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#5E636B">05</p></div>
+<aside>Follow the technology and the trade. Track how AI-assisted systems like the Bayraktar TB2 are proliferating across West, East and North Africa. Question operator readiness: rapid procurement can lead to over-reliance on automated target recognition. And always humanise the harm by centring the rural, pastoralist and marginalised communities who bear the cost of untested systems.</aside>
+</section>
+<section id="investigate" data-transition="fade" style="background:#F5F1E8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">03 · Key methodological steps</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15;width:1300px">Conducting Investigations on AI Harms &amp; Bias</h2>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:420px;width:480px;display:flex;flex-direction:column;gap:18px;background:#FCFAF5;border:1px solid #DDD5C4;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#A44F14">Step 1</p>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Find physical evidence of harm</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Combine remote AI analysis with direct field reporting to verify physical evidence on the ground.</p>
+</div>
+<svg aria-hidden="true" data-build-in="fade 2" style="position:absolute;left:620px;top:508px;width:88px;height:24px" viewBox="0 0 88 24"><line x1="0" y1="12" x2="74" y2="12" stroke="#A44F14" stroke-width="4"/><path d="M70 3 L88 12 L70 21 z" fill="#A44F14"/></svg>
+<div data-build-in="rise 3" style="position:absolute;left:720px;top:420px;width:480px;display:flex;flex-direction:column;gap:18px;background:#FCFAF5;border:1px solid #DDD5C4;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#A44F14">Step 2</p>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Accessible OSINT &amp; GEOINT</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Use free or low-cost satellite imagery, blast geometry and digital flight-tracking to verify official claims.</p>
+</div>
+<svg aria-hidden="true" data-build-in="fade 4" style="position:absolute;left:1212px;top:508px;width:88px;height:24px" viewBox="0 0 88 24"><line x1="0" y1="12" x2="74" y2="12" stroke="#A44F14" stroke-width="4"/><path d="M70 3 L88 12 L70 21 z" fill="#A44F14"/></svg>
+<div data-build-in="rise 5" style="position:absolute;left:1312px;top:420px;width:480px;display:flex;flex-direction:column;gap:18px;background:#15191F;color:#F5F1E8;border-top:6px solid #C8641E;border-radius:12px;padding:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#E8954F">Step 3</p>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Collaborative journalism</h3>
+<p style="font-size:26px;line-height:1.45;color:#C9CED6">Partner with local newsrooms, regional networks and global hubs such as the Pulitzer Center to share data and safety resources.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#5E636B">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#5E636B">06</p></div>
+<aside>The method moves from ground truth to verification to collaboration. Step one: find physical evidence of harm by pairing remote AI analysis with field reporting. Step two: use accessible OSINT and GEOINT — free or low-cost satellite imagery, blast geometry, digital flight-tracking — to test official claims. Step three: don’t do it alone. Partner with local newsrooms, regional networks and global hubs like the Pulitzer Center to share data and safety resources.</aside>
+</section>
+<section id="techniques" data-transition="fade" style="background:#15191F;color:#F5F1E8;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E8954F">04 · Practical steps</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">3 Key Techniques for Reporting on AI Systems</h2>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:360px;width:1664px;display:flex;gap:48px;border-top:2px solid #3A414C;padding-top:32px">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;color:#E8954F;width:140px">01</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Audit the training data</h3>
+<p style="font-size:28px;line-height:1.45;color:#C9CED6">Question where the algorithms were trained, and why they fail in African operational environments.</p>
+</div>
+</div>
+<div data-build-in="rise 2" style="position:absolute;left:128px;top:555px;width:1664px;display:flex;gap:48px;border-top:2px solid #3A414C;padding-top:32px">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;color:#E8954F;width:140px">02</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Follow the paper &amp; money trail</h3>
+<p style="font-size:28px;line-height:1.45;color:#C9CED6">Trace procurement contracts, bilateral trade agreements, hardware origin tags and tech-transfer deals.</p>
+</div>
+</div>
+<div data-build-in="rise 3" style="position:absolute;left:128px;top:750px;width:1664px;display:flex;gap:48px;border-top:2px solid #3A414C;padding-top:32px">
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;color:#E8954F;width:140px">03</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:40px;font-weight:700;line-height:1.2">Confront official narratives</h3>
+<p style="font-size:28px;line-height:1.45;color:#C9CED6">Match government and military press releases line by line against verified field evidence and forensic testimonies.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#9AA1AB">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#9AA1AB">07</p></div>
+<aside>Three techniques to take back to your newsroom. Audit the training data: where were these algorithms trained, and why do they fail here? Follow the paper and money trail: procurement contracts, bilateral trade agreements, hardware origin tags, tech-transfer deals. Confront official narratives: put every press release side by side with your verified field evidence and forensic testimony, line by line.</aside>
+</section>
+<section id="beats" data-transition="fade" style="background:#F5F1E8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">05 · High-impact angles</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">What to Report Next: Unexplored AI Beats</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Import &amp; export governance</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Are African nations being used as testing grounds for unregulated surveillance and military AI?</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Socio-economic AI bias</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Investigate biometric border systems, automated credit scoring and predictive policing in African cities.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FCFAF5;border:1px solid #DDD5C4;border-radius:12px;padding:40px">
+<svg aria-hidden="true" style="color:#A44F14;width:48px;height:48px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+<h3 style="font-family:'Libre Baskerville', Georgia, serif;font-size:36px;font-weight:700;line-height:1.2">Legal redress &amp; rights</h3>
+<p style="font-size:26px;line-height:1.45;color:#3D4450">Document legal precedents, victims’ rights and policy frameworks for AI accountability on the continent.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#5E636B">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#5E636B">08</p></div>
+<aside>Three beats that are still wide open. Import and export governance: is the continent becoming a testing ground for unregulated surveillance and military AI? Socio-economic bias: biometric borders, automated credit scoring and predictive policing in our cities. And legal redress: what precedents, victims’ rights and policy frameworks exist for AI accountability in Africa?</aside>
+</section>
+<section id="narrative" data-transition="fade" style="background:#15191F;color:#F5F1E8;font-family:'Public Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E8954F">06 · Discussion prompt for newsrooms</p>
+<h2 style="font-family:'Libre Baskerville', Georgia, serif;font-size:64px;font-weight:700;line-height:1.15">Owning the Narrative on African Tech Harms</h2>
+<p style="font-family:'Libre Baskerville', Georgia, serif;font-style:italic;font-size:40px;line-height:1.4;color:#C9CED6;width:1500px;padding-top:28px">How can African journalists build shared structures to hold state and private AI actors accountable?</p>
+<div data-build-in="pop 1" style="position:absolute;left:128px;top:640px;width:528px;display:flex;flex-direction:column;gap:14px;border:2px solid #E8954F;border-radius:12px;padding:32px">
+<svg aria-hidden="true" style="color:#E8954F;width:44px;height:44px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6"/></svg>
+<h3 style="font-size:32px;font-weight:700;line-height:1.25">Shared investigative desks</h3>
+</div>
+<div data-build-in="pop 2" style="position:absolute;left:696px;top:640px;width:528px;display:flex;flex-direction:column;gap:14px;border:2px solid #E8954F;border-radius:12px;padding:32px">
+<svg aria-hidden="true" style="color:#E8954F;width:44px;height:44px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+<h3 style="font-size:32px;font-weight:700;line-height:1.25">Open-source repositories</h3>
+</div>
+<div data-build-in="pop 3" style="position:absolute;left:1264px;top:640px;width:528px;display:flex;flex-direction:column;gap:14px;border:2px solid #E8954F;border-radius:12px;padding:32px">
+<svg aria-hidden="true" style="color:#E8954F;width:44px;height:44px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+<h3 style="font-size:32px;font-weight:700;line-height:1.25">Cross-border teams</h3>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between"><p style="font-size:24px;color:#9AA1AB">HumAngle × Pulitzer Center · Drone Wars</p><p style="font-size:24px;color:#9AA1AB">09</p></div>
+<aside>Open the floor. Reveal the three structures one at a time and ask the room: How can African journalists build shared investigative desks, open-source repositories and cross-border teams to hold state and private AI actors accountable? Invite newsrooms to share what already exists and what is missing.</aside>
+</section>
+<section id="close" data-transition="fade" style="background:#ECE6D8;color:#15191F;font-family:'Public Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#A44F14">Questions &amp; discussion</p>
+<h1 style="font-family:'Libre Baskerville', Georgia, serif;font-size:104px;font-weight:700;line-height:1.1">Thank you</h1>
+<p style="font-size:30px;line-height:1.5;color:#3D4450;width:1200px">Hold AI systems — and those who deploy them — to account, with evidence from the ground up.</p>
+<div style="display:flex;flex-direction:column;gap:6px;border-left:4px solid #C8641E;padding:4px 0 4px 28px">
+<p style="font-size:30px;font-weight:700">Ibrahim Adeyemi</p>
+<p style="font-size:24px;color:#5E636B">Investigations Editor, HumAngle Media</p>
+</div>
+<aside>Thank the audience, invite questions, and point them to HumAngle and the Pulitzer Center’s Drone Wars reporting for the full investigations.</aside>
+</section>
+</div></div>
+<div id="progress"></div>
+<div id="notes" role="region" aria-label="Speaker notes"><h4>Speaker notes</h4><div id="notesText"></div></div>
+<div id="overview" role="dialog" aria-label="All slides"></div>
+<nav id="bar" aria-label="Slide controls">
+<button id="prev" aria-label="Previous">&#8592;</button>
+<span id="count" aria-live="polite"></span>
+<button id="next" aria-label="Next">&#8594;</button>
+<span id="title">Investigating AI Harms, Bias &amp; Accountability</span>
+<button id="gridBtn" title="All slides (O)">Slides</button>
+<button id="notesBtn" title="Speaker notes (N)" class="wide">Notes</button>
+<button id="fsBtn" title="Full screen (F)">Present</button>
+</nav>
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(stage.children);
+  var cur=0, step=0;
+  function builds(s){return [].slice.call(s.querySelectorAll('[data-build-in]')).sort(function(a,b){
+    var n=function(e){var m=e.getAttribute('data-build-in').match(/\d+/);return m?+m[0]:0};return n(a)-n(b);});}
+  function fit(){var vp=document.getElementById('viewport');var s=Math.min(vp.clientWidth/1920,vp.clientHeight/1080);stage.style.transform='scale('+s+')';}
+  function render(){
+    slides.forEach(function(s,i){s.classList.toggle('active',i===cur);s.setAttribute('aria-hidden',i!==cur);});
+    builds(slides[cur]).forEach(function(e,i){e.classList.toggle('pending',i>=step);});
+    document.getElementById('count').textContent=(cur+1)+' / '+slides.length;
+    document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+    var a=slides[cur].querySelector('aside');document.getElementById('notesText').textContent=a?a.textContent:'';
+    if(location.hash!=='#slide-'+(cur+1))history.replaceState(null,'','#slide-'+(cur+1));
+    [].forEach.call(document.querySelectorAll('#overview button'),function(b,i){b.classList.toggle('current',i===cur);});
+  }
+  function go(i,showAll){if(i<0||i>=slides.length)return;cur=i;step=showAll?builds(slides[i]).length:0;render();}
+  function next(){if(step<builds(slides[cur]).length){step++;render();}else go(cur+1);}
+  function prev(){if(step>0){step--;render();}else go(cur-1,true);}
+  // overview
+  var ov=document.getElementById('overview');
+  slides.forEach(function(s,i){var b=document.createElement('button');var t=document.createElement('div');t.className='thumb';
+    var c=s.cloneNode(true);c.removeAttribute('id');c.className='';c.style.opacity=1;c.style.visibility='visible';t.appendChild(c);
+    b.appendChild(t);var l=document.createElement('span');var h=s.querySelector('h1,h2');l.textContent=(i+1)+'. '+(h?h.textContent:'');b.appendChild(l);
+    b.onclick=function(){go(i,false);ov.classList.remove('open');};ov.appendChild(b);});
+  function sizeThumbs(){[].forEach.call(ov.querySelectorAll('.thumb'),function(t){t.firstChild.style.transform='scale('+(t.clientWidth/1920)+')';});}
+  function toggleOv(){ov.classList.toggle('open');sizeThumbs();}
+  function toggleNotes(){document.getElementById('notes').classList.toggle('open');}
+  function fs(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen();}}
+  document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+  document.getElementById('gridBtn').onclick=toggleOv;document.getElementById('notesBtn').onclick=toggleNotes;document.getElementById('fsBtn').onclick=fs;
+  document.getElementById('viewport').addEventListener('click',function(e){if(e.clientX<window.innerWidth/3)prev();else next();});
+  document.addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    var k=e.key;
+    if(k==='ArrowRight'||k===' '||k==='PageDown'){e.preventDefault();next();}
+    else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();prev();}
+    else if(k==='Home')go(0);else if(k==='End')go(slides.length-1,true);
+    else if(k==='n'||k==='N')toggleNotes();else if(k==='f'||k==='F')fs();
+    else if(k==='o'||k==='O')toggleOv();else if(k==='Escape')ov.classList.remove('open');
+  });
+  var tx=null;document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){dx<0?next():prev();}tx=null;});
+  window.addEventListener('resize',function(){fit();sizeThumbs();});
+  var m=location.hash.match(/slide-(\d+)/);cur=m?Math.min(Math.max(+m[1]-1,0),slides.length-1):0;
+  fit();render();
+})();
+</script>
+</body>
+</html>
