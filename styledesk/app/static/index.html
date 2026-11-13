@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Style Desk</title>
+  <meta name="description" content="Train it on your writing. Check any text against your voice and rewrite what doesn't sound like you.">
+  <meta name="theme-color" content="#1f4e79">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<!-- Sign in -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-card">
+    <div class="brand">Style Desk</div>
+    <p class="muted">Teach it how you write. Then check anything (an AI draft, a colleague's edit) against your voice, and rewrite what doesn't sound like you.</p>
+    <div class="seg">
+      <button data-mode="login" class="active">Sign in</button>
+      <button data-mode="register">Create account</button>
+      <button data-mode="join">Join a team</button>
+    </div>
+    <form id="auth-form">
+      <label data-show="join">Invite code<input name="invite_code" autocomplete="off" placeholder="From your team owner"></label>
+      <label data-show="join register">Your name<input name="name" autocomplete="name"></label>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button class="primary" type="submit" id="auth-submit">Sign in</button>
+    </form>
+  </div>
+</section>
+
+<header class="top" hidden>
+  <div class="brand">Style Desk</div>
+  <div class="voice-pick">
+    <label for="voice-select" class="sr">Voice</label>
+    <select id="voice-select" title="Which voice to check against"></select>
+    <button id="btn-new-voice" title="Create a new voice">+ New voice</button>
+  </div>
+  <nav>
+    <button data-tab="check" class="active">Check &amp; rewrite</button>
+    <button data-tab="train">Train voice</button>
+    <button data-tab="account">Account</button>
+  </nav>
+</header>
+
+<main hidden>
+  <!-- Check & rewrite -->
+  <section id="tab-check" class="tab active">
+    <div class="split">
+      <div class="col">
+        <label>Title <span class="opt">(optional)</span><input id="c-title" placeholder="Title or headline"></label>
+        <label>Text to check<textarea id="c-text" rows="16" placeholder="Paste anything: an AI draft, an email, a post. It's compared with how you write."></textarea></label>
+        <div class="row">
+          <label class="check" id="ai-toggle"><input type="checkbox" id="c-ai"> Deep check with AI (tone &amp; voice)</label>
+          <span class="grow"></span>
+          <button id="btn-check" class="primary">Check</button>
+        </div>
+        <p class="muted" id="ai-note" hidden>AI features are off because the server has no Anthropic API key. Rule-based checks still work.</p>
+      </div>
+      <div class="col">
+        <div id="report" class="report empty">
+          <b>How it works</b>
+          <ol>
+            <li>Train a voice on a few pieces of your own writing (<b>Train voice</b>).</li>
+            <li>Paste any text here and press <b>Check</b>.</li>
+            <li>See what doesn't sound like you, and rewrite it in your voice.</li>
+          </ol>
+        </div>
+        <div id="rewrite" class="report" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Train -->
+  <section id="tab-train" class="tab">
+    <div id="train-empty" class="report empty" hidden>
+      <b>Create your first voice.</b> A voice is a writing style learned from your samples, for example
+      “My blog”, “Work emails” or “Our newsroom”. You can have as many as you like.
+      <div class="row" style="margin-top:12px"><button class="primary" data-act="new-voice">+ New voice</button></div>
+    </div>
+    <div class="split" id="train-body">
+      <div class="col">
+        <div class="row">
+          <input id="v-name" class="title-input" aria-label="Voice name">
+          <button id="btn-save-voice">Save</button>
+        </div>
+        <input id="v-desc" placeholder="What is this voice for? (optional)" aria-label="Voice description">
+
+        <h2>1. Add your writing</h2>
+        <p class="muted">Add things you wrote yourself: posts, articles, emails, essays. Around 1,000 words gives a useful result, and more is better. Each file is one sample.</p>
+        <div class="row">
+          <input type="file" id="s-files" multiple accept=".txt,.md">
+          <button id="btn-upload">Upload</button>
+        </div>
+        <details>
+          <summary>Or paste writing</summary>
+          <textarea id="s-body" rows="8" placeholder="Paste one or more pieces. Put a line with just --- between separate pieces."></textarea>
+          <button id="btn-add-sample">Add</button>
+        </details>
+        <ul id="samples" class="list compact"></ul>
+
+        <h2>2. Your rules <span class="opt">(optional)</span></h2>
+        <p class="muted">Things you know about your own style. They always win over what's learned.</p>
+        <div class="rule-form">
+          <select id="r-kind">
+            <option value="prefer">Prefer a word: replace one word with another</option>
+            <option value="ban">Never use: flag a word or phrase</option>
+            <option value="note">Note: describe a habit for the AI</option>
+          </select>
+          <input id="r-term" placeholder="Word or phrase (e.g. utilize)">
+          <input id="r-repl" placeholder="Use instead (e.g. use)">
+          <input id="r-reason" placeholder="Why (optional)">
+          <button id="btn-add-rule">Add rule</button>
+        </div>
+        <ul id="rules" class="list compact"></ul>
+        <p class="danger-zone"><button id="btn-delete-voice" class="link danger">Delete this voice</button></p>
+      </div>
+      <div class="col">
+        <h2>What it has learned</h2>
+        <div id="stats"></div>
+        <div class="row">
+          <h2 class="grow">Voice profile</h2>
+          <button id="btn-learn" class="primary">Learn my voice with AI</button>
+        </div>
+        <div id="profile"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Account -->
+  <section id="tab-account" class="tab">
+    <div class="split">
+      <div class="col">
+        <h2>You</h2>
+        <div class="stat"><div class="v" id="acct-name"></div><div class="k" id="acct-email"></div></div>
+        <h2>Workspace</h2>
+        <p class="muted" id="ws-explain">Voices live in a workspace. Invite others to share them, for example a newsroom or a team that writes in one house style.</p>
+        <div class="row" id="ws-rename"><input id="ws-name" aria-label="Workspace name"><button id="btn-ws-save">Rename</button></div>
+        <div id="invite-box">
+          <p class="muted">Invite code. People use it under <b>Join a team</b>:</p>
+          <div class="row"><code id="invite-code" class="code"></code><button id="btn-rotate">New code</button></div>
+        </div>
+        <ul id="members" class="list compact"></ul>
+        <p><button id="btn-logout">Sign out</button></p>
+      </div>
+      <div class="col">
+        <h2>Use it everywhere</h2>
+        <div class="stat"><div class="k">This app</div><div>Works in any browser. In Chrome or Edge, use “Install app” in the address bar to add it to your computer. On a phone, choose “Add to Home Screen”.</div></div>
+        <div class="stat"><div class="k">Chrome extension</div><div>Checks what you write in any text box on the web, and rewrites in your voice. Load <code>clients/chrome-extension</code> from <code>chrome://extensions</code> (turn on Developer mode, then Load unpacked) and sign in with this server address: <code id="server-url"></code></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="new-voice-dialog">
+  <form method="dialog" id="new-voice-form">
+    <h2>New voice</h2>
+    <label>Name<input name="name" required maxlength="80" placeholder="e.g. My blog, Work emails, Our newsroom"></label>
+    <label>What is it for? <span class="opt">(optional)</span><input name="description" maxlength="300"></label>
+    <div class="row"><span class="grow"></span><button value="cancel" formnovalidate>Cancel</button><button class="primary" value="ok">Create</button></div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
