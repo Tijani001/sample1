@@ -76,8 +76,27 @@ The owner can manage everything.
 ## Tests
 
 ```bash
-cd styledesk && python -m pytest -q
+cd styledesk && pip install pytest httpx && python -m pytest -q
 ```
+
+To try the AI features for real on the sample voice (a few cents of API use):
+
+```bash
+export ANTHROPIC_API_KEY=...
+python scripts/try_ai.py                                   # personal-blog voice vs samples/ai-draft.txt
+python scripts/try_ai.py samples/voices/news-reporting my-draft.txt
+```
+
+This prints the learned voice profile, the review of the draft, a rewrite of the flagged parts and a whole-text rewrite. Each comes with a rule-based score, so you can see whether it moved toward the voice.
+
+## Deploy
+
+The `Dockerfile` runs on any host that runs containers (Render, Railway, Fly.io, a VPS):
+
+- Set `ANTHROPIC_API_KEY` as a secret on the host.
+- Mount a persistent volume at `/data`, where the SQLite database lives. Without one, accounts and voices are lost on every redeploy.
+- Serve it over HTTPS, which the Chrome extension and the installable app need.
+- The app listens on `$PORT` (default 8000).
 
 ## Layout
 
