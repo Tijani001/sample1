@@ -19,6 +19,10 @@ from .auth import (current_user, hash_password, issue_token, new_invite_code, ow
 STATIC = os.path.join(os.path.dirname(__file__), "static")
 MAX_TEXT_CHARS = 100_000
 MAX_SPANS = 60
+# Protects the AI key on a public server: if set, creating a new account needs this code.
+SIGNUP_CODE = os.environ.get("STYLEDESK_SIGNUP_CODE", "").strip()
+# AI calls (deep check, learn voice, rewrite) allowed per user per UTC day. 0 = unlimited.
+AI_DAILY_LIMIT = int(os.environ.get("STYLEDESK_AI_DAILY_LIMIT", "40"))
 
 app = FastAPI(title="Style Desk")
 db.init()
@@ -30,10 +34,15 @@ class RegisterIn(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=200)
     client: str = "web"
+    signup_code: str = ""
 
 
-class JoinIn(RegisterIn):
+class JoinIn(BaseModel):
     invite_code: str = Field(min_length=4)
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=200)
+    client: str = "web"
 
 
 class LoginIn(BaseModel):
@@ -158,6 +167,28 @@ def _to_sentence(text: str, start: int, end: int) -> tuple[int, int]:
     return s, max(e, end)
 
 
+def _today() -> str:
+    return db.now()[:10]
+
+
+def _ai_used(user) -> int:
+    r = db.one("SELECT count FROM ai_usage WHERE user_id = ? AND day = ?", (user["id"], _today()))
+    return r["count"] if r else 0
+
+
+def _charge_ai(user):
+    """Count one AI call against the user's daily allowance, or refuse."""
+    if AI_DAILY_LIMIT and _ai_used(user) >= AI_DAILY_LIMIT:
+        raise HTTPException(429, f"You've used today's {AI_DAILY_LIMIT} AI checks and rewrites. "
+                                 "Rule-based checks still work; AI resets at midnight UTC.")
+    db.execute("INSERT INTO ai_usage (user_id, day, count) VALUES (?, ?, 1) "
+               "ON CONFLICT(user_id, day) DO UPDATE SET count = count + 1", (user["id"], _today()))
+
+
+def _refund_ai(user):
+    db.execute("UPDATE ai_usage SET count = MAX(0, count - 1) WHERE user_id = ? AND day = ?", (user["id"], _today()))
+
+
 def _merge(spans: list[dict]) -> list[dict]:
     out: list[dict] = []
     for sp in sorted(spans, key=lambda s: (s["start"], -s["end"])):
@@ -185,7 +216,9 @@ def _email_free(email: str):
 
 @app.post("/api/auth/register")
 def register(r: RegisterIn):
-    """Anyone can sign up; they get their own workspace."""
+    """Anyone can sign up (with the signup code, if the server has one); they get their own workspace."""
+    if SIGNUP_CODE and r.signup_code.strip() != SIGNUP_CODE:
+        raise HTTPException(403, "This Style Desk is invite-only. Enter the signup code you were given.")
     _email_free(r.email)
     first = r.name.strip().split()[0]
     wid = db.execute("INSERT INTO workspaces (name, invite_code, created_at) VALUES (?, ?, ?)",
@@ -227,6 +260,8 @@ def logout(user=Depends(current_user)):
 def me(user=Depends(current_user)):
     out = {k: user[k] for k in ("id", "name", "email", "role", "workspace_name")}
     out["ai_enabled"] = ai.available()
+    out["ai_daily_limit"] = AI_DAILY_LIMIT
+    out["ai_used_today"] = _ai_used(user)
     out["ai_provider"] = ai.provider()
     out["ai_model"] = ai.model_name()
     if user["role"] == "owner":
@@ -376,9 +411,11 @@ def learn_profile(vid: int, user=Depends(current_user)):
     if not samples:
         raise HTTPException(400, "Add some writing samples first.")
     stats = _relearn(vid)
+    _charge_ai(user)
     try:
         profile, used = ai.distill_profile(samples, stats, _rules(vid))
     except ai.AIUnavailable as e:
+        _refund_ai(user)
         raise HTTPException(503, str(e))
     db.execute("UPDATE voices SET profile = ?, profile_updated_at = ? WHERE id = ?",
                (profile.model_dump_json(), db.now(), vid))
@@ -408,6 +445,8 @@ def check_text(payload: CheckIn, user=Depends(current_user)):
                   "word_count": (stats or {}).get("word_count", 0)},
         "fingerprint": fp, "differences": differences, "ai": None, "ai_error": None,
     }
+    if payload.use_ai and ai.available():
+        _charge_ai(user)
     if payload.use_ai:
         try:
             r = ai.review(v["name"], text, v["profile"], stats, rules, _samples(v["id"]))
@@ -421,6 +460,8 @@ def check_text(payload: CheckIn, user=Depends(current_user)):
                                "start": start, "end": end, "excerpt": it.quote, "message": it.explanation,
                                "replacement": None})
         except ai.AIUnavailable as e:
+            if ai.available():
+                _refund_ai(user)
             report["ai_error"] = str(e)
     issues.sort(key=lambda x: (x["start"] is None, x["start"] or 0))
     for i, it in enumerate(issues):
@@ -442,6 +483,11 @@ def rewrite(payload: RewriteIn, user=Depends(current_user)):
     args = (v["name"], v["profile"], v["stats"], _rules(v["id"]), _samples(v["id"]))
     if not args[4] and not args[1]:
         raise HTTPException(400, "Train this voice with some writing samples first.")
+    if not ai.available():
+        raise HTTPException(503, "AI features need an API key on the server (OPENAI_API_KEY or ANTHROPIC_API_KEY).")
+    if payload.mode == "spans" and not any(s.end <= len(text) and s.start < s.end for s in payload.spans):
+        raise HTTPException(400, "Nothing to rewrite.")
+    _charge_ai(user)
     try:
         if payload.mode == "all":
             new = ai.rewrite_all(v["name"], text, *args[1:], add_prompts=payload.add_prompts)
@@ -457,6 +503,7 @@ def rewrite(payload: RewriteIn, user=Depends(current_user)):
             sp["id"] = i + 1
         rewrites = ai.rewrite_spans(v["name"], text, spans, *args[1:])
     except ai.AIUnavailable as e:
+        _refund_ai(user)
         raise HTTPException(503, str(e))
     out, pos, changes = [], 0, []
     for sp in spans:
@@ -487,6 +534,18 @@ def manifest():
 @app.get("/sw.js")
 def service_worker():
     return FileResponse(os.path.join(STATIC, "sw.js"), media_type="text/javascript")
+
+
+@app.get("/api/config")
+def public_config():
+    """What the sign-in screen needs to know before anyone is signed in."""
+    return {"signup_code_required": bool(SIGNUP_CODE)}
+
+
+@app.get("/healthz")
+def healthz():
+    db.one("SELECT 1 AS ok")
+    return {"ok": True}
 
 
 @app.get("/")

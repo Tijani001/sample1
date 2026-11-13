@@ -95,12 +95,34 @@ This prints the learned voice profile, the review of the draft, a rewrite of the
 
 ## Deploy
 
-The `Dockerfile` runs on any host that runs containers (Render, Railway, Fly.io, a VPS):
+### Render (recommended)
 
-- Set `OPENAI_API_KEY` (or `ANTHROPIC_API_KEY`) as a secret on the host.
-- Mount a persistent volume at `/data`, where the SQLite database lives. Without one, accounts and voices are lost on every redeploy.
-- Serve it over HTTPS, which the Chrome extension and the installable app need.
-- The app listens on `$PORT` (default 8000).
+`render.yaml` at the repository root is a Render Blueprint. It defines the web service, a 1 GB persistent disk for the database, a health check and the settings.
+
+1. In Render, choose **New > Blueprint** and connect this GitHub repository. Pick the branch that contains `render.yaml`.
+2. Render asks for two values:
+   - `OPENAI_API_KEY`: your OpenAI key.
+   - `STYLEDESK_SIGNUP_CODE`: a code people need to create an account. Leave it empty to let anyone sign up, but they'll be using your API key.
+3. Click **Apply**. The first build takes a few minutes. The app will be at `https://styledesk-XXXX.onrender.com`.
+
+It runs on the Starter plan, because persistent disks need a paid instance. Every push to the branch redeploys automatically.
+
+### Other hosts
+
+The `Dockerfile` runs anywhere that runs containers:
+- Set `OPENAI_API_KEY` (or `ANTHROPIC_API_KEY`) as a secret.
+- Mount a persistent volume at `/data`.
+- Serve over HTTPS.
+- The app listens on `$PORT`.
+
+### Protecting your API key on a public server
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `STYLEDESK_SIGNUP_CODE` | unset | If set, new accounts need this code. Team invites still work without it. |
+| `STYLEDESK_AI_DAILY_LIMIT` | `40` | AI checks, voice learning and rewrites allowed per user per UTC day. `0` means no limit. A failed AI call doesn't count. |
+
+Set a monthly spending limit in your OpenAI account as well.
 
 ## Layout
 

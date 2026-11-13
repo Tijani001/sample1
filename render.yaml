@@ -1,0 +1,23 @@
+# Render Blueprint for Style Desk. In Render: New > Blueprint, pick this repository and branch.
+# Render asks for the values marked `sync: false` (they are never stored in this repo).
+services:
+  - type: web
+    name: styledesk
+    runtime: docker
+    plan: starter                 # a paid plan is required for the persistent disk below
+    dockerfilePath: ./styledesk/Dockerfile
+    dockerContext: ./styledesk
+    healthCheckPath: /healthz
+    disk:
+      name: styledesk-data
+      mountPath: /data            # the SQLite database lives here (STYLEDESK_DB=/data/styledesk.db)
+      sizeGB: 1
+    envVars:
+      - key: OPENAI_API_KEY       # your OpenAI key; entered in Render, never committed
+        sync: false
+      - key: STYLEDESK_SIGNUP_CODE  # people need this code to create an account; leave empty to allow anyone
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-6-astra
+      - key: STYLEDESK_AI_DAILY_LIMIT  # AI checks + rewrites per user per day
+        value: "40"

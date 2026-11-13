@@ -142,6 +142,7 @@ def test_rewrite_spans_merges_overlaps_and_splices(client, monkeypatch):
         return {sp["id"]: f"<{sp['id']}>" for sp in spans}
 
     monkeypatch.setattr(ai, "rewrite_spans", fake)
+    monkeypatch.setattr(ai, "available", lambda: True)
     text = "Alpha beta gamma. Delta epsilon."
     r = client.post("/api/rewrite", json={"voice_id": vid, "text": text, "spans": [
         {"start": 0, "end": 10, "reason": "a"}, {"start": 6, "end": 16, "reason": "b"}, {"start": 18, "end": 23}]}).json()
@@ -167,6 +168,7 @@ def test_rewrite_all_and_errors(client, monkeypatch):
     from app import ai
     vid = _voice(client)
     assert client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi there.", "mode": "all"}).status_code == 503
+    monkeypatch.setattr(ai, "available", lambda: True)
     monkeypatch.setattr(ai, "rewrite_all", lambda name, text, *a, **k: "Hey.")
     assert client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi there.", "mode": "all"}).json()["text"] == "Hey."
     empty = _voice(client, "Empty", samples=None)
@@ -226,3 +228,41 @@ def test_ai_provider_selection(monkeypatch):
     assert ai.provider() == "openai"
     monkeypatch.delenv("OPENAI_API_KEY")
     assert ai.provider() is None  # explicitly chosen provider without its key
+
+
+def test_signup_code_protects_registration(app, monkeypatch):
+    from app import main
+    monkeypatch.setattr(main, "SIGNUP_CODE", "letmein")
+    c = TestClient(app)
+    assert c.get("/api/config").json() == {"signup_code_required": True}
+    body = {"name": "Eve", "email": "eve@example.com", "password": "password123"}
+    assert c.post("/api/auth/register", json=body).status_code == 403
+    assert c.post("/api/auth/register", json={**body, "signup_code": "wrong"}).status_code == 403
+    assert c.post("/api/auth/register", json={**body, "signup_code": "letmein"}).status_code == 200
+
+
+def test_daily_ai_limit(client, monkeypatch):
+    from app import ai, main
+    vid = _voice(client)
+    monkeypatch.setattr(main, "AI_DAILY_LIMIT", 2)
+    monkeypatch.setattr(ai, "available", lambda: True)
+    monkeypatch.setattr(ai, "rewrite_all", lambda *a, **k: "Hey.")
+    calls = {"n": 0}
+
+    def flaky(*a, **k):
+        calls["n"] += 1
+        raise ai.AIUnavailable("down")
+    monkeypatch.setattr(ai, "review", flaky)
+    # A failed AI call is refunded, so it doesn't use up the allowance.
+    assert client.post("/api/check", json={"voice_id": vid, "text": "Hello there.", "use_ai": True}).json()["ai_error"] == "down"
+    assert client.get("/api/me").json()["ai_used_today"] == 0
+    for _ in range(2):
+        assert client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi.", "mode": "all"}).status_code == 200
+    r = client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi.", "mode": "all"})
+    assert r.status_code == 429 and "today" in r.json()["detail"]
+    assert client.post("/api/check", json={"voice_id": vid, "text": "Hello there.", "use_ai": True}).status_code == 429
+    assert client.post("/api/check", json={"voice_id": vid, "text": "Hello there."}).status_code == 200  # rules still work
+
+
+def test_healthz(app):
+    assert TestClient(app).get("/healthz").json() == {"ok": True}

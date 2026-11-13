@@ -52,10 +52,13 @@ document.querySelectorAll("nav button").forEach((b) => b.addEventListener("click
 
 // ---------- auth ----------
 let authMode = "login";
+let SIGNUP_CODE_REQUIRED = false;
+fetch("/api/config").then((r) => r.json()).then((c) => { SIGNUP_CODE_REQUIRED = !!c.signup_code_required; setAuthMode(authMode); }).catch(() => {});
 function setAuthMode(m) {
   authMode = m;
   document.querySelectorAll(".seg button").forEach((b) => b.classList.toggle("active", b.dataset.mode === m));
   document.querySelectorAll("#auth-form [data-show]").forEach((el) => (el.hidden = !el.dataset.show.split(" ").includes(m)));
+  if (!SIGNUP_CODE_REQUIRED) $("#signup-code-field").hidden = true;
   $("#auth-submit").textContent = { login: "Sign in", join: "Join team", register: "Create account" }[m];
   $("#auth-form [name=password]").autocomplete = m === "login" ? "current-password" : "new-password";
 }
@@ -67,6 +70,7 @@ $("#auth-form").addEventListener("submit", (e) => {
     const body = { email: f.email, password: f.password, client: "web" };
     if (authMode !== "login") body.name = f.name;
     if (authMode === "join") body.invite_code = f.invite_code;
+    if (authMode === "register" && SIGNUP_CODE_REQUIRED) body.signup_code = f.signup_code;
     const r = await api(`/api/auth/${authMode}`, { method: "POST", body: JSON.stringify(body) });
     TOKEN = r.token;
     store.set("sd_token", TOKEN);
@@ -438,7 +442,7 @@ $("#btn-learn").addEventListener("click", (e) => busy(e.target, "Reading your wr
 async function loadAccount() {
   ME = await api("/api/me");
   $("#acct-name").textContent = ME.name;
-  $("#acct-email").textContent = ME.email;
+  $("#acct-email").textContent = ME.email + (ME.ai_enabled && ME.ai_daily_limit ? ` \u00b7 AI used today: ${ME.ai_used_today} of ${ME.ai_daily_limit}` : "");
   const isOwner = ME.role === "owner";
   $("#ws-name").value = ME.workspace_name;
   $("#ws-rename").hidden = !isOwner;
