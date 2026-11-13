@@ -1,17 +1,22 @@
-"""Claude-powered voice learning, review and rewriting.
+"""AI voice learning, review and rewriting, with Anthropic (Claude) or OpenAI as the provider.
 
 Optional: without an API key the app still learns and checks with the deterministic
-learner/checker; only the AI voice profile, AI review and rewriting need Claude."""
+learner/checker; only the AI voice profile, AI review and rewriting need a model.
+
+Provider selection: STYLEDESK_AI_PROVIDER=anthropic|openai, otherwise whichever key is set
+(ANTHROPIC_API_KEY first, then OPENAI_API_KEY)."""
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from typing import Literal
 
 from pydantic import BaseModel, Field
 
-MODEL = os.environ.get("STYLEDESK_MODEL", "claude-opus-5-5")
-# Server-side refusal fallback: if the model declines, the API retries on a fallback model.
+ANTHROPIC_MODEL = os.environ.get("STYLEDESK_MODEL", "claude-opus-5-5")
+OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-6-astra")
+# Anthropic server-side refusal fallback: if the model declines, the API retries on a fallback model.
 BETAS = ["server-side-fallback-2026-07-01"]
 # Keep requests well inside the context window; very large sample sets are trimmed (newest first).
 MAX_SAMPLE_CHARS = 1_500_000
@@ -62,21 +67,86 @@ class AIUnavailable(Exception):
     pass
 
 
+def provider() -> str | None:
+    chosen = os.environ.get("STYLEDESK_AI_PROVIDER", "").strip().lower()
+    has_anthropic = bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+    has_openai = bool(os.environ.get("OPENAI_API_KEY"))
+    if chosen == "anthropic":
+        return "anthropic" if has_anthropic else None
+    if chosen == "openai":
+        return "openai" if has_openai else None
+    return "anthropic" if has_anthropic else "openai" if has_openai else None
+
+
 def available() -> bool:
-    return bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+    return provider() is not None
+
+
+def model_name() -> str | None:
+    return {"anthropic": ANTHROPIC_MODEL, "openai": OPENAI_MODEL}.get(provider())
 
 
 def _call(system: str | list, user: str, schema: type[BaseModel], effort: str):
+    p = provider()
+    if p is None:
+        raise AIUnavailable("AI features need an API key on the server (OPENAI_API_KEY or ANTHROPIC_API_KEY).")
+    return _call_openai(system, user, schema, effort) if p == "openai" else _call_anthropic(system, user, schema, effort)
+
+
+def _call_openai(system: str | list, user: str, schema: type[BaseModel], effort: str):
+    try:
+        import openai
+    except ImportError as e:  # pragma: no cover
+        raise AIUnavailable("openai package not installed (pip install openai)") from e
+    instructions = system if isinstance(system, str) else "\n\n".join(b["text"] for b in system)
+    client = openai.OpenAI()
+    try:
+        # Streamed so long reasoning doesn't hit idle-connection timeouts in proxies or hosts
+        # (a silent non-streamed request is cut off after ~30s in some networks). Reasoning
+        # summaries keep events flowing while the model thinks; we don't show them.
+        with client.responses.stream(
+            model=OPENAI_MODEL,
+            # Voice description comes first in the instructions, so OpenAI's automatic prompt
+            # caching reuses it across checks; the cache key groups requests for the same voice.
+            instructions=instructions,
+            input=[{"role": "user", "content": user}],
+            text_format=schema,
+            reasoning={"effort": effort, "summary": "auto"},
+            max_output_tokens=32000,
+            prompt_cache_key="styledesk-" + hashlib.sha256(instructions[:4000].encode()).hexdigest()[:24],
+            store=False,
+        ) as stream:
+            for _ in stream:
+                pass
+            resp = stream.get_final_response()
+    except openai.AuthenticationError as e:
+        raise AIUnavailable("The OpenAI API key was rejected.") from e
+    except openai.RateLimitError as e:
+        raise AIUnavailable("Rate limited or out of credit on the OpenAI API; try again shortly.") from e
+    except openai.APIConnectionError as e:
+        raise AIUnavailable("Could not reach the OpenAI API.") from e
+    except openai.APIStatusError as e:
+        msg = getattr(e, "message", "") or str(e)
+        raise AIUnavailable(f"OpenAI API error ({e.status_code}): {msg}") from e
+
+    for item in resp.output or []:
+        for part in getattr(item, "content", None) or []:
+            if getattr(part, "type", "") == "refusal":
+                raise AIUnavailable("The model declined to process this text.")
+    if resp.status == "incomplete" or resp.output_parsed is None:
+        raise AIUnavailable("The AI response was incomplete; try a shorter text.")
+    return resp.output_parsed
+
+
+def _call_anthropic(system: str | list, user: str, schema: type[BaseModel], effort: str):
     try:
         import anthropic
     except ImportError as e:  # pragma: no cover
         raise AIUnavailable("anthropic package not installed") from e
-    if not available():
-        raise AIUnavailable("AI features need an Anthropic API key on the server (ANTHROPIC_API_KEY).")
     client = anthropic.Anthropic()
     try:
         resp = client.beta.messages.parse(
-            model=MODEL,
+            model=ANTHROPIC_MODEL,
             max_tokens=16000,
             betas=BETAS,
             fallbacks="default",
@@ -187,9 +257,33 @@ def review(name: str, text: str, profile: dict | None, stats: dict | None, rules
 # ---------- rewriting ----------
 _REWRITE_RULES = (
     "Keep the meaning, facts, names, numbers and any direct quotations exactly as they are. "
-    "Don't add new claims or information. Match the writer's tone, rhythm, vocabulary, formality, point of view "
-    "and punctuation habits, and follow the writer's own rules."
+    "Don't add new claims, and never invent experiences, anecdotes or details about the writer. "
+    "Match the writer's tone, rhythm, vocabulary, formality, point of view and punctuation habits, "
+    "and follow the writer's own rules. Restructure sentences freely when that is what the writer would do: "
+    "a rewrite that keeps the original's sentence shapes with a few words swapped is not good enough."
 )
+
+
+def _avoid(stats: dict | None) -> str:
+    """Phrasings typical of AI text that this writer doesn't use, so rewrites don't reintroduce them."""
+    from .learner import AI_TELLS
+    used = set((stats or {}).get("ai_phrases_used") or [])
+    phrases = [pid for pid, _, _ in AI_TELLS if pid not in used]
+    fp = (stats or {}).get("fingerprint") or {}
+    extra = []
+    if fp.get("em_dashes_per_1kw", 99) < 0.5:
+        extra.append("em dashes")
+    if fp.get("exclamations_per_1kw", 99) < 0.5:
+        extra.append("exclamation marks")
+    if fp.get("semicolons_per_1kw", 99) < 0.5:
+        extra.append("semicolons")
+    out = ("Never use these phrasings, which this writer doesn't use and which read as AI-written: "
+           + "; ".join(phrases) + ". Also avoid the same ideas in disguise: contrast templates like "
+           "\"it's not (just) X, it's Y\" or \"not only X but Y\" in any wording, audience lists like "
+           "\"whether you're X or Y\", rhetorical roadmaps (\"here are three ways\"), and grand closing morals.")
+    if extra:
+        out += " This writer doesn't use " + ", ".join(extra) + "."
+    return out
 
 
 def rewrite_spans(name: str, text: str, spans: list[dict], profile, stats, rules, samples) -> dict[int, str]:
@@ -206,6 +300,7 @@ def rewrite_spans(name: str, text: str, spans: list[dict], profile, stats, rules
         "Passages are marked ⟦n⟧like this⟦/n⟧. For each marked passage, return replacement text "
         "for exactly that passage: it must read naturally with the unmarked text around it (which stays as it is), "
         "keep the same role in its sentence or paragraph, and must not include the markers. " + _REWRITE_RULES
+        + " " + _avoid(stats)
     )
     vb = _voice_block(name, profile, stats, rules, _pick_examples(samples, 8_000))
     user = f"<text>\n{''.join(marked)}\n</text>\n\nWhy each passage was flagged:\n{reasons}"
@@ -214,11 +309,19 @@ def rewrite_spans(name: str, text: str, spans: list[dict], profile, stats, rules
     return {r.id: r.text for r in out.rewrites if r.id in valid}
 
 
-def rewrite_all(name: str, text: str, profile, stats, rules, samples) -> str:
+def rewrite_all(name: str, text: str, profile, stats, rules, samples, add_prompts: bool = False) -> str:
     task = (
         "You rewrite a whole text so it sounds like the writer described in <voice>, as if they had written it "
         "themselves. Keep roughly the same length and structure unless the writer's habits call for shorter "
-        "sentences or paragraphs. Return only the rewritten text. " + _REWRITE_RULES
+        "sentences or paragraphs. Return only the rewritten text. " + _REWRITE_RULES + " " + _avoid(stats) +
+        " Where it fits the writer and doesn't create a false claim, prefer their usual point of view and "
+        "contraction habits."
     )
+    if add_prompts:
+        task += (
+            " This writer's voice may rely on personal details, experiences or concrete examples that the text "
+            "doesn't contain. Where those details belong, add one or two short bracketed prompts for the writer to "
+            "fill in, for example [add a moment from your own week]. Never invent the details yourself."
+        )
     vb = _voice_block(name, profile, stats, rules, _pick_examples(samples, 8_000))
     return _call(_system(task, vb), f"<text>\n{text}\n</text>", FullRewrite, effort="medium").text

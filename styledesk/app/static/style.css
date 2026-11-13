@@ -183,3 +183,5 @@ dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--p
 dialog::backdrop { background: rgba(0,0,0,.35); }
 dialog h2 { margin-top: 0; }
 @media (max-width: 860px) { .voice-pick { order: 2; flex: 1; } .voice-pick select { flex: 1; max-width: none; } }
+label.check.small { font-size: 12px; }
+mark.fill-in { background: var(--warn-bg); color: var(--warn); border-radius: 3px; padding: 0 2px; font-family: system-ui, sans-serif; font-size: 14px; }

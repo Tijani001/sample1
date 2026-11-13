@@ -38,7 +38,7 @@ Learning, rules and AI all live on the server, so a voice behaves the same in ev
 - **Accounts:** password reset, email verification, and Google/Microsoft sign-in. Teams such as newsrooms will expect single sign-on.
 - **Privacy:** people's writing samples and drafts can be private or unpublished, so this needs a clear policy:
   - The extension only reads the text box being typed in, and can be switched off per site.
-  - With AI on, text is sent to the Anthropic API.
+  - With AI on, text is sent to the AI provider (OpenAI or Anthropic). OpenAI requests are made with `store=False`.
   - Add "export my data" and "delete my account".
 - **Cost control:** every deep check, profile and rewrite is a paid API call. Add per-user rate limits and usage caps, and plan pricing around them (for example a free tier with rule-based checks only, and a paid tier for AI rewriting).
 - **Quality:** build a small evaluation set of voices and AI drafts, so the effect of changes to the prompts on rewrite quality can be measured.

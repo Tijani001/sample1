@@ -83,6 +83,7 @@ class RewriteIn(BaseModel):
     text: str = Field(min_length=1, max_length=ai.MAX_REWRITE_CHARS)
     mode: Literal["spans", "all"] = "spans"
     spans: list[Span] = []
+    add_prompts: bool = False  # mode=all: leave [notes] where the writer's own details should go
 
 
 class ProfileIn(BaseModel):
@@ -226,6 +227,8 @@ def logout(user=Depends(current_user)):
 def me(user=Depends(current_user)):
     out = {k: user[k] for k in ("id", "name", "email", "role", "workspace_name")}
     out["ai_enabled"] = ai.available()
+    out["ai_provider"] = ai.provider()
+    out["ai_model"] = ai.model_name()
     if user["role"] == "owner":
         out["invite_code"] = db.one("SELECT invite_code FROM workspaces WHERE id = ?", (user["workspace_id"],))["invite_code"]
     out["members"] = db.rows("SELECT id, name, email, role FROM users WHERE workspace_id = ? ORDER BY role DESC, name",
@@ -441,7 +444,7 @@ def rewrite(payload: RewriteIn, user=Depends(current_user)):
         raise HTTPException(400, "Train this voice with some writing samples first.")
     try:
         if payload.mode == "all":
-            new = ai.rewrite_all(v["name"], text, *args[1:])
+            new = ai.rewrite_all(v["name"], text, *args[1:], add_prompts=payload.add_prompts)
             return {"text": new, "changes": [{"start": 0, "end": len(new), "original_start": 0,
                                               "original_end": len(text), "original": text, "rewrite": new}]}
         spans = [s.model_dump() for s in payload.spans if s.end <= len(text) and s.start < s.end]

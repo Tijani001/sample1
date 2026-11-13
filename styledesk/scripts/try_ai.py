@@ -1,7 +1,7 @@
 """Live test of the AI features against a sample voice (uses real API calls; costs a few cents).
 
     cd styledesk
-    export ANTHROPIC_API_KEY=...
+    export OPENAI_API_KEY=...        # or ANTHROPIC_API_KEY
     python scripts/try_ai.py                       # blog voice vs. samples/ai-draft.txt
     python scripts/try_ai.py samples/voices/news-reporting path/to/draft.txt
 
@@ -44,7 +44,7 @@ def main():
     voice_dir = sys.argv[1] if len(sys.argv) > 1 else "samples/voices/personal-blog"
     draft_path = sys.argv[2] if len(sys.argv) > 2 else "samples/ai-draft.txt"
     if not ai.available():
-        sys.exit("Set ANTHROPIC_API_KEY first.")
+        sys.exit("Set OPENAI_API_KEY or ANTHROPIC_API_KEY first.")
     samples = load(voice_dir)
     title, _, draft = open(draft_path, encoding="utf-8").read().strip().partition("\n")
     draft = draft.strip()

@@ -36,6 +36,8 @@ def app(tmp_path, monkeypatch):
     monkeypatch.setenv("STYLEDESK_DB", str(tmp_path / "t.db"))
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("STYLEDESK_AI_PROVIDER", raising=False)
     import importlib
 
     from app import db, main
@@ -165,7 +167,7 @@ def test_rewrite_all_and_errors(client, monkeypatch):
     from app import ai
     vid = _voice(client)
     assert client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi there.", "mode": "all"}).status_code == 503
-    monkeypatch.setattr(ai, "rewrite_all", lambda name, text, *a: "Hey.")
+    monkeypatch.setattr(ai, "rewrite_all", lambda name, text, *a, **k: "Hey.")
     assert client.post("/api/rewrite", json={"voice_id": vid, "text": "Hi there.", "mode": "all"}).json()["text"] == "Hey."
     empty = _voice(client, "Empty", samples=None)
     assert client.post("/api/rewrite", json={"voice_id": empty, "text": "Hi.", "mode": "all"}).status_code == 400
@@ -209,3 +211,18 @@ def test_team_members_share_voices_but_cannot_edit_others(app, client):
 def test_logout_revokes_token(client):
     assert client.post("/api/auth/logout").status_code == 200
     assert client.get("/api/me").status_code == 401
+
+
+def test_ai_provider_selection(monkeypatch):
+    from app import ai
+    for k in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "OPENAI_API_KEY", "STYLEDESK_AI_PROVIDER"):
+        monkeypatch.delenv(k, raising=False)
+    assert ai.provider() is None and not ai.available()
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    assert ai.provider() == "openai" and ai.model_name() == ai.OPENAI_MODEL
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-test")
+    assert ai.provider() == "anthropic"
+    monkeypatch.setenv("STYLEDESK_AI_PROVIDER", "openai")
+    assert ai.provider() == "openai"
+    monkeypatch.delenv("OPENAI_API_KEY")
+    assert ai.provider() is None  # explicitly chosen provider without its key

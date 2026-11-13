@@ -196,6 +196,7 @@ function renderReport() {
     ${ME.ai_enabled && CHECKED.trim() ? `<div class="row actions">
       <button class="primary" id="btn-rw-flagged" ${rewritable.length ? "" : "disabled"}>Rewrite flagged parts in my voice</button>
       <button id="btn-rw-all">Rewrite everything</button>
+      <label class="check small" title="The AI won't invent experiences. Tick this to get [notes] where your own stories or examples would make it sound like you."><input type="checkbox" id="rw-prompts"> Leave notes where my own details should go</label>
     </div>` : ""}
     <div class="story">${highlight(CHECKED, r.issues)}</div>
     <ul class="issues">${r.issues.map((it) => `
@@ -266,10 +267,10 @@ function shiftAfterEdit(it, delta) {
 }
 
 // ---------- rewrite ----------
-async function doRewrite({ mode, spans }) {
+async function doRewrite({ mode, spans, add_prompts = false }) {
   if (!textUnchanged()) return;
   if (CHECKED.length > 30000) return toast("Rewriting works on up to 30,000 characters at a time.");
-  const r = await api("/api/rewrite", { method: "POST", body: JSON.stringify({ voice_id: VOICE_ID, text: CHECKED, mode, spans }) });
+  const r = await api("/api/rewrite", { method: "POST", body: JSON.stringify({ voice_id: VOICE_ID, text: CHECKED, mode, spans, add_prompts }) });
   if (mode === "spans" && !r.changes.length) return toast("Nothing needed rewriting.");
   showRewrite(r, mode);
 }
@@ -277,7 +278,7 @@ async function doRewrite({ mode, spans }) {
 function showRewrite(r, mode) {
   const box = $("#rewrite");
   let html = "";
-  if (mode === "all") html = esc(r.text);
+  if (mode === "all") html = esc(r.text).replace(/\[[^\]\n]{3,200}\]/g, (m) => `<mark class="fill-in">${m}</mark>`);
   else {
     let pos = 0;
     for (const ch of r.changes) {
@@ -289,7 +290,7 @@ function showRewrite(r, mode) {
   box.hidden = false;
   box.innerHTML = `
     <h3>Rewritten in your voice</h3>
-    <p class="muted">${mode === "all" ? "The whole text, rewritten." : `${r.changes.length} part${r.changes.length === 1 ? "" : "s"} rewritten (highlighted). Hover to see the original.`} Facts, names and quotes are kept.</p>
+    <p class="muted">${mode === "all" ? (/\[[^\]\n]{3,200}\]/.test(r.text) ? "The whole text, rewritten. Fill in the highlighted [notes] with your own details. The AI doesn't invent experiences." : "The whole text, rewritten.") : `${r.changes.length} part${r.changes.length === 1 ? "" : "s"} rewritten (highlighted). Hover to see the original.`} Facts, names and quotes are kept.</p>
     <div class="story">${html}</div>
     ${mode === "spans" ? `<details><summary>Show changes side by side</summary><ul class="changes">${r.changes.map((c) => `<li><del>${esc(c.original)}</del><ins>${esc(c.rewrite)}</ins></li>`).join("")}</ul></details>` : ""}
     <div class="row actions">
@@ -302,6 +303,8 @@ function showRewrite(r, mode) {
   $("#rw-use").addEventListener("click", (e) => busy(e.target, "Checking…", async () => {
     $("#c-text").value = r.text;
     box.hidden = true;
+    $("#report").className = "report empty";
+    $("#report").textContent = "Checking the new version\u2026";
     await runCheck(false);
     toast("Updated. Run a deep check again to re-score with AI.");
   }));
@@ -365,7 +368,7 @@ async function loadTrain() {
     ${p.never_does.length ? `<h3>Doesn't sound like you</h3><ul class="plain">${p.never_does.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
     <p class="muted">Learned ${esc((v.profile_updated_at || "").replace("T", " ").slice(0, 16))} UTC. Learn again after adding more writing.</p>`
     : ME.ai_enabled
-      ? `<p class="muted">Not learned yet. After adding your writing, press <b>Learn my voice with AI</b>. Claude reads your samples and describes your tone, rhythm and word choice. That description is used to judge and rewrite text.</p>`
+      ? `<p class="muted">Not learned yet. After adding your writing, press <b>Learn my voice with AI</b>. The AI reads your samples and describes your tone, rhythm and word choice. That description is used to judge and rewrite text.</p>`
       : `<p class="muted">AI isn't set up on this server, so your voice is judged on the measurable fingerprint and your rules.</p>`;
 }
 
