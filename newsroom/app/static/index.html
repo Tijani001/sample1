@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Style Desk</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">Style Desk <span class="sub">house style, checked before it reaches the editor</span></div>
+  <nav>
+    <button data-tab="write" class="active">Write &amp; check</button>
+    <button data-tab="queue">Editor queue</button>
+    <button data-tab="style">Style guide</button>
+  </nav>
+  <div id="ai-status" class="pill"></div>
+</header>
+
+<main>
+  <!-- Reporter -->
+  <section id="tab-write" class="tab active">
+    <div class="split">
+      <div class="col">
+        <label>Headline<input id="s-title" placeholder="Headline"></label>
+        <label>Byline<input id="s-byline" placeholder="Reporter name"></label>
+        <label>Story<textarea id="s-body" rows="18" placeholder="Paste or write the story. Separate paragraphs with a blank line."></textarea></label>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="s-ai" checked> AI review</label>
+          <span class="grow"></span>
+          <button id="btn-check">Check story</button>
+          <button id="btn-submit" class="primary">Submit to editor</button>
+        </div>
+      </div>
+      <div class="col">
+        <div id="report" class="report empty">Run a check to see how the story matches house style.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editor -->
+  <section id="tab-queue" class="tab">
+    <div class="split">
+      <div class="col narrow">
+        <div class="row">
+          <select id="q-filter">
+            <option value="">All submissions</option>
+            <option value="submitted" selected>Awaiting review</option>
+            <option value="needs changes">Needs changes</option>
+            <option value="approved">Approved</option>
+          </select>
+        </div>
+        <ul id="queue" class="list"></ul>
+      </div>
+      <div class="col" id="sub-detail"><div class="report empty">Select a submission.</div></div>
+    </div>
+  </section>
+
+  <!-- Style -->
+  <section id="tab-style" class="tab">
+    <div class="split">
+      <div class="col">
+        <h2>1. Teach it your style</h2>
+        <p class="muted">Add articles your newsroom has published. Each file is one article; the first line is the headline.
+          The more articles, the more reliable the learned style.</p>
+        <div class="row">
+          <input type="file" id="a-files" multiple accept=".txt,.md">
+          <button id="btn-upload">Upload</button>
+        </div>
+        <details>
+          <summary>Or paste an article</summary>
+          <input id="a-title" placeholder="Headline">
+          <textarea id="a-body" rows="8" placeholder="Article text"></textarea>
+          <button id="btn-add-article">Add article</button>
+        </details>
+        <ul id="articles" class="list compact"></ul>
+
+        <h2>2. House rules</h2>
+        <p class="muted">Rules editors write down. They always override what is learned.</p>
+        <div class="rule-form">
+          <select id="r-kind">
+            <option value="prefer">Prefer: replace a term</option>
+            <option value="ban">Ban: flag a term</option>
+            <option value="note">Note: guidance for the AI reviewer</option>
+          </select>
+          <input id="r-term" placeholder="Term (e.g. utilise)">
+          <input id="r-repl" placeholder="Use instead (e.g. use)">
+          <input id="r-reason" placeholder="Reason / guidance">
+          <button id="btn-add-rule">Add rule</button>
+        </div>
+        <ul id="rules" class="list compact"></ul>
+      </div>
+      <div class="col">
+        <h2>What it has learned</h2>
+        <div id="stats"></div>
+        <div class="row">
+          <h2 class="grow">AI style guide</h2>
+          <button id="btn-learn" class="primary">Learn style guide from archive</button>
+        </div>
+        <div id="guide"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
