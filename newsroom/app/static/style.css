@@ -119,3 +119,17 @@ details > * { margin-top: 6px; }
   .split .col.narrow { max-width: none; }
   .brand .sub { display: none; }
 }
+
+[hidden] { display: none !important; }
+.auth { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+.auth-card { width: 100%; max-width: 420px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+.auth-card .brand { font-size: 26px; }
+.seg { display: flex; gap: 4px; background: var(--bg); padding: 4px; border-radius: 8px; margin: 16px 0; }
+.seg button { flex: 1; border: none; background: none; color: var(--muted); padding: 6px 4px; font-size: 13px; white-space: normal; }
+.seg button.active { background: var(--panel); color: var(--ink); }
+.auth-card form .primary { width: 100%; margin-top: 4px; }
+.who { font-family: system-ui, sans-serif; font-size: 13px; color: var(--muted); }
+button.link { border: none; background: none; color: var(--accent); padding: 0 4px; }
+.code { font-size: 22px; letter-spacing: .12em; padding: 6px 12px; background: var(--panel); border: 1px dashed var(--line); border-radius: 6px; }
+#tab-team .stat { margin-bottom: 8px; line-height: 1.5; }
+@media (max-width: 860px) { nav { order: 3; flex-basis: 100%; overflow-x: auto; } }

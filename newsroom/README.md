@@ -1,6 +1,8 @@
 # Style Desk
 
-A newsroom tool that learns your house style from stories you've already published, then checks every story a reporter files before it reaches an editor.
+Grammarly-style writing help, trained on your own newsroom's house style. Style Desk learns your style from stories you've already published, then checks reporters' writing wherever they write: the web app, in any text box through the Chrome extension, and (planned) keyboards and native apps. See [docs/ROADMAP.md](docs/ROADMAP.md).
+
+Every newsroom has its own account, style profile and house rules. An editor sets up the newsroom, and reporters join with an invite code.
 
 ## How it works
 
@@ -33,7 +35,15 @@ export ANTHROPIC_API_KEY=...        # optional: enables the AI guide + review
 uvicorn app.main:app --reload
 ```
 
-Open http://localhost:8000. To try it, upload the files in `samples/archive/` on the **Style guide** tab, then check a story on **Write & check**.
+Open http://localhost:8000 and choose **Set up a newsroom**; you become its editor. Upload the files in `samples/archive/` on the **Style guide** tab, then check a story on **Write & check**. The **Team & apps** tab shows the invite code reporters use to join.
+
+### Chrome extension
+
+1. Open `chrome://extensions` and turn on **Developer mode**.
+2. Click **Load unpacked** and choose `clients/chrome-extension`.
+3. Click the Style Desk toolbar button and sign in with the server address and your account.
+
+Start typing in any text box. Problems are underlined, and the badge in the corner of the box opens suggestions. Click an underlined word to jump to its fix.
 
 Settings (environment variables):
 
@@ -54,11 +64,10 @@ cd newsroom && python -m pytest -q
 - `app/learner.py`: measures style preferences from the archive (deterministic, needs no API key)
 - `app/checker.py`: checks a story against the learned profile and the house rules
 - `app/ai.py`: Claude style-guide distillation and story review (structured outputs)
-- `app/main.py`: FastAPI routes; `app/db.py`: SQLite storage
-- `app/static/`: the web interface
+- `app/main.py`: FastAPI routes; `app/auth.py`: accounts, newsrooms and tokens; `app/db.py`: SQLite storage
+- `app/static/`: the web app (installable PWA)
+- `clients/chrome-extension/`: the browser extension (Manifest V3)
 
 ## Not built yet
 
-- Logins and roles. Right now anyone who can open the app can see both the reporter and editor views.
-- Several newsrooms or desks, each with its own style profile.
-- Plugins for CMS tools (WordPress, Arc, Google Docs) so stories are checked where reporters already write.
+See [docs/ROADMAP.md](docs/ROADMAP.md): Google Docs and Word add-ins, Android and iOS keyboards, native apps, and what a public launch needs.

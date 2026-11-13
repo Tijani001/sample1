@@ -1,14 +1,68 @@
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+let TOKEN = null, ME = null;
+try { TOKEN = localStorage.getItem("sd_token"); } catch {}
+
 async function api(path, opts = {}) {
-  const res = await fetch(path, {
-    ...opts,
-    headers: opts.body && !(opts.body instanceof FormData) ? { "Content-Type": "application/json" } : undefined,
-  });
+  const headers = {};
+  if (opts.body && !(opts.body instanceof FormData)) headers["Content-Type"] = "application/json";
+  if (TOKEN) headers.Authorization = "Bearer " + TOKEN;
+  const res = await fetch(path, { ...opts, headers });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.detail ? (typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)) : res.statusText);
+  if (res.status === 401 && !path.startsWith("/api/auth/")) { signOutLocal(); throw new Error(data.detail || "Sign in again."); }
+  if (!res.ok) throw new Error(data.detail ? (typeof data.detail === "string" ? data.detail : data.detail.map?.((d) => d.msg).join("; ") || JSON.stringify(data.detail)) : res.statusText);
   return data;
+}
+
+// ---------- auth ----------
+let authMode = "login";
+function setAuthMode(m) {
+  authMode = m;
+  document.querySelectorAll(".seg button").forEach((b) => b.classList.toggle("active", b.dataset.mode === m));
+  document.querySelectorAll("#auth-form [data-show]").forEach((el) => (el.hidden = !el.dataset.show.split(" ").includes(m)));
+  $("#auth-submit").textContent = { login: "Sign in", join: "Join newsroom", register: "Create newsroom" }[m];
+  $("#auth-form [name=password]").autocomplete = m === "login" ? "current-password" : "new-password";
+}
+document.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); setAuthMode(b.dataset.mode); }));
+$("#auth-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  busy($("#auth-submit"), "One moment\u2026", async () => {
+    const f = Object.fromEntries(new FormData(e.target));
+    const body = { email: f.email, password: f.password, client: "web" };
+    if (authMode !== "login") body.name = f.name;
+    if (authMode === "join") body.invite_code = f.invite_code;
+    if (authMode === "register") body.newsroom_name = f.newsroom_name;
+    const r = await api(`/api/auth/${authMode}`, { method: "POST", body: JSON.stringify(body) });
+    TOKEN = r.token;
+    try { localStorage.setItem("sd_token", TOKEN); } catch {}
+    await boot();
+  });
+});
+function signOutLocal() {
+  TOKEN = null; ME = null;
+  try { localStorage.removeItem("sd_token"); } catch {}
+  $("#auth").hidden = false; $("header.top").hidden = true; $("main").hidden = true;
+}
+$("#btn-logout").addEventListener("click", async () => { try { await api("/api/auth/logout", { method: "POST" }); } catch {} signOutLocal(); });
+
+async function boot() {
+  if (!TOKEN) return signOutLocal();
+  try { ME = await api("/api/me"); } catch { return; }
+  $("#auth").hidden = true; $("header.top").hidden = false; $("main").hidden = false;
+  const isEditor = ME.role === "editor";
+  document.querySelectorAll("[data-role=editor]").forEach((el) => (el.hidden = !isEditor));
+  $("#nav-queue").textContent = isEditor ? "Editor queue" : "My stories";
+  $("#who").textContent = `${ME.name} \u00b7 ${ME.newsroom_name}`;
+  $("#s-byline").value ||= ME.name;
+  // Text shared to the installed app from another app (Android share sheet, etc.)
+  const q = new URLSearchParams(location.search);
+  if (q.has("share")) {
+    $("#s-title").value = q.get("title") || "";
+    $("#s-body").value = q.get("text") || "";
+    history.replaceState(null, "", "/");
+  }
+  loadStatus();
 }
 
 function toast(msg) {
@@ -33,6 +87,7 @@ document.querySelectorAll("nav button").forEach((b) =>
     document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.id === "tab-" + b.dataset.tab));
     if (b.dataset.tab === "queue") loadQueue();
     if (b.dataset.tab === "style") loadStyle();
+    if (b.dataset.tab === "team") loadTeam();
   })
 );
 
@@ -43,6 +98,19 @@ async function loadStatus() {
   el.classList.toggle("on", s.ai_enabled);
   if (!s.ai_enabled) $("#s-ai").checked = false;
 }
+
+// ---------- team ----------
+async function loadTeam() {
+  const me = await api("/api/me");
+  $("#invite-code").textContent = me.invite_code;
+  $("#server-url").textContent = location.origin;
+  $("#members").innerHTML = me.members.map((m) => `<li><div class="grow"><b>${esc(m.name)}</b> <span class="muted">${esc(m.email)}</span></div><span class="status">${esc(m.role)}</span></li>`).join("");
+}
+$("#btn-rotate").addEventListener("click", (e) => busy(e.target, "\u2026", async () => {
+  const r = await api("/api/newsroom/invite/rotate", { method: "POST" });
+  $("#invite-code").textContent = r.invite_code;
+  toast("New invite code created. The old one no longer works.");
+}));
 
 // ---------- report rendering ----------
 function highlight(body, issues) {
@@ -162,13 +230,14 @@ async function openSubmission(id) {
     <h2>${esc(s.title)}</h2>
     <div class="muted">${esc(s.byline || "No byline")} · submitted ${esc(s.created_at.replace("T", " ").slice(0, 16))} UTC · <span class="status">${esc(s.status)}</span></div>
     <div id="sub-report"></div>
+    ${ME.role !== "editor" ? (s.editor_note ? `<div class="verdict"><b>Editor:</b> ${esc(s.editor_note)}</div>` : "") : `
     <label>Note to reporter<textarea id="d-note" rows="3">${esc(s.editor_note || "")}</textarea></label>
     <div class="row">
       <button data-status="needs changes">Send back</button>
       <button data-status="approved" class="primary">Approve</button>
       <span class="grow"></span>
       ${s.status === "approved" ? `<button id="btn-promote" title="Approved stories make the learned style more accurate">Add to style archive</button>` : ""}
-    </div>`;
+    </div>`}`;
   const rep = document.createElement("div");
   box.querySelector("#sub-report").replaceWith(rep);
   renderReport(rep, s.title, s.body, s.report);
@@ -264,4 +333,6 @@ $("#btn-learn").addEventListener("click", (e) => busy(e.target, "Reading the arc
   loadStyle(); loadStatus();
 }));
 
-loadStatus();
+setAuthMode("login");
+boot();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Style Desk</title>
+<style>
+  :root { --ink:#1d1d1b; --muted:#6b6a65; --line:#e2e0d8; --bg:#fff; --accent:#1f4e79; --err:#b42318; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#ecebe6; --muted:#a09f98; --line:#34332e; --bg:#1f1f1c; --accent:#6ea8dc; --err:#ff8a80; } }
+  body { width: 300px; margin: 0; padding: 16px; font: 13px system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  h1 { font: bold 18px Georgia, serif; margin: 0 0 4px; }
+  p { color: var(--muted); margin: 0 0 12px; }
+  label { display: block; margin-bottom: 8px; color: var(--muted); }
+  input[type=text], input[type=email], input[type=password], input[type=url] { width: 100%; box-sizing: border-box; padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; margin-top: 3px; font: inherit; background: var(--bg); color: var(--ink); }
+  button { font: inherit; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; width: 100%; }
+  .row { display: flex; gap: 8px; align-items: center; margin: 10px 0; }
+  .grow { flex: 1; }
+  .err { color: var(--err); min-height: 1em; margin-top: 8px; }
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+  <h1>Style Desk</h1>
+  <div id="signed-out" hidden>
+    <p>Sign in with your newsroom account.</p>
+    <form id="login">
+      <label>Server address<input type="url" id="server" required placeholder="https://styledesk.yournewsroom.com"></label>
+      <label>Email<input type="email" id="email" required autocomplete="email"></label>
+      <label>Password<input type="password" id="password" required autocomplete="current-password"></label>
+      <button class="primary" type="submit">Sign in</button>
+      <div class="err" id="err"></div>
+    </form>
+    <p>No account? Ask your editor for an invite code, then join from the Style Desk website.</p>
+  </div>
+  <div id="signed-in" hidden>
+    <div class="card"><b id="who"></b><div id="nr" style="color:var(--muted)"></div></div>
+    <label class="row"><input type="checkbox" id="enabled"> <span class="grow">Check my writing</span></label>
+    <label class="row"><input type="checkbox" id="site"> <span class="grow">On <b id="host"></b></span></label>
+    <div class="row"><a href="#" id="open">Open Style Desk</a><span class="grow"></span><button id="logout">Sign out</button></div>
+  </div>
+<script src="popup.js"></script>
+</body>
+</html>

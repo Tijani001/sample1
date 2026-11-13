@@ -4,20 +4,47 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Style Desk</title>
+  <meta name="theme-color" content="#1f4e79">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<header class="top">
+<!-- Sign in -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-card">
+    <div class="brand">Style Desk</div>
+    <p class="muted">Your newsroom's house style, checked wherever you write.</p>
+    <div class="seg">
+      <button data-mode="login" class="active">Sign in</button>
+      <button data-mode="join">Join a newsroom</button>
+      <button data-mode="register">Set up a newsroom</button>
+    </div>
+    <form id="auth-form">
+      <label data-show="register">Newsroom name<input name="newsroom_name" autocomplete="organization"></label>
+      <label data-show="join">Invite code<input name="invite_code" autocomplete="off" placeholder="From your editor"></label>
+      <label data-show="join register">Your name<input name="name" autocomplete="name"></label>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button class="primary" type="submit" id="auth-submit">Sign in</button>
+    </form>
+  </div>
+</section>
+
+<header class="top" hidden>
   <div class="brand">Style Desk <span class="sub">house style, checked before it reaches the editor</span></div>
   <nav>
     <button data-tab="write" class="active">Write &amp; check</button>
-    <button data-tab="queue">Editor queue</button>
-    <button data-tab="style">Style guide</button>
+    <button data-tab="queue" id="nav-queue">Editor queue</button>
+    <button data-tab="style" data-role="editor">Style guide</button>
+    <button data-tab="team" data-role="editor">Team &amp; apps</button>
   </nav>
   <div id="ai-status" class="pill"></div>
+  <div class="who"><span id="who"></span> <button id="btn-logout" class="link">Sign out</button></div>
 </header>
 
-<main>
+<main hidden>
   <!-- Reporter -->
   <section id="tab-write" class="tab active">
     <div class="split">
@@ -98,6 +125,25 @@
           <button id="btn-learn" class="primary">Learn style guide from archive</button>
         </div>
         <div id="guide"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section id="tab-team" class="tab">
+    <div class="split">
+      <div class="col">
+        <h2>Invite reporters</h2>
+        <p class="muted">Reporters join your newsroom with this code. They can then sign in on the web, in the browser extension and in the apps.</p>
+        <div class="row"><code id="invite-code" class="code"></code><button id="btn-rotate">New code</button></div>
+        <h2>Members</h2>
+        <ul id="members" class="list compact"></ul>
+      </div>
+      <div class="col">
+        <h2>Use Style Desk everywhere</h2>
+        <div class="stat"><div class="k">Web app</div><div>Works in any browser. In Chrome or Edge, use “Install app” in the address bar to get a desktop app. On a phone, use “Add to Home Screen”.</div></div>
+        <div class="stat"><div class="k">Chrome extension</div><div>Checks your writing in the CMS, Gmail, WordPress and any other text box on the web. Load <code>clients/chrome-extension</code> from <code>chrome://extensions</code> (Developer mode → Load unpacked) and sign in with this server address: <code id="server-url"></code></div></div>
+        <div class="stat"><div class="k">Keyboards and native apps</div><div>In development. See <code>docs/ROADMAP.md</code>.</div></div>
       </div>
     </div>
   </section>
