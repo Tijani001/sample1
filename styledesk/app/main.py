@@ -542,12 +542,12 @@ def public_config():
     return {"signup_code_required": bool(SIGNUP_CODE)}
 
 
-@app.get("/healthz")
+@app.api_route("/healthz", methods=["GET", "HEAD"])
 def healthz():
     db.one("SELECT 1 AS ok")
     return {"ok": True}
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def index():
     return FileResponse(os.path.join(STATIC, "index.html"))

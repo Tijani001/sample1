@@ -265,4 +265,6 @@ def test_daily_ai_limit(client, monkeypatch):
 
 
 def test_healthz(app):
-    assert TestClient(app).get("/healthz").json() == {"ok": True}
+    c = TestClient(app)
+    assert c.get("/healthz").json() == {"ok": True}
+    assert c.head("/healthz").status_code == 200 and c.head("/").status_code == 200  # uptime monitors use HEAD
