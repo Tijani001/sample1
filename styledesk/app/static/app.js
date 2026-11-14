@@ -59,6 +59,9 @@ function setAuthMode(m) {
   document.querySelectorAll(".seg button").forEach((b) => b.classList.toggle("active", b.dataset.mode === m));
   document.querySelectorAll("#auth-form [data-show]").forEach((el) => (el.hidden = !el.dataset.show.split(" ").includes(m)));
   if (!SIGNUP_CODE_REQUIRED) $("#signup-code-field").hidden = true;
+  // Only fields that are visible for this mode are required, so the browser stops an empty submit.
+  const need = { register: ["name"].concat(SIGNUP_CODE_REQUIRED ? ["signup_code"] : []), join: ["name", "invite_code"], login: [] }[m];
+  for (const n of ["name", "invite_code", "signup_code"]) $(`#auth-form [name=${n}]`).required = need.includes(n);
   $("#auth-submit").textContent = { login: "Sign in", join: "Join team", register: "Create account" }[m];
   $("#auth-form [name=password]").autocomplete = m === "login" ? "current-password" : "new-password";
 }

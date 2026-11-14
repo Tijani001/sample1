@@ -238,7 +238,8 @@ def test_signup_code_protects_registration(app, monkeypatch):
     body = {"name": "Eve", "email": "eve@example.com", "password": "password123"}
     assert c.post("/api/auth/register", json=body).status_code == 403
     assert c.post("/api/auth/register", json={**body, "signup_code": "wrong"}).status_code == 403
-    assert c.post("/api/auth/register", json={**body, "signup_code": "letmein"}).status_code == 200
+    # Phones capitalise the first letter; the code is matched case-insensitively.
+    assert c.post("/api/auth/register", json={**body, "signup_code": " Letmein "}).status_code == 200
 
 
 def test_daily_ai_limit(client, monkeypatch):

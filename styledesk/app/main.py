@@ -217,7 +217,7 @@ def _email_free(email: str):
 @app.post("/api/auth/register")
 def register(r: RegisterIn):
     """Anyone can sign up (with the signup code, if the server has one); they get their own workspace."""
-    if SIGNUP_CODE and r.signup_code.strip() != SIGNUP_CODE:
+    if SIGNUP_CODE and r.signup_code.strip().casefold() != SIGNUP_CODE.casefold():
         raise HTTPException(403, "This Style Desk is invite-only. Enter the signup code you were given.")
     _email_free(r.email)
     first = r.name.strip().split()[0]
@@ -246,7 +246,7 @@ def join(j: JoinIn):
 def login(r: LoginIn):
     u = db.one("SELECT id, password_hash FROM users WHERE email = ?", (r.email,))
     if not u or not verify_password(r.password, u["password_hash"]):
-        raise HTTPException(401, "Wrong email or password.")
+        raise HTTPException(401, "Wrong email or password. First time here? Choose Create account.")
     return _session(u["id"], r.client)
 
 
