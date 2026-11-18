@@ -1,5 +1,5 @@
 [build]
-  publish = "court-reporting-deck"
+  publish = "justice-reporting-presentation"
 
 [[headers]]
   for = "/*"
