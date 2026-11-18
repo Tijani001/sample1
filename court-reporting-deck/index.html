@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Justice Reporting Session</title>
+<meta name="description" content="From Courtroom Observation to Public Interest Story: an interactive training deck on court reporting and identifying justice stories.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ee; --surface:#ffffff; --surface-2:#efebe4; --ink:#1b1f2a; --muted:#5d6472;
+  --line:#ddd6cb; --accent:#8c2f39; --accent-soft:#f3e3e4; --gold:#b8892b; --gold-soft:#f6ecd6;
+  --good:#2f6b4f; --good-soft:#e2efe8; --bad:#a3322a; --bad-soft:#f6e1df;
+  --shadow:0 1px 2px rgba(20,20,30,.06),0 8px 24px rgba(20,20,30,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14161c; --surface:#1d2029; --surface-2:#252935; --ink:#eceae5; --muted:#a3a8b4;
+    --line:#333847; --accent:#e07a84; --accent-soft:#3a2328; --gold:#e0b45a; --gold-soft:#3a3120;
+    --good:#7fcaa3; --good-soft:#1e3329; --bad:#f08a80; --bad-soft:#3d2422;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14161c; --surface:#1d2029; --surface-2:#252935; --ink:#eceae5; --muted:#a3a8b4;
+  --line:#333847; --accent:#e07a84; --accent-soft:#3a2328; --gold:#e0b45a; --gold-soft:#3a3120;
+  --good:#7fcaa3; --good-soft:#1e3329; --bad:#f08a80; --bad-soft:#3d2422;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:400 18px/1.55 Inter,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
+h1{font-size:clamp(34px,5.4vw,68px)}
+h2{font-size:clamp(28px,3.6vw,46px);margin-bottom:.5em}
+h3{font-size:clamp(19px,1.7vw,23px);margin-bottom:.35em}
+p+p{margin-top:.6em}
+em{font-style:normal;color:var(--accent);font-weight:600}
+
+/* ---------- deck ---------- */
+.deck{position:fixed;inset:0 0 56px 0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:48px max(16px,6vw);overflow-y:auto;opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .35s ease,transform .35s ease,visibility .35s}
+.slide.active{opacity:1;visibility:visible;transform:none}
+.slide.prev{transform:translateX(-24px)}
+.inner{width:100%;max-width:1180px;margin:0 auto}
+.kicker{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.lede{font-size:clamp(18px,1.6vw,22px);color:var(--muted);max-width:60ch}
+.grid{display:grid;gap:16px;margin-top:24px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+.card p{color:var(--muted);font-size:16px}
+.num{font-family:Fraunces,serif;font-size:28px;color:var(--gold);font-weight:700;line-height:1;margin-bottom:8px;display:block}
+ul.clean{list-style:none}
+ul.clean li{position:relative;padding-left:22px;margin:.45em 0}
+ul.clean li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--gold-soft);color:var(--gold)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;background:var(--accent);color:#fff;font-weight:600;font-size:15px}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,.opt:focus-visible,.flip:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* title */
+.title-slide{background:radial-gradient(1200px 600px at 85% 10%,var(--accent-soft),transparent 60%),radial-gradient(900px 500px at 0% 100%,var(--gold-soft),transparent 60%)}
+.title-slide h1{max-width:16ch}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:36px;color:var(--muted);font-size:15px}
+.meta-row strong{color:var(--ink);display:block;font-size:17px}
+.scale{display:block;width:72px;height:72px;margin-bottom:22px;color:var(--accent)}
+
+/* section divider */
+.divider{background:var(--ink);color:var(--bg)}
+.divider .kicker{color:var(--gold)}
+.divider h2{font-size:clamp(36px,5vw,64px);max-width:18ch}
+.divider .lede{color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.divider .time{font-family:Fraunces,serif;font-size:clamp(60px,9vw,120px);color:var(--gold);line-height:1;opacity:.9}
+
+/* quote */
+blockquote{font-family:Fraunces,serif;font-size:clamp(24px,3vw,38px);line-height:1.25;border-left:4px solid var(--accent);padding-left:24px;max-width:28ch}
+cite{display:block;margin-top:14px;font:500 15px Inter,sans-serif;color:var(--muted);font-style:normal}
+
+/* poll */
+.poll{display:grid;gap:12px;margin-top:24px;max-width:820px}
+.poll-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;position:relative;overflow:hidden}
+.poll-bar{position:absolute;inset:0 auto 0 0;background:var(--accent-soft);width:0;transition:width .4s ease;z-index:0}
+.poll-row>*:not(.poll-bar){position:relative;z-index:1}
+.poll-ctl{display:flex;align-items:center;gap:8px}
+.poll-ctl button{width:34px;height:34px;border-radius:8px;background:var(--surface-2);font-weight:700}
+.poll-ctl span{min-width:2ch;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* agenda */
+.agenda{margin-top:24px;display:grid;gap:10px;max-width:900px}
+.ag{display:grid;grid-template-columns:90px 1fr auto;gap:16px;align-items:center;padding:14px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--line);transition:all .3s}
+.ag .t{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+.ag .d{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.ag.now{border-color:var(--accent);background:var(--accent-soft);transform:scale(1.01)}
+.ag.done{opacity:.55}
+
+/* compare */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:24px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.vs>div{padding:26px 28px;background:var(--surface)}
+.vs>div+div{background:var(--surface-2)}
+.vs h3{display:flex;align-items:center;gap:10px}
+
+/* choice / quiz */
+.scenario{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:20px 22px;margin-top:20px;font-size:19px}
+.opts{display:grid;gap:10px;margin-top:16px}
+.opt{text-align:left;padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:16px;transition:all .2s;display:flex;gap:12px;align-items:flex-start}
+.opt:hover{border-color:var(--accent)}
+.opt .letter{flex:0 0 26px;height:26px;border-radius:7px;background:var(--surface-2);display:grid;place-items:center;font-weight:700;font-size:13px}
+.opt.right{background:var(--good-soft);border-color:var(--good)}
+.opt.right .letter{background:var(--good);color:#fff}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opt.wrong .letter{background:var(--bad);color:#fff}
+.feedback{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--gold-soft);font-size:16px;display:none}
+.feedback.show{display:block;animation:fade .3s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tab{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:600}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* flip cards */
+.flip{perspective:900px;height:150px;text-align:left}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line)}
+.face.front{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.face.back{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 35%,transparent);transform:rotateY(180deg)}
+.face small{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.face.front small{color:var(--bad)}.face.back small{color:var(--good)}
+.face b{font-family:Fraunces,serif;font-size:20px;line-height:1.25;font-weight:600}
+.face span{font-size:13px;color:var(--muted)}
+
+/* headline tester */
+.hl{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.hl q{font-family:Fraunces,serif;font-size:19px;quotes:"\201C" "\201D"}
+.hl .acts{display:flex;gap:8px}
+.hl .acts button{padding:8px 12px;border-radius:9px;border:1px solid var(--line);font-size:14px;font-weight:600;background:var(--surface-2)}
+.hl .why{grid-column:1/-1;font-size:15px;color:var(--muted);display:none;border-top:1px dashed var(--line);padding-top:10px}
+.hl.answered .why{display:block}
+.hl.ok{border-color:var(--good);background:var(--good-soft)}
+.hl.no{border-color:var(--bad);background:var(--bad-soft)}
+.verdict{font-weight:700;margin-right:6px}
+.hl.ok .verdict{color:var(--good)}.hl.no .verdict{color:var(--bad)}
+
+/* checklist */
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);cursor:pointer;font-size:16px;user-select:none}
+.check input{appearance:none;flex:0 0 22px;height:22px;border-radius:6px;border:2px solid var(--line);margin-top:1px;display:grid;place-items:center;transition:all .15s;cursor:pointer}
+.check input:checked{background:var(--good);border-color:var(--good)}
+.check input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.check:has(input:checked){border-color:var(--good)}
+.check:has(input:checked) span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--good)}
+.meter{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:16px;max-width:420px}
+.meter i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+
+/* notes sheet */
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);font-size:15px;overflow:hidden}
+.sheet header{padding:12px 18px;background:var(--surface-2);display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:13px;color:var(--muted)}
+.sheet header b{display:block;color:var(--ink);font-size:14px}
+.sheet .row{display:grid;grid-template-columns:70px 1fr 1fr;border-top:1px solid var(--line)}
+.sheet .row>div{padding:9px 14px}
+.sheet .row>div+div{border-left:1px solid var(--line)}
+.sheet .row.head{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.tag{font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:6px}
+.tag.q{background:var(--accent-soft);color:var(--accent)}
+.tag.o{background:var(--gold-soft);color:var(--gold)}
+
+/* pyramid */
+.pyr{display:grid;gap:6px;margin-top:20px;justify-items:center}
+.pyr div{background:var(--accent);color:#fff;border-radius:8px;padding:10px 16px;text-align:center;font-size:15px;font-weight:500}
+.pyr div b{display:block;font-size:16px}
+.pyr div:nth-child(1){width:100%}.pyr div:nth-child(2){width:88%;opacity:.92}.pyr div:nth-child(3){width:76%;opacity:.84}
+.pyr div:nth-child(4){width:64%;opacity:.76}.pyr div:nth-child(5){width:52%;opacity:.68}.pyr div:nth-child(6){width:40%;opacity:.6}
+
+/* exercise */
+.timer{font-family:Fraunces,serif;font-size:clamp(64px,10vw,128px);font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+.timer.low{color:var(--bad)}
+.timer-wrap{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.timer-btns{display:flex;gap:8px;flex-wrap:wrap}
+.casefile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;font-size:15.5px;box-shadow:var(--shadow);columns:2;column-gap:32px}
+.casefile p{break-inside:avoid;margin:0 0 10px}
+.casefile b{color:var(--accent)}
+.stamp{display:inline-block;border:2px solid var(--accent);color:var(--accent);font-weight:700;letter-spacing:.1em;font-size:12px;padding:3px 8px;border-radius:6px;transform:rotate(-2deg);margin-bottom:12px}
+.traps{display:none;margin-top:16px}
+.traps.show{display:grid;animation:fade .3s}
+
+/* reveal */
+.reveal-item{opacity:.15;transition:opacity .3s}
+.reveal-item.shown{opacity:1}
+
+/* jigsaw */
+.jig{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.jig button{padding:9px 14px;border-radius:999px;border:1px dashed var(--line);background:var(--surface);font-size:14px;font-weight:500}
+.jig button.on{background:var(--bad-soft);border:1px solid var(--bad);color:var(--bad)}
+.jig-out{margin-top:12px;font-weight:600;font-size:16px}
+
+/* chrome */
+.bar{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;gap:10px;padding:0 max(16px,2vw);background:var(--surface);border-top:1px solid var(--line);z-index:20}
+.bar .ttl{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bar .ttl b{color:var(--ink)}
+.icon-btn{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--ink);flex:0 0 auto}
+.icon-btn:hover{background:var(--surface-2)}
+.icon-btn svg{width:20px;height:20px}
+.count{font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;min-width:58px;text-align:center}
+.clock{font-variant-numeric:tabular-nums;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--surface-2);white-space:nowrap}
+.clock.run{background:var(--accent-soft);color:var(--accent)}
+.progress{position:fixed;left:0;top:0;height:3px;background:var(--accent);z-index:30;transition:width .35s ease}
+.notes{position:fixed;right:16px;bottom:72px;width:min(420px,calc(100vw - 32px));max-height:45vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;font-size:15px;z-index:25;display:none}
+.notes.show{display:block;animation:fade .2s}
+.notes h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.overview{position:fixed;inset:0;background:var(--bg);z-index:40;overflow:auto;padding:24px max(16px,4vw);display:none}
+.overview.show{display:block}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}
+.ov-grid button{text-align:left;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);min-height:96px;display:flex;flex-direction:column;gap:6px}
+.ov-grid button.cur{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.ov-grid small{color:var(--muted);font-size:12px;font-weight:600}
+.ov-grid span{font-weight:600;font-size:15px;line-height:1.3}
+.help{font-size:13px;color:var(--muted)}
+kbd{font:600 12px Inter,sans-serif;padding:2px 6px;border-radius:5px;border:1px solid var(--line);background:var(--surface-2)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+@media (max-width:860px){
+  body{font-size:16px}
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .casefile{columns:1}
+  .sheet header{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:600px){
+  .slide{justify-content:flex-start;padding:36px 16px 28px}
+  .g2,.g3,.g4,.vs{grid-template-columns:1fr}
+  .ag{grid-template-columns:64px 1fr auto;gap:10px;padding:12px}
+  .hl{grid-template-columns:1fr}
+  .sheet .row{grid-template-columns:52px 1fr}
+  .sheet .row>div:nth-child(3){grid-column:2;border-left:1px solid var(--line);border-top:1px dashed var(--line)}
+  .bar .ttl,.hide-sm{display:none}
+  .flip{height:170px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<main class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide" data-title="Title" data-notes="Welcome fellows. Introduce yourself and your beat. Set the tone: this is a working session — we will vote, test headlines and write a real court report before we leave. Press T to start the 90-minute session clock.">
+  <div class="inner">
+    <svg class="scale" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 8v48M20 56h24M12 16h40M32 12a3 3 0 1 0 0-.01"/><path d="M14 16 6 34a8 8 0 0 0 16 0L14 16zM50 16l-8 18a8 8 0 0 0 16 0L50 16z"/></svg>
+    <span class="kicker">Court Reporting &amp; Identifying Justice Stories</span>
+    <h1>From Courtroom Observation to Public&nbsp;Interest&nbsp;Story</h1>
+    <p class="lede" style="margin-top:18px">The journalist’s approach to justice reporting</p>
+    <div class="meta-row">
+      <div><span>Facilitator</span><strong id="facilitator">Journalist</strong></div>
+      <div><span>Duration</span><strong>1 hour 30 minutes</strong></div>
+      <div><span>Format</span><strong>Interactive workshop</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 POLL -->
+<section class="slide" data-title="Warm-up poll" data-notes="Ask for a show of hands for each option and tap + to record the count. Use the result to bridge: most people think 'crime'; this session is about seeing justice — and injustice — as a public-interest beat.">
+  <div class="inner">
+    <span class="kicker">Warm-up · show of hands</span>
+    <h2>When you hear “court reporting”, what comes to mind first?</h2>
+    <div class="poll" data-poll>
+      <div class="poll-row"><i class="poll-bar"></i><span>🔪 Crime and scandal stories</span><div class="poll-ctl"><button aria-label="Remove vote">−</button><span>0</span><button aria-label="Add vote">+</button></div></div>
+      <div class="poll-row"><i class="poll-bar"></i><span>⏳ Long, slow proceedings and adjournments</span><div class="poll-ctl"><button aria-label="Remove vote">−</button><span>0</span><button aria-label="Add vote">+</button></div></div>
+      <div class="poll-row"><i class="poll-bar"></i><span>📜 Confusing legal jargon</span><div class="poll-ctl"><button aria-label="Remove vote">−</button><span>0</span><button aria-label="Add vote">+</button></div></div>
+      <div class="poll-row"><i class="poll-bar"></i><span>⚖️ Holding the justice system to account</span><div class="poll-ctl"><button aria-label="Remove vote">−</button><span>0</span><button aria-label="Add vote">+</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 OBJECTIVES -->
+<section class="slide" data-title="Learning objectives" data-notes="Read the four outcomes. Emphasise the expected output: by the end, every fellow should be able to spot a public-interest issue in a court proceeding and produce a short, factual, balanced report.">
+  <div class="inner">
+    <span class="kicker">By the end of this session</span>
+    <h2>You should be able to…</h2>
+    <div class="grid g4">
+      <div class="card"><span class="num">01</span><h3>Understand</h3><p>the role of journalism in promoting access to justice.</p></div>
+      <div class="card"><span class="num">02</span><h3>Identify</h3><p>newsworthy, public-interest issues from court proceedings.</p></div>
+      <div class="card"><span class="num">03</span><h3>Observe</h3><p>proceedings closely and take accurate, usable notes.</p></div>
+      <div class="card"><span class="num">04</span><h3>Produce</h3><p>factual, balanced and responsible court reports.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 AGENDA -->
+<section class="slide" data-title="Session plan" data-notes="If the session clock is running (press T), the current block is highlighted automatically, so you can glance here to check pace.">
+  <div class="inner">
+    <span class="kicker">90 minutes · six blocks</span>
+    <h2>Session plan</h2>
+    <div class="agenda" id="agenda">
+      <div class="ag" data-start="0" data-len="10"><span class="t">00–10</span><span>Introduction to court reporting</span><span class="d">10′</span></div>
+      <div class="ag" data-start="10" data-len="20"><span class="t">10–30</span><span>Story identification &amp; news values</span><span class="d">20′</span></div>
+      <div class="ag" data-start="30" data-len="20"><span class="t">30–50</span><span>Observation, note-taking &amp; verification</span><span class="d">20′</span></div>
+      <div class="ag" data-start="50" data-len="20"><span class="t">50–70</span><span>Writing &amp; ethical reporting</span><span class="d">20′</span></div>
+      <div class="ag" data-start="70" data-len="15"><span class="t">70–85</span><span>Practical court-reporting exercise</span><span class="d">15′</span></div>
+      <div class="ag" data-start="85" data-len="5"><span class="t">85–90</span><span>Questions &amp; recap</span><span class="d">5′</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 DIVIDER 1 -->
+<section class="slide divider" data-title="Part 1 · Introduction" data-notes="Part 1: 10 minutes. Two slides — why open justice matters, and the difference between a court report and a justice story.">
+  <div class="inner">
+    <div class="time">10′</div>
+    <span class="kicker">Part 1</span>
+    <h2>Introduction to court reporting</h2>
+    <p class="lede">Why the press gallery matters to access to justice.</p>
+  </div>
+</section>
+
+<!-- 6 OPEN JUSTICE -->
+<section class="slide" data-title="Why court reporting matters" data-notes="The Hewart quote is from R v Sussex Justices (1924), the foundation of the open-justice principle. Ask: who in this room has seen a case where publicity changed the outcome — a detainee released, a long-delayed trial finally heard?">
+  <div class="inner">
+    <span class="kicker">Open justice</span>
+    <div class="grid g2" style="align-items:center;gap:40px">
+      <div>
+        <blockquote>“Justice should not only be done, but should manifestly and undoubtedly be seen to be done.”<cite>Lord Hewart CJ, <i>R v Sussex Justices</i> (1924)</cite></blockquote>
+      </div>
+      <div>
+        <h3>The reporter is the public’s eyes in court</h3>
+        <ul class="clean">
+          <li><b>Accountability</b> — judges, prosecutors, police and lawyers act in public view.</li>
+          <li><b>Access to justice</b> — exposing delays, costs, detention and unequal treatment.</li>
+          <li><b>Public understanding</b> — explaining rights, procedure and the law.</li>
+          <li><b>Deterrence &amp; confidence</b> — a visible system earns trust.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 COURT REPORT VS JUSTICE STORY -->
+<section class="slide" data-title="Court report vs justice story" data-notes="Most newsrooms stop at the left column. The goal of this fellowship is to move fellows to the right column — without abandoning the accuracy discipline of the left.">
+  <div class="inner">
+    <span class="kicker">Two kinds of output</span>
+    <h2>From “what happened today” to “why it matters”</h2>
+    <div class="vs">
+      <div>
+        <h3>📰 Court report</h3>
+        <ul class="clean">
+          <li>One case, one sitting</li>
+          <li>Charges, evidence, rulings, next date</li>
+          <li>Strictly what was said in open court</li>
+          <li>Fast, frequent, factual</li>
+        </ul>
+      </div>
+      <div>
+        <h3>⚖️ Justice story</h3>
+        <ul class="clean">
+          <li>Patterns across many cases</li>
+          <li>Systems: delays, detention, legal aid, cost</li>
+          <li>Data, documents, voices outside court</li>
+          <li>Asks: who is failed, and why?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 DIVIDER 2 -->
+<section class="slide divider" data-title="Part 2 · Story identification" data-notes="Part 2: 20 minutes. News values, where justice stories hide, then two 'find the angle' scenarios for the room to vote on.">
+  <div class="inner">
+    <div class="time">20′</div>
+    <span class="kicker">Part 2</span>
+    <h2>Story identification &amp; news values</h2>
+    <p class="lede">Seeing the story behind the cause list.</p>
+  </div>
+</section>
+
+<!-- 9 NEWS VALUES -->
+<section class="slide" data-title="News values, justice lens" data-notes="Click each card to reveal it one by one, or press the button to reveal all. For each, ask the room for a local example.">
+  <div class="inner">
+    <span class="kicker">News values through a justice lens</span>
+    <h2>What makes a court matter newsworthy?</h2>
+    <div class="grid g4" data-reveal>
+      <div class="card reveal-item"><h3>Impact</h3><p>How many people does the ruling or failure affect?</p></div>
+      <div class="card reveal-item"><h3>Prominence</h3><p>Public officials, institutions, well-known parties.</p></div>
+      <div class="card reveal-item"><h3>Precedent</h3><p>A first-of-its-kind ruling or new interpretation of law.</p></div>
+      <div class="card reveal-item"><h3>Conflict</h3><p>State vs citizen, rights vs power, community vs company.</p></div>
+      <div class="card reveal-item"><h3>Human interest</h3><p>Ordinary lives changed by the justice system.</p></div>
+      <div class="card reveal-item"><h3>Proximity</h3><p>Local courts, local defendants, local consequences.</p></div>
+      <div class="card reveal-item"><h3>Timeliness</h3><p>Verdicts, sentencing, bail, deadlines, anniversaries.</p></div>
+      <div class="card reveal-item"><h3>Pattern</h3><p>The tenth adjournment is a story; so is the hundredth detainee.</p></div>
+    </div>
+    <div style="margin-top:18px"><button class="btn ghost" data-reveal-all>Reveal all</button></div>
+  </div>
+</section>
+
+<!-- 10 WHERE STORIES HIDE -->
+<section class="slide" data-title="Where justice stories hide" data-notes="These are the access-to-justice stories that rarely make the news because no one is in court to notice them. Encourage fellows to keep a running log of adjournments and their reasons — the data becomes the story.">
+  <div class="inner">
+    <span class="kicker">Look beyond the verdict</span>
+    <h2>Where justice stories hide</h2>
+    <div class="grid g3">
+      <div class="card"><h3>⏳ Delay</h3><p>Repeated adjournments, absent prosecutors, missing case files, “no power today”.</p></div>
+      <div class="card"><h3>🔒 Detention</h3><p>Awaiting-trial detainees held longer than the maximum sentence for the offence.</p></div>
+      <div class="card"><h3>💸 Bail &amp; cost</h3><p>Bail terms poor defendants can never meet; filing fees and hidden charges.</p></div>
+      <div class="card"><h3>🧑‍⚖️ Representation</h3><p>Defendants without lawyers; overstretched legal aid; no interpreter.</p></div>
+      <div class="card"><h3>📄 Compliance</h3><p>Court orders and judgments ignored by government or powerful parties.</p></div>
+      <div class="card"><h3>🏛 Infrastructure</h3><p>Courtrooms without records, recording, ramps or space for the public.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 FIND THE ANGLE -->
+<section class="slide" data-title="Activity: Find the angle" data-notes="Read the scenario aloud. Let the room vote by show of hands, then click the answer they chose. The feedback explains the best angle. Switch scenarios with the tabs.">
+  <div class="inner">
+    <span class="kicker">Activity · vote, then reveal</span>
+    <h2>Find the strongest angle</h2>
+    <div class="tabs" data-tabs>
+      <button class="tab on" data-tab="0">Scenario 1</button>
+      <button class="tab" data-tab="1">Scenario 2</button>
+    </div>
+    <div data-panels>
+      <div data-panel="0" data-quiz>
+        <div class="scenario">A magistrate adjourns a petty-theft case <b>for the 14th time</b> because the prosecution witness is absent again. The defendant, accused of stealing a phone, has been in custody for <b>three years</b>.</div>
+        <div class="opts">
+          <button class="opt" data-ok="0"><span class="letter">A</span>“Man accused of phone theft back in court”</button>
+          <button class="opt" data-ok="1"><span class="letter">B</span>Three years awaiting trial over a phone: how adjournments keep detainees locked up</button>
+          <button class="opt" data-ok="0"><span class="letter">C</span>Profile of the phone’s owner and the impact of theft</button>
+        </div>
+        <div class="feedback"><b>Best: B.</b> The court date is just the peg; the public-interest story is pre-trial detention and delay. Check how many other cases on the cause list share the pattern, and seek comment from the prosecution, the defence, the court registry and the custody authority.</div>
+      </div>
+      <div data-panel="0" data-quiz hidden>
+        <div class="scenario">A High Court orders a state agency to <b>pay compensation</b> to 200 families evicted from a waterfront settlement. Eighteen months later, <b>no payment</b> has been made and families are still in temporary shelters.</div>
+        <div class="opts">
+          <button class="opt" data-ok="0"><span class="letter">A</span>Re-report the original judgment</button>
+          <button class="opt" data-ok="0"><span class="letter">B</span>Interview one family about their eviction day</button>
+          <button class="opt" data-ok="1"><span class="letter">C</span>Court said pay: 18 months on, families still wait — tracking an ignored judgment</button>
+        </div>
+        <div class="feedback"><b>Best: C.</b> Non-compliance with court orders is a core access-to-justice story. Get the certified judgment, document the timeline, give the agency a right of reply, and use human voices (B) <i>inside</i> this story rather than instead of it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 PUBLIC INTEREST TEST -->
+<section class="slide" data-title="Public interest test" data-notes="Distinguish 'in the public interest' from 'what interests the public'. A celebrity divorce interests the public; a pattern of unlawful detention is in the public interest. Ask fellows to run Scenario 1 through these questions.">
+  <div class="inner">
+    <span class="kicker">A quick filter</span>
+    <h2>In the public interest — or just interesting to the public?</h2>
+    <div class="grid g2">
+      <div class="card"><span class="num">?</span><h3>Does it affect many people, or the vulnerable?</h3><p>Rights, safety, liberty, money, services.</p></div>
+      <div class="card"><span class="num">?</span><h3>Does it expose wrongdoing or system failure?</h3><p>Abuse of power, corruption, negligence, unlawful detention.</p></div>
+      <div class="card"><span class="num">?</span><h3>Does it help people make decisions?</h3><p>Knowing their rights, where to seek help, how the law applies.</p></div>
+      <div class="card"><span class="num">?</span><h3>Does it hold power to account?</h3><p>Public bodies, officials, institutions, corporations.</p></div>
+    </div>
+    <p class="lede" style="margin-top:18px">Yes to one or more → you likely have a <em>public-interest</em> story.</p>
+  </div>
+</section>
+
+<!-- 13 DIVIDER 3 -->
+<section class="slide divider" data-title="Part 3 · Observation & verification" data-notes="Part 3: 20 minutes. Preparation, what to watch, a note-taking template, and a verification checklist.">
+  <div class="inner">
+    <div class="time">20′</div>
+    <span class="kicker">Part 3</span>
+    <h2>Observation, note-taking &amp; verification</h2>
+    <p class="lede">Accuracy is won or lost in the courtroom notebook.</p>
+  </div>
+</section>
+
+<!-- 14 BEFORE AND DURING -->
+<section class="slide" data-title="Before & during court" data-notes="Stress: know the court's rules on phones, recording and photography before you enter — they differ by court and by judge. When unsure, ask the registrar.">
+  <div class="inner">
+    <span class="kicker">Courtroom observation</span>
+    <h2>Before you enter &amp; what to watch</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>🗂 Before</h3>
+        <ul class="clean">
+          <li>Check the cause list; get the case number and court</li>
+          <li>Obtain the charge sheet or originating process</li>
+          <li>Read reports of earlier sittings</li>
+          <li>Know the parties, counsel and judge</li>
+          <li>Learn the court’s rules on phones, recording and photos</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>👁 During</h3>
+        <ul class="clean">
+          <li>Who is present — and who is absent</li>
+          <li>Charges read and pleas taken</li>
+          <li>Key testimony, in the witness’s exact words</li>
+          <li>Exhibits tendered; objections and rulings</li>
+          <li>Adjournment: new date <b>and the reason</b></li>
+          <li>What <i>didn’t</i> happen that should have</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 NOTE TEMPLATE -->
+<section class="slide" data-title="A note-taking template" data-notes="Show the three-column method: time, what was said/done (fact), and your observations kept separate. Mark verbatim quotes clearly. Never mix your impressions into the factual column.">
+  <div class="inner">
+    <span class="kicker">Note-taking</span>
+    <h2>Separate what was <em>said</em> from what you <em>saw</em></h2>
+    <div class="sheet">
+      <header>
+        <div>Court<b>High Court 3</b></div>
+        <div>Judge<b>Justice A. B. (fictional)</b></div>
+        <div>Case no.<b>CR/000/2026</b></div>
+        <div>Date / start<b>18 Nov · 10:42</b></div>
+      </header>
+      <div class="row head"><div>Time</div><div>Proceedings (fact)</div><div>Observations</div></div>
+      <div class="row"><div>10:42</div><div>Case called. Defendant present, represented. Prosecution: 2nd witness.</div><div><span class="tag o">OBS</span>Sitting began 2 hrs late.</div></div>
+      <div class="row"><div>10:50</div><div><span class="tag q">Q</span>“We paid every Friday. By January the account was empty.” — PW2</div><div><span class="tag o">OBS</span>~40 people in public gallery.</div></div>
+      <div class="row"><div>11:15</div><div>Cross-exam: PW2 agrees she did not see the defendant withdraw money.</div><div>—</div></div>
+      <div class="row"><div>11:40</div><div>Adjourned to 9 Dec for continuation of trial.</div><div><span class="tag o">OBS</span>Reason: next witness absent.</div></div>
+    </div>
+    <p class="help" style="margin-top:12px"><span class="tag q">Q</span> = verbatim quote &nbsp; <span class="tag o">OBS</span> = your observation — never presented as fact.</p>
+  </div>
+</section>
+
+<!-- 16 VERIFICATION CHECKLIST -->
+<section class="slide" data-title="Verification checklist" data-notes="Interactive: tick each item as the room tells you how they would verify it. This checklist doubles as the pre-filing routine fellows should use every time.">
+  <div class="inner">
+    <span class="kicker">Verification, fact-checking &amp; corroboration</span>
+    <h2>Before you file, check…</h2>
+    <div class="grid g2" data-checklist>
+      <label class="check"><input type="checkbox"><span>Names, ages and spellings against the charge sheet or court registry</span></label>
+      <label class="check"><input type="checkbox"><span>The <b>exact</b> charges and the law they fall under</span></label>
+      <label class="check"><input type="checkbox"><span>Quotes against your notes — or leave them out</span></label>
+      <label class="check"><input type="checkbox"><span>Legal terms and procedure with a lawyer or the registrar</span></label>
+      <label class="check"><input type="checkbox"><span>Out-of-court claims corroborated by a second independent source</span></label>
+      <label class="check"><input type="checkbox"><span>Both sides given a fair hearing; right of reply sought</span></label>
+      <label class="check"><input type="checkbox"><span>Next date and stage of the case confirmed</span></label>
+      <label class="check"><input type="checkbox"><span>No identifying detail of a protected child or survivor</span></label>
+    </div>
+    <div class="meter"><i></i></div>
+  </div>
+</section>
+
+<!-- 17 DIVIDER 4 -->
+<section class="slide divider" data-title="Part 4 · Writing & ethics" data-notes="Part 4: 20 minutes. Presumption of innocence, prejudice, interviewing ethically, structure and formats, and protecting children and vulnerable people.">
+  <div class="inner">
+    <div class="time">20′</div>
+    <span class="kicker">Part 4</span>
+    <h2>Writing &amp; ethical reporting</h2>
+    <p class="lede">Fair, accurate and contemporaneous — and do no harm.</p>
+  </div>
+</section>
+
+<!-- 18 LANGUAGE FLIPS -->
+<section class="slide" data-title="Presumption of innocence" data-notes="Ask fellows to rewrite each red card aloud before you flip it. Key principle: until a court convicts, everything is an allegation and must be attributed.">
+  <div class="inner">
+    <span class="kicker">Presumption of innocence · tap to flip</span>
+    <h2>Responsible language: an accused is not a convict</h2>
+    <div class="grid g3">
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“Killer remanded in prison”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“Man charged with murder remanded in custody”</b><span>Charged ≠ guilty</span></div></div></button>
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“Fraudster who stole savings”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“Trader accused of stealing savings”</b><span>Attribute the allegation</span></div></div></button>
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“He confessed to police”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“Prosecution says he made a statement; the defence disputes it”</b><span>Report the contest, not a conclusion</span></div></div></button>
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“The victim told the court…”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“The complainant told the court…”</b><span>Pre-verdict, “victim” presumes the crime</span></div></div></button>
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“Evidence proves guilt”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“The prosecution told the court the evidence shows…”</b><span>Only the court decides</span></div></div></button>
+      <button class="flip"><div class="flip-in"><div class="face front"><small>Avoid</small><b>“Thief finally caught”</b><span>Tap for a better version</span></div><div class="face back"><small>Prefer</small><b>“Man arrested over alleged theft”</b><span>Arrest is not proof</span></div></div></button>
+    </div>
+  </div>
+</section>
+
+<!-- 19 PREJUDICE -->
+<section class="slide" data-title="Not prejudicing a trial" data-notes="Contempt and sub judice rules differ by jurisdiction — tell fellows to learn their own court's rules and their newsroom's legal policy. The safest ground: a fair, accurate and contemporaneous report of what was said in open court, with attribution.">
+  <div class="inner">
+    <span class="kicker">Reporting allegations without prejudicing a trial</span>
+    <h2>Report the trial — don’t conduct it</h2>
+    <div class="grid g2">
+      <div class="card" style="border-top:4px solid var(--good)">
+        <h3>✅ Safe ground</h3>
+        <ul class="clean">
+          <li>What was said and done in <b>open court</b></li>
+          <li>Fair, accurate, balanced and timely</li>
+          <li>Every allegation attributed (“the prosecution alleged…”)</li>
+          <li>The defence case reported alongside the prosecution’s</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid var(--bad)">
+        <h3>⛔ Risky ground</h3>
+        <ul class="clean">
+          <li>Comment on guilt or innocence before verdict</li>
+          <li>Previous convictions or “evidence” not before the court</li>
+          <li>Material the court has excluded or ordered not published</li>
+          <li>Interviewing witnesses about their evidence mid-trial</li>
+          <li>“Trial by media” campaigns, inflammatory photos and captions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 20 HEADLINE TESTER -->
+<section class="slide" data-title="Activity: Fair or prejudicial?" data-notes="For each headline, get a quick verdict from the room, then click their answer. The explanation appears underneath. Score shown at the bottom.">
+  <div class="inner">
+    <span class="kicker">Activity · fair or prejudicial?</span>
+    <h2>Test the headline</h2>
+    <div class="grid" data-headlines style="margin-top:16px;gap:10px">
+      <div class="hl" data-ans="no"><q>Corrupt ex-minister finally faces justice</q><div class="acts"><button data-v="ok">Fair</button><button data-v="no">Prejudicial</button></div><div class="why"><span class="verdict">Prejudicial.</span>“Corrupt” presumes guilt. Try: “Ex-minister goes on trial over alleged contract fraud.”</div></div>
+      <div class="hl" data-ans="ok"><q>Witness tells court she did not see accused take the money</q><div class="acts"><button data-v="ok">Fair</button><button data-v="no">Prejudicial</button></div><div class="why"><span class="verdict">Fair.</span>Accurate, attributed report of testimony given in open court.</div></div>
+      <div class="hl" data-ans="no"><q>Pastor accused of abuse has done it before, neighbours say</q><div class="acts"><button data-v="ok">Fair</button><button data-v="no">Prejudicial</button></div><div class="why"><span class="verdict">Prejudicial.</span>Out-of-court claims of past conduct, not before the court, could influence the trial.</div></div>
+      <div class="hl" data-ans="ok"><q>Three years without trial: detainee’s case adjourned for 14th time</q><div class="acts"><button data-v="ok">Fair</button><button data-v="no">Prejudicial</button></div><div class="why"><span class="verdict">Fair.</span>A factual, public-interest angle on delay that makes no claim about guilt.</div></div>
+      <div class="hl" data-ans="no"><q>Killer driver smiles as charges are read</q><div class="acts"><button data-v="ok">Fair</button><button data-v="no">Prejudicial</button></div><div class="why"><span class="verdict">Prejudicial.</span>“Killer” presumes guilt; demeanour commentary invites judgement. Report the charge and plea.</div></div>
+    </div>
+    <p class="help" style="margin-top:12px" data-score>Score: 0 / 5</p>
+  </div>
+</section>
+
+<!-- 21 INTERVIEWING -->
+<section class="slide" data-title="Interviewing stakeholders" data-notes="Emphasise informed consent — especially with people unfamiliar with media. Explain what will be published, where, and the possible consequences for them and their case.">
+  <div class="inner">
+    <span class="kicker">Interviewing relevant stakeholders ethically</span>
+    <h2>Who to talk to — and how</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>👥 Who</h3>
+        <ul class="clean">
+          <li>Prosecution and defence counsel</li>
+          <li>Defendants — through their lawyers</li>
+          <li>Families and affected communities</li>
+          <li>Court registry and public relations officers</li>
+          <li>Legal aid bodies, civil society, academics</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🤝 How</h3>
+        <ul class="clean">
+          <li><b>Informed consent</b> — explain use, platform and risks</li>
+          <li><b>Don’t</b> discuss evidence with witnesses during trial</li>
+          <li><b>Trauma-informed</b> — patience, privacy, the right to stop</li>
+          <li><b>No payment</b> or promises in exchange for information</li>
+          <li><b>Right of reply</b> for anyone criticised</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 22 STRUCTURE -->
+<section class="slide" data-title="Structure of a court report" data-notes="Walk down the pyramid, then compare the two intros. The weak intro buries the news and editorialises; the strong one leads with what happened today and attributes.">
+  <div class="inner">
+    <span class="kicker">Writing the court report</span>
+    <div class="grid g2" style="align-items:center;gap:36px">
+      <div>
+        <h2>Most important first</h2>
+        <div class="pyr">
+          <div><b>Intro</b>Who, charged with what, what happened today</div>
+          <div><b>Attribution</b>Who said it, in which court</div>
+          <div><b>Key evidence</b>Testimony and exhibits</div>
+          <div><b>Defence</b>Plea, response, cross-exam</div>
+          <div><b>Background</b>Context of the case</div>
+          <div><b>Next</b>Adjourned to…</div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:0">
+        <div class="card" style="border-left:4px solid var(--bad)"><span class="pill" style="background:var(--bad-soft);color:var(--bad)">Weak intro</span><p style="margin-top:10px;color:var(--ink)">“The long-awaited trial of the notorious fraud case continued on Tuesday at the High Court amid tension.”</p></div>
+        <div class="card" style="border-left:4px solid var(--good)"><span class="pill" style="background:var(--good-soft);color:var(--good)">Strong intro</span><p style="margin-top:10px;color:var(--ink)">“A cooperative treasurer told the High Court on Tuesday that members’ savings had vanished from their account, but admitted she never saw the accused trader withdraw the money.”</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 23 FORMATS -->
+<section class="slide" data-title="Report, news story, feature" data-notes="The same case can feed three formats. A daily report today; a news story when there's a ruling or new development; a human-interest feature that explores the system through people's experience.">
+  <div class="inner">
+    <span class="kicker">One case, three formats</span>
+    <h2>Choosing the right format</h2>
+    <div class="grid g3">
+      <div class="card"><span class="pill">Court report</span><h3 style="margin-top:12px">What happened today</h3><p>300–500 words. Strict chronology of proceedings, attribution in every paragraph, filed same day.</p></div>
+      <div class="card"><span class="pill">News story</span><h3 style="margin-top:12px">What changed</h3><p>Rulings, verdicts, sentencing, bail. Adds reaction, context and what happens next.</p></div>
+      <div class="card"><span class="pill">Human-interest feature</span><h3 style="margin-top:12px">What it means</h3><p>Lives behind the case. Narrative, scenes, voices — still verified, still fair, still careful about live proceedings.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 24 CHILDREN & VULNERABLE -->
+<section class="slide" data-title="Children & vulnerable persons" data-notes="Use the jigsaw demo: click each detail. Individually each seems harmless; combined, the child is identifiable. Check the specific statutory protections in your jurisdiction — many forbid identifying children in proceedings and survivors of sexual offences.">
+  <div class="inner">
+    <span class="kicker">Ethical reporting involving children and vulnerable persons</span>
+    <div class="grid g2" style="gap:36px;align-items:start;margin-top:0">
+      <div>
+        <h2>Protect identity — minimise harm</h2>
+        <ul class="clean">
+          <li>Never identify children involved in proceedings — as defendants, witnesses or complainants</li>
+          <li>Protect survivors of sexual and gender-based violence</li>
+          <li>Take care with people with mental-health conditions or disabilities</li>
+          <li>Blur faces, change voices, avoid school uniforms and landmarks</li>
+          <li>Ask: does this detail serve the public, or only curiosity?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🧩 Beware “jigsaw identification”</h3>
+        <p>Tap each detail a careless report might include:</p>
+        <div class="jig" data-jigsaw>
+          <button>Mother’s full name</button>
+          <button>Name of her school</button>
+          <button>Street she lives on</button>
+          <button>Her age: 15</button>
+          <button>Photo of the family house</button>
+        </div>
+        <div class="jig-out" data-jig-out>0 details — child not identifiable.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 25 DIVIDER 5 -->
+<section class="slide divider" data-title="Part 5 · Practical exercise" data-notes="Part 5: 15 minutes. 10 minutes writing, 5 minutes peer review. Fellows can work individually or in pairs.">
+  <div class="inner">
+    <div class="time">15′</div>
+    <span class="kicker">Part 5</span>
+    <h2>Practical court-reporting exercise</h2>
+    <p class="lede">From notebook to publishable report.</p>
+  </div>
+</section>
+
+<!-- 26 CASE FILE -->
+<section class="slide" data-title="Exercise: the court notes" data-notes="These notes are fictional. They contain deliberate traps: the shout of 'Thief!', the defence counsel's outside-court remark, the child witness's identifying details, and the 2-hour delay (a possible justice angle). Reveal the traps only after the writing time.">
+  <div class="inner">
+    <span class="kicker">Your reporter’s notes · fictional case</span>
+    <h2 style="margin-bottom:14px">The State v. K. Adeyemi</h2>
+    <div class="casefile">
+      <span class="stamp">FICTIONAL · TRAINING ONLY</span>
+      <p><b>Court:</b> High Court 3, Courtroom 2 · Tuesday. Sitting began 2 hours late; the judge said there had been a power outage.</p>
+      <p><b>Charges:</b> Three counts — conspiracy, obtaining by false pretences and stealing 48 million in savings belonging to the Unity Market Women’s Cooperative. Pleaded <b>not guilty</b> in March.</p>
+      <p><b>Custody:</b> In custody since November last year; bail application refused in January.</p>
+      <p><b>Testimony:</b> Second prosecution witness, Mrs R. Eze, 56, cooperative treasurer: <i>“We gave him our contributions every Friday. In January, the account was empty.”</i></p>
+      <p><b>Cross-examination</b> (defence counsel B. Okafor): she agreed she never personally saw the defendant withdraw money.</p>
+      <p><b>Exhibit P4:</b> bank statement of the cooperative account, admitted without objection.</p>
+      <p><b>Gallery:</b> About 40 cooperative members attended; some wept. One shouted “Thief!” and was warned by the judge.</p>
+      <p><b>Outside court:</b> Mr Okafor told reporters: “My client is a scapegoat.”</p>
+      <p><b>Next witness:</b> A 15-year-old girl, daughter of a member. Her mother gave you the girl’s name and school.</p>
+      <p><b>Adjourned</b> to 9 December for continuation of trial.</p>
+    </div>
+    <div style="margin-top:14px"><button class="btn ghost" data-traps-btn>Reveal the traps</button></div>
+    <div class="grid g4 traps" data-traps>
+      <div class="card"><h3>“Thief!”</h3><p>An outburst, not evidence. Don’t headline it.</p></div>
+      <div class="card"><h3>“Scapegoat”</h3><p>Outside court — attribute it clearly and keep it in proportion.</p></div>
+      <div class="card"><h3>The child</h3><p>No name, school or detail that identifies her.</p></div>
+      <div class="card"><h3>The delay</h3><p>Power outage + months in custody = a follow-up justice story.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 27 TASK + TIMER -->
+<section class="slide" data-title="Exercise: write & review" data-notes="Start the 10-minute timer for writing. When it ends, switch to 5 minutes and pairs swap reports to score each other against the checklist.">
+  <div class="inner">
+    <span class="kicker">Your task</span>
+    <div class="grid g2" style="gap:40px;align-items:start;margin-top:0">
+      <div>
+        <h2>Write a 150–200 word court report</h2>
+        <ul class="clean">
+          <li>Strong intro: who, what charge, what happened today</li>
+          <li>Attribute every allegation</li>
+          <li>Include the defence’s position</li>
+          <li>End with the next date</li>
+          <li>Then <b>swap with a partner</b> and peer-review</li>
+        </ul>
+        <h3 style="margin-top:22px">Peer-review checklist</h3>
+        <div class="grid" data-checklist style="gap:8px;margin-top:8px">
+          <label class="check"><input type="checkbox"><span>Accurate names, charges and dates</span></label>
+          <label class="check"><input type="checkbox"><span>Presumption of innocence respected</span></label>
+          <label class="check"><input type="checkbox"><span>Balanced: defence included</span></label>
+          <label class="check"><input type="checkbox"><span>Child witness not identifiable</span></label>
+          <label class="check"><input type="checkbox"><span>Clear, plain language; next date stated</span></label>
+        </div>
+        <div class="meter"><i></i></div>
+      </div>
+      <div class="card timer-wrap">
+        <span class="kicker" style="margin:0">Exercise timer</span>
+        <div class="timer" data-timer>10:00</div>
+        <div class="timer-btns">
+          <button class="btn" data-t="toggle">Start</button>
+          <button class="btn ghost" data-t="10">Write · 10′</button>
+          <button class="btn ghost" data-t="5">Review · 5′</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 28 DIVIDER 6 -->
+<section class="slide divider" data-title="Part 6 · Questions & recap" data-notes="Part 6: 5 minutes. Rapid-fire quiz, takeaways, then open the floor.">
+  <div class="inner">
+    <div class="time">5′</div>
+    <span class="kicker">Part 6</span>
+    <h2>Questions &amp; recap</h2>
+  </div>
+</section>
+
+<!-- 29 QUIZ -->
+<section class="slide" data-title="Rapid recap quiz" data-notes="Rapid-fire: read the question, take shouted answers, click to confirm.">
+  <div class="inner">
+    <span class="kicker">Rapid recap</span>
+    <h2>Three quick questions</h2>
+    <div class="grid g3">
+      <div data-quiz>
+        <h3>1. Before a verdict, the person giving evidence of a crime against them is best called…</h3>
+        <div class="opts">
+          <button class="opt" data-ok="0"><span class="letter">A</span>The victim</button>
+          <button class="opt" data-ok="1"><span class="letter">B</span>The complainant</button>
+        </div>
+        <div class="feedback">“Complainant” (or “alleged victim”) avoids presuming the crime happened.</div>
+      </div>
+      <div data-quiz>
+        <h3>2. A note marked [OBS] in your notebook is…</h3>
+        <div class="opts">
+          <button class="opt" data-ok="0"><span class="letter">A</span>A fact said in court</button>
+          <button class="opt" data-ok="1"><span class="letter">B</span>Your own observation</button>
+        </div>
+        <div class="feedback">Keep observations separate — never present them as testimony.</div>
+      </div>
+      <div data-quiz>
+        <h3>3. Naming a child witness’s school is…</h3>
+        <div class="opts">
+          <button class="opt" data-ok="0"><span class="letter">A</span>Fine if you don’t name her</button>
+          <button class="opt" data-ok="1"><span class="letter">B</span>Jigsaw identification — avoid</button>
+        </div>
+        <div class="feedback">Combined details can identify a child as surely as a name.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 30 TAKEAWAYS -->
+<section class="slide" data-title="Key takeaways" data-notes="Close on the six principles. Invite fellows to pick one court and track it for a month — the patterns they log will become their first justice story.">
+  <div class="inner">
+    <span class="kicker">Take these with you</span>
+    <h2>Six principles of justice reporting</h2>
+    <div class="grid g3">
+      <div class="card"><span class="num">1</span><h3>Be present</h3><p>The public relies on you to see what happens in court.</p></div>
+      <div class="card"><span class="num">2</span><h3>Look for patterns</h3><p>Delay, detention and cost are stories, not background.</p></div>
+      <div class="card"><span class="num">3</span><h3>Note precisely</h3><p>Exact words, times — and facts kept apart from impressions.</p></div>
+      <div class="card"><span class="num">4</span><h3>Presume innocence</h3><p>Attribute every allegation. Only the court decides guilt.</p></div>
+      <div class="card"><span class="num">5</span><h3>Verify everything</h3><p>Documents, registry, second sources, right of reply.</p></div>
+      <div class="card"><span class="num">6</span><h3>Do no harm</h3><p>Protect children, survivors and the vulnerable.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 31 THANKS -->
+<section class="slide title-slide" data-title="Questions" data-notes="Open the floor. Share your contact details and any follow-up resources.">
+  <div class="inner">
+    <span class="kicker">Thank you</span>
+    <h1>Questions?</h1>
+    <p class="lede" style="margin-top:18px">Justice reported fairly is justice made visible.</p>
+    <div class="meta-row">
+      <div><span>Facilitator</span><strong data-facilitator>Journalist</strong></div>
+      <div><span>Session</span><strong>Court Reporting &amp; Identifying Justice Stories</strong></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<aside class="notes" id="notes" aria-live="polite"><h4>Presenter notes</h4><div id="notes-body"></div></aside>
+
+<div class="overview" id="overview">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <h2 style="margin:0">All slides</h2>
+    <p class="help"><kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>N</kbd> notes · <kbd>O</kbd> overview · <kbd>T</kbd> session clock · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> close</p>
+  </div>
+  <div class="ov-grid" id="ov-grid"></div>
+</div>
+
+<nav class="bar" aria-label="Slide controls">
+  <button class="icon-btn" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+  <span class="count" id="count">1 / 1</span>
+  <button class="icon-btn" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  <span class="ttl" id="ttl"></span>
+  <button class="clock" id="clock" title="Session clock (T)">Start session · 90:00</button>
+  <button class="icon-btn" id="btn-notes" aria-label="Presenter notes (N)" title="Presenter notes (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></button>
+  <button class="icon-btn" id="btn-ov" aria-label="Slide overview (O)" title="Overview (O)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+  <button class="icon-btn hide-sm" id="btn-theme" aria-label="Toggle theme" title="Light / dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  <button class="icon-btn hide-sm" id="btn-fs" aria-label="Fullscreen (F)" title="Fullscreen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</nav>
+
+<script>
+(function(){
+  /* ===== Edit your name here ===== */
+  const FACILITATOR = "Journalist";
+
+  document.getElementById('facilitator').textContent = FACILITATOR;
+  document.querySelectorAll('[data-facilitator]').forEach(e => e.textContent = FACILITATOR);
+
+  const store = {
+    get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+    set(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+  };
+
+  const slides = [...document.querySelectorAll('.slide')];
+  const $ = id => document.getElementById(id);
+  let cur = 0;
+
+  function go(i){
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => {
+      s.classList.toggle('active', k === i);
+      s.classList.toggle('prev', k < i);
+      s.setAttribute('aria-hidden', k !== i);
+    });
+    cur = i;
+    slides[i].scrollTop = 0;
+    $('count').textContent = (i + 1) + ' / ' + slides.length;
+    $('progress').style.width = ((i + 1) / slides.length * 100) + '%';
+    $('ttl').innerHTML = '<b>' + slides[i].dataset.title + '</b>';
+    $('notes-body').textContent = slides[i].dataset.notes || 'No notes for this slide.';
+    history.replaceState(null, '', '#' + (i + 1));
+    document.querySelectorAll('#ov-grid button').forEach((b, k) => b.classList.toggle('cur', k === i));
+  }
+  const next = () => go(cur + 1), prev = () => go(cur - 1);
+  $('next').onclick = next; $('prev').onclick = prev;
+
+  /* overview */
+  slides.forEach((s, k) => {
+    const b = document.createElement('button');
+    b.innerHTML = '<small>' + (k + 1) + '</small><span></span>';
+    b.querySelector('span').textContent = s.dataset.title;
+    b.onclick = () => { go(k); toggleOv(false); };
+    $('ov-grid').appendChild(b);
+  });
+  function toggleOv(force){ $('overview').classList.toggle('show', force); }
+  $('btn-ov').onclick = () => toggleOv();
+
+  /* notes */
+  const toggleNotes = () => $('notes').classList.toggle('show');
+  $('btn-notes').onclick = toggleNotes;
+
+  /* theme */
+  const savedTheme = store.get('deck-theme');
+  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+  $('btn-theme').onclick = () => {
+    const dark = document.documentElement.dataset.theme
+      ? document.documentElement.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme: dark)').matches;
+    const t = dark ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t; store.set('deck-theme', t);
+  };
+
+  /* fullscreen */
+  const fs = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+  $('btn-fs').onclick = fs;
+
+  /* keyboard */
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input,textarea')) return;
+    const k = e.key;
+    if (['ArrowRight','PageDown',' '].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft','PageUp'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 'o' || k === 'O') toggleOv();
+    else if (k === 'f' || k === 'F') fs();
+    else if (k === 't' || k === 'T') toggleClock();
+    else if (k === 'Escape') { toggleOv(false); $('notes').classList.remove('show'); }
+  });
+
+  /* swipe */
+  let sx = null, sy = null;
+  $('deck').addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  $('deck').addEventListener('touchend', e => {
+    if (sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) dx < 0 ? next() : prev();
+    sx = null;
+  });
+
+  /* ===== session clock (90 min) ===== */
+  const TOTAL = 90 * 60;
+  let clockStart = null, clockAcc = 0, clockTick = null;
+  const fmt = s => { s = Math.max(0, Math.round(s)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+  function elapsed(){ return clockAcc + (clockStart ? (Date.now() - clockStart) / 1000 : 0); }
+  function renderClock(){
+    const el = elapsed();
+    const c = $('clock');
+    c.textContent = (clockStart ? '● ' : (el ? '❚❚ ' : 'Start session · ')) + fmt(TOTAL - el);
+    c.classList.toggle('run', !!clockStart);
+    const min = el / 60;
+    document.querySelectorAll('#agenda .ag').forEach(a => {
+      const s = +a.dataset.start, l = +a.dataset.len;
+      a.classList.toggle('now', el > 0 && min >= s && min < s + l);
+      a.classList.toggle('done', min >= s + l);
+    });
+  }
+  function toggleClock(){
+    if (clockStart) { clockAcc = elapsed(); clockStart = null; clearInterval(clockTick); }
+    else { clockStart = Date.now(); clockTick = setInterval(renderClock, 1000); }
+    renderClock();
+  }
+  $('clock').onclick = toggleClock;
+  renderClock();
+
+  /* ===== polls ===== */
+  document.querySelectorAll('[data-poll]').forEach(p => {
+    const rows = [...p.querySelectorAll('.poll-row')];
+    const counts = rows.map(() => 0);
+    const draw = () => {
+      const max = Math.max(1, ...counts);
+      rows.forEach((r, i) => { r.querySelector('.poll-ctl span').textContent = counts[i]; r.querySelector('.poll-bar').style.width = (counts[i] / max * 100) + '%'; });
+    };
+    rows.forEach((r, i) => {
+      const [minus, plus] = r.querySelectorAll('button');
+      minus.onclick = () => { counts[i] = Math.max(0, counts[i] - 1); draw(); };
+      plus.onclick = () => { counts[i]++; draw(); };
+    });
+  });
+
+  /* ===== progressive reveal ===== */
+  document.querySelectorAll('[data-reveal]').forEach(g => {
+    g.querySelectorAll('.reveal-item').forEach(it => it.addEventListener('click', () => it.classList.add('shown')));
+    const all = g.parentElement.querySelector('[data-reveal-all]');
+    if (all) all.onclick = () => g.querySelectorAll('.reveal-item').forEach(it => it.classList.add('shown'));
+  });
+
+  /* ===== tabs ===== */
+  document.querySelectorAll('[data-tabs]').forEach(t => {
+    const panels = [...t.parentElement.querySelectorAll('[data-panels] > *')];
+    t.querySelectorAll('.tab').forEach((b, i) => b.onclick = () => {
+      t.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+      panels.forEach((p, k) => p.hidden = k !== i);
+    });
+  });
+
+  /* ===== quizzes ===== */
+  document.querySelectorAll('[data-quiz]').forEach(q => {
+    q.querySelectorAll('.opt').forEach(o => o.onclick = () => {
+      q.querySelectorAll('.opt').forEach(x => x.classList.remove('right','wrong'));
+      o.classList.add(o.dataset.ok === '1' ? 'right' : 'wrong');
+      q.querySelector('.opt[data-ok="1"]').classList.add('right');
+      q.querySelector('.feedback').classList.add('show');
+    });
+  });
+
+  /* ===== flip cards ===== */
+  document.querySelectorAll('.flip').forEach(f => f.onclick = () => f.classList.toggle('on'));
+
+  /* ===== headline tester ===== */
+  document.querySelectorAll('[data-headlines]').forEach(g => {
+    const score = g.parentElement.querySelector('[data-score]');
+    const items = [...g.querySelectorAll('.hl')];
+    const upd = () => { const n = items.filter(h => h.dataset.correct === '1').length; score.textContent = 'Score: ' + n + ' / ' + items.length; };
+    items.forEach(h => h.querySelectorAll('button').forEach(b => b.onclick = () => {
+      h.classList.add('answered');
+      h.classList.remove('ok','no');
+      h.classList.add(h.dataset.ans);
+      h.dataset.correct = b.dataset.v === h.dataset.ans ? '1' : '0';
+      h.querySelectorAll('button').forEach(x => x.style.outline = x === b ? '2px solid var(--ink)' : '');
+      upd();
+    }));
+  });
+
+  /* ===== checklists ===== */
+  document.querySelectorAll('[data-checklist]').forEach(c => {
+    const meter = c.parentElement.querySelector('.meter i');
+    const boxes = [...c.querySelectorAll('input')];
+    const upd = () => { if (meter) meter.style.width = (boxes.filter(b => b.checked).length / boxes.length * 100) + '%'; };
+    boxes.forEach(b => b.addEventListener('change', upd));
+  });
+
+  /* ===== jigsaw ===== */
+  document.querySelectorAll('[data-jigsaw]').forEach(j => {
+    const out = j.parentElement.querySelector('[data-jig-out]');
+    const msgs = ['0 details — child not identifiable.','1 detail — seems harmless…','2 details — her community can now guess.','3 details — neighbours know exactly who she is.','4 details — she is identified.','5 details — fully exposed. Every piece mattered.'];
+    j.querySelectorAll('button').forEach(b => b.onclick = () => {
+      b.classList.toggle('on');
+      const n = j.querySelectorAll('.on').length;
+      out.textContent = msgs[n];
+      out.style.color = n >= 3 ? 'var(--bad)' : n ? 'var(--gold)' : '';
+    });
+  });
+
+  /* ===== traps reveal ===== */
+  document.querySelectorAll('[data-traps-btn]').forEach(b => b.onclick = () => {
+    const t = b.parentElement.parentElement.querySelector('[data-traps]');
+    t.classList.toggle('show');
+    b.textContent = t.classList.contains('show') ? 'Hide the traps' : 'Reveal the traps';
+  });
+
+  /* ===== exercise timer ===== */
+  document.querySelectorAll('[data-timer]').forEach(disp => {
+    const wrap = disp.parentElement;
+    let total = 600, left = 600, endAt = null, iv = null;
+    const toggleBtn = wrap.querySelector('[data-t="toggle"]');
+    const draw = () => {
+      disp.textContent = fmt(left);
+      disp.classList.toggle('low', left <= 60);
+      toggleBtn.textContent = endAt ? 'Pause' : (left < total ? 'Resume' : 'Start');
+    };
+    const tick = () => {
+      left = (endAt - Date.now()) / 1000;
+      if (left <= 0) { left = 0; endAt = null; clearInterval(iv); beep(); }
+      draw();
+    };
+    toggleBtn.onclick = () => {
+      if (endAt) { left = (endAt - Date.now()) / 1000; endAt = null; clearInterval(iv); }
+      else if (left > 0) { endAt = Date.now() + left * 1000; iv = setInterval(tick, 250); }
+      draw();
+    };
+    wrap.querySelectorAll('[data-t="10"],[data-t="5"]').forEach(b => b.onclick = () => {
+      clearInterval(iv); endAt = null; total = left = +b.dataset.t * 60; draw();
+    });
+    draw();
+  });
+  function beep(){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [0, .3, .6].forEach(t => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(ctx.destination); g.gain.setValueAtTime(.2, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .25); o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .26); });
+    } catch(e){}
+  }
+
+  /* start */
+  const h = parseInt(location.hash.slice(1), 10);
+  go(isNaN(h) ? 0 : h - 1);
+})();
+</script>
+</body>
+</html>
