@@ -66,7 +66,6 @@ Copy `.env.example` to `.env.local`. Everything is optional for local developmen
 | `DISABLE_DEMO_PAYMENTS` | `true` removes the sandbox gateway (do this in production). |
 | `NEXT_PUBLIC_MAPBOX_TOKEN` | Mapbox static maps instead of the built-in schematic map. |
 | `EMAIL_/SMS_PROVIDER_API_KEY`, `WHATSAPP_PROVIDER_TOKEN`, `WEB_PUSH_PRIVATE_KEY` | Outbound notification channels. Until set, messages are recorded in `notification_outbox` as `skipped_no_provider`. |
-| `NEXT_PUBLIC_BRAND_ASSETS` | `official` to use the supplied logo files from `public/brand`. |
 
 ## Database
 
@@ -90,7 +89,25 @@ PGlite stores data on local disk, so it is for development and demos only; serve
 
 ## Brand assets
 
-The official logo file was **not present in the repository**. The mark used throughout (`src/components/brand/logo.tsx`, `public/brand/*.svg`, PWA icons in `public/icons`) is a faithful vector reconstruction: a coral (#FF6347) location pin above a navy (#174363) road, with the lowercase “goroada” wordmark. To use the official artwork, replace `public/brand/logo.svg`, `logo-inverted.svg` and `icon.svg`, regenerate `public/icons/*.png` from it, and set `NEXT_PUBLIC_BRAND_ASSETS=official`.
+The official logo (`public/brand/goroada-logo-original.jpg`, as supplied) was cropped and traced to vector so it stays sharp at every size. Colours were sampled from the file:
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| Navy | `#194466` | Road mark, “road” in the wordmark, headings, navigation |
+| Brand orange | `#E1560A` | “go” and “a” in the wordmark, brand accents |
+| Pin coral | `#F96B4F` | Location pin in the mark |
+| Action orange | `#C94C08` | Buttons and selected states (accessible darker shade of brand orange, 4.65:1 with white text) |
+
+| File | Used for |
+| --- | --- |
+| `public/brand/logo.svg` | Navigation (desktop and mobile), footer, portals |
+| `public/brand/logo-inverted.svg` | Dark backgrounds: digital tickets, emails |
+| `public/brand/icon.svg`, `icon-inverted.svg` | Standalone mark |
+| `public/brand/logo-1200.png`, `logo-inverted-1200.png` | PDF tickets, emails, social previews |
+| `public/brand/splash.png` | PWA splash / loading |
+| `public/icons/*` | Favicon (SVG + PNG), app icons 192/512, maskable icon, Apple touch icon |
+
+The traced vector is faithful to the supplied artwork. If the designer has the original vector master (AI/SVG), drop it into `public/brand/` with the same file names for pixel-perfect letterforms.
 
 ## Photo credits
 

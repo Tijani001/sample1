@@ -5,7 +5,7 @@ Legend: ✅ done · 🟡 partial / sandboxed · ⏳ not started (needs external 
 ## Phase 1 — Design foundation
 - ✅ Design tokens (colour scales, accessible action coral, semantic states, radii, shadows, motion)
 - ✅ Geist typography, tabular numerals
-- 🟡 Brand assets: vector reconstruction of the logo, favicon, PWA icons, maskable icon, splash colours — **replace with the official files** (not found in the repo)
+- ✅ Official brand assets: supplied logo cropped and traced to vector; inverted variant; favicon, PWA icons, maskable and Apple icons, splash; PDF ticket logo; colour tokens sampled from the logo
 - ✅ Responsive shell: desktop header, mobile header, bottom navigation, footer, skip link
 - ✅ Primitives: buttons, inputs, fields, badges, notices, overlays (bottom sheet ↔ dialog), tabs, skeletons, toasts
 

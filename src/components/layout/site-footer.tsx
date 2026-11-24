@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="mt-20 border-t border-line bg-surface-2/60 pb-24 pt-12 md:pb-12 no-print">
       <div className="container-page grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div>
-          <Logo />
+          <Logo height={30} />
           <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-ink-3">Every road. One app. Search, compare and book intercity road trips from trusted transport operators.</p>
           <p className="mt-4 text-xs text-ink-3">Goroada is a booking platform. Journeys are operated by independent transport companies.</p>
         </div>

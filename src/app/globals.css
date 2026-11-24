@@ -2,35 +2,36 @@
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Goroada design tokens
-   Brand: navy #174363 · coral #FF6347 (from the official logo).
-   Coral fails WCAG AA as text/button fill with white (2.95:1), so interactive coral uses
-   darker "action" variants (#D23F22 → 4.69:1) while the brand coral stays for accents.
+   Brand (sampled from the official logo): navy #194466 · pin coral #F96B4F · wordmark orange #E1560A.
+   The orange family ("coral-*" tokens) drives actions. Brand orange is 3.79:1 on white, so buttons and
+   selected states use the darker action shade #C94C08 (4.65:1 with white text); text links use #B8450A.
    ───────────────────────────────────────────────────────────────────────────── */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --color-navy-50: #eef4f9;
-  --color-navy-100: #d9e6f0;
-  --color-navy-200: #b3cde0;
-  --color-navy-300: #82aac8;
-  --color-navy-400: #4d7fa6;
-  --color-navy-500: #2a5d84;
-  --color-navy-600: #174363; /* brand */
-  --color-navy-700: #123651;
-  --color-navy-800: #0e2a40;
+  --color-navy-100: #d8e5ef;
+  --color-navy-200: #b1cadf;
+  --color-navy-300: #80a6c6;
+  --color-navy-400: #4b7ba4;
+  --color-navy-500: #2a5b84;
+  --color-navy-600: #194466; /* brand */
+  --color-navy-700: #143855;
+  --color-navy-800: #0f2b42;
   --color-navy-900: #102a43; /* primary text */
   --color-navy-950: #081a2b;
 
-  --color-coral-50: #fff3f0;
-  --color-coral-100: #ffe3dc;
-  --color-coral-200: #ffc5b8;
-  --color-coral-300: #ff9d87;
-  --color-coral-400: #ff7a5f;
-  --color-coral-500: #ff6347; /* brand */
-  --color-coral-600: #d23f22; /* action: 4.69:1 on white */
-  --color-coral-700: #b3331a; /* hover / text: 5.9:1 */
-  --color-coral-800: #922a16;
+  --color-coral-50: #fff4ec;
+  --color-coral-100: #ffe5d2;
+  --color-coral-200: #ffc8a3;
+  --color-coral-300: #fca46e;
+  --color-coral-400: #f37a3a;
+  --color-coral-500: #e1560a; /* brand orange (wordmark) */
+  --color-coral-600: #c94c08; /* action: 4.65:1 with white */
+  --color-coral-700: #b8450a; /* hover / text: 5.4:1 */
+  --color-coral-800: #a03c09;
+  --color-pin: #f96b4f; /* brand pin coral (mark, decorative accents) */
 
   --color-ink: #102a43;
   --color-ink-2: #475569;

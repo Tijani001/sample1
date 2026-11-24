@@ -20,7 +20,7 @@ export function RouteMap({ origin, destination, stops = [], estimate, className,
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   if (token) {
     const path = [origin, ...stops, destination].map((p) => `${p.lng},${p.lat}`).join(",");
-    const url = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s+174363(${origin.lng},${origin.lat}),pin-s+ff6347(${destination.lng},${destination.lat}),path-3+174363-0.8(${encodeURIComponent(polyline([origin, ...stops, destination]))})/auto/640x400@2x?access_token=${token}`;
+    const url = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s+194466(${origin.lng},${origin.lat}),pin-s+F96B4F(${destination.lng},${destination.lat}),path-3+194466-0.8(${encodeURIComponent(polyline([origin, ...stops, destination]))})/auto/640x400@2x?access_token=${token}`;
     void path;
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={url} alt={label ?? `Route from ${origin.name} to ${destination.name}`} className={cn("w-full rounded-2xl object-cover", className)} loading="lazy" />;
@@ -53,22 +53,22 @@ export function RouteMap({ origin, destination, stops = [], estimate, className,
         <defs><pattern id="grid" width={8 * scale} height={8 * scale} patternUnits="userSpaceOnUse"><path d={`M ${8 * scale} 0 L 0 0 0 ${8 * scale}`} fill="none" stroke="#dbe6ef" strokeWidth={0.4 * scale} /></pattern></defs>
         <rect x={cx - vw} y={cy - vh} width={vw * 2} height={vh * 2} fill="url(#grid)" />
         <path d={NIGERIA.map(([lng, lat], i) => `${i ? "L" : "M"}${proj(lng, lat).join(" ")}`).join(" ") + "Z"} fill="#ffffff" stroke="#b3cde0" strokeWidth={1.2 * scale} strokeLinejoin="round" />
-        <path d={d} fill="none" stroke="#174363" strokeOpacity="0.15" strokeWidth={7 * scale} strokeLinecap="round" strokeLinejoin="round" />
-        <path d={d} fill="none" stroke="#174363" strokeWidth={2.4 * scale} strokeLinecap="round" strokeLinejoin="round" />
+        <path d={d} fill="none" stroke="#194466" strokeOpacity="0.15" strokeWidth={7 * scale} strokeLinecap="round" strokeLinejoin="round" />
+        <path d={d} fill="none" stroke="#194466" strokeWidth={2.4 * scale} strokeLinecap="round" strokeLinejoin="round" />
         {stops.map((s, i) => { const [x, y] = proj(s.lng, s.lat); return <circle key={i} cx={x} cy={y} r={3 * scale} fill="#fff" stroke="#4d7fa6" strokeWidth={1.5 * scale} />; })}
         {[origin, destination].map((p, i) => {
           const [x, y] = proj(p.lng, p.lat);
           return (
             <g key={i}>
-              <circle cx={x} cy={y} r={6 * scale} fill={i ? "#ff6347" : "#174363"} stroke="#fff" strokeWidth={2 * scale} />
+              <circle cx={x} cy={y} r={6 * scale} fill={i ? "#F96B4F" : "#194466"} stroke="#fff" strokeWidth={2 * scale} />
               <text x={x} y={y - 10 * scale} textAnchor="middle" fontSize={10 * scale} fontWeight="600" fill="#102a43" stroke="#fff" strokeWidth={3 * scale} paintOrder="stroke">{p.name}</text>
             </g>
           );
         })}
         {est && (
           <g>
-            <circle cx={est[0]} cy={est[1]} r={9 * scale} fill="#ff6347" fillOpacity="0.18" />
-            <circle cx={est[0]} cy={est[1]} r={4.5 * scale} fill="#fff" stroke="#ff6347" strokeWidth={2 * scale} strokeDasharray={`${2 * scale} ${1.5 * scale}`} />
+            <circle cx={est[0]} cy={est[1]} r={9 * scale} fill="#F96B4F" fillOpacity="0.18" />
+            <circle cx={est[0]} cy={est[1]} r={4.5 * scale} fill="#fff" stroke="#F96B4F" strokeWidth={2 * scale} strokeDasharray={`${2 * scale} ${1.5 * scale}`} />
           </g>
         )}
       </svg>

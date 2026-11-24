@@ -1,41 +1,37 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Goroada brand mark: a coral location pin above a navy road, with the lowercase "goroada" wordmark.
- *
- * NOTE: The official logo file was not present in the repository, so this is a faithful vector
- * reconstruction from the brand description. To use the official artwork, drop the supplied files into
- * /public/brand (logo.svg, icon.svg) and set NEXT_PUBLIC_BRAND_ASSETS=official — every placement in the
- * product (navigation, tickets, emails, portals, PWA icons) reads from this component or those files.
+ * Official Goroada brand assets, traced to vector from the supplied logo (public/brand/goroada-logo-original.jpg).
+ *   logo.svg            full colour wordmark: navy road + coral pin, "go" and "a" in brand orange, "road" in navy
+ *   logo-inverted.svg   for dark backgrounds (navy parts become white)
+ *   icon.svg            standalone road + pin mark (app icon, favicon, compact placements)
+ * Do not recolour or redraw the mark; use these files.
  */
-export const BRAND = { navy: "#174363", coral: "#FF6347" } as const;
+export const BRAND = { navy: "#194466", pin: "#F96B4F", orange: "#E1560A" } as const;
 
-export function LogoMark({ className, title = "Goroada" }: { className?: string; title?: string }) {
-  if (process.env.NEXT_PUBLIC_BRAND_ASSETS === "official") {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src="/brand/icon.svg" alt={title} className={className} />;
-  }
+/** Intrinsic aspect ratio of the wordmark artwork (width / height). */
+export const LOGO_RATIO = 602 / 135;
+
+export function Logo({ className, inverted, height = 32, priority }: { className?: string; inverted?: boolean; height?: number; priority?: boolean }) {
   return (
-    <svg viewBox="0 0 64 64" className={cn("shrink-0", className)} role="img" aria-label={title}>
-      <path d="M13 63 27.6 35.5h8.8L51 63Z" fill={BRAND.navy} />
-      <path d="M31.1 40h1.8l.35 5h-2.5zM30.6 49h2.8l.5 6.5h-3.8zM30 59h4l.4 4h-4.8z" fill="#fff" />
-      <path d="M32 33.5s-12.5-11.6-12.5-19a12.5 12.5 0 0 1 25 0c0 7.4-12.5 19-12.5 19Z" fill={BRAND.coral} />
-      <circle cx="32" cy="14.6" r="4.6" fill="#fff" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={inverted ? "/brand/logo-inverted.svg" : "/brand/logo.svg"}
+      alt="Goroada"
+      width={Math.round(height * LOGO_RATIO)}
+      height={height}
+      fetchPriority={priority ? "high" : undefined}
+      decoding="async"
+      className={cn("block h-auto select-none", className)}
+      style={{ height, width: "auto" }}
+      draggable={false}
+    />
   );
 }
 
-export function Logo({ className, markClassName, inverted }: { className?: string; markClassName?: string; inverted?: boolean }) {
-  if (process.env.NEXT_PUBLIC_BRAND_ASSETS === "official") {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={inverted ? "/brand/logo-inverted.svg" : "/brand/logo.svg"} alt="Goroada" className={cn("h-8 w-auto", className)} />;
-  }
+export function LogoMark({ className, title = "Goroada", inverted }: { className?: string; title?: string; inverted?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5", className)} aria-label="Goroada">
-      <LogoMark className={cn("h-8 w-8", markClassName)} title="" />
-      <span aria-hidden className={cn("text-[23px] font-semibold leading-none tracking-[-0.045em]", inverted ? "text-white" : "text-navy-600")}>
-        goroada
-      </span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={inverted ? "/brand/icon-inverted.svg" : "/brand/icon.svg"} alt={title} width={32} height={32} decoding="async" className={cn("shrink-0 select-none", className)} draggable={false} />
   );
 }

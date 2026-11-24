@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   cacheComponents: false,
   serverExternalPackages: ["@electric-sql/pglite", "postgres"],
   poweredByHeader: false,
+  // Files read from disk at runtime must ship with serverless functions.
+  outputFileTracingIncludes: {
+    "/**": ["./db/migrations/**/*"],
+    "/api/bookings/[id]/tickets": ["./public/brand/logo-inverted-1200.png"],
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "upload.wikimedia.org" }],

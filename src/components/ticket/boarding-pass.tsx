@@ -1,4 +1,4 @@
-import { LogoMark } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 import { formatDate, formatTime, dayOffsetLabel } from "@/lib/domain/time";
 import type { TripResult } from "@/lib/services/search";
 import { cn } from "@/lib/cn";
@@ -13,10 +13,7 @@ export function BoardingPass({ trip, passenger, seat, ticketNo, reference, qr, s
   return (
     <article className={cn("relative w-full overflow-hidden rounded-[22px] border border-line bg-white shadow-md print:break-inside-avoid print:shadow-none", voided && "opacity-60")} aria-label={`Ticket for ${passenger}`}>
       <header className="flex items-center justify-between bg-navy-600 px-5 py-3.5 text-white">
-        <span className="flex items-center gap-2">
-          <LogoMark className="h-7 w-7 rounded-lg bg-white p-1" title="" />
-          <span className="text-lg font-semibold tracking-[-0.04em]">goroada</span>
-        </span>
+        <Logo inverted height={24} />
         <span className="text-right text-[11px] font-medium uppercase tracking-[0.14em] text-white/80">
           Boarding pass<br /><span className="text-white">{direction === "outbound" ? "Outbound" : "Return"}</span>
         </span>

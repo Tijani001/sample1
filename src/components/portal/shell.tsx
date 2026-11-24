@@ -5,7 +5,7 @@ import { ArrowLeft, LogOut, BadgePercent, Banknote, BarChart3, BookOpen, Buildin
 
 const ICONS = { BadgePercent, Banknote, BarChart3, BookOpen, Building2, Bus, CalendarClock, CreditCard, FileClock, Headphones, LayoutDashboard, Map, Route, RotateCcw, ScanLine, Users };
 export type IconName = keyof typeof ICONS;
-import { LogoMark } from "@/components/brand/logo";
+import { Logo, LogoMark } from "@/components/brand/logo";
 import { signOutAction } from "@/app/(consumer)/account/actions";
 import { cn } from "@/lib/cn";
 
@@ -22,8 +22,10 @@ export function PortalShell({ kind, orgName, userName, nav, children, banner }: 
     <div className="min-h-dvh bg-surface-2 lg:grid lg:grid-cols-[248px_1fr]">
       <aside className="hidden border-r border-line bg-white lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-2.5 border-b border-line px-5">
-          <LogoMark className="h-8 w-8" title="" />
-          <div className="leading-tight"><p className="text-[15px] font-semibold tracking-tight text-navy-600">goroada</p><p className="text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3">{kind} portal</p></div>
+          <Link href={kind === "Admin" ? "/admin" : "/operator"} aria-label={`${kind} portal home`} className="flex flex-col gap-1">
+            <Logo height={24} />
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ink-3">{kind} portal</span>
+          </Link>
         </div>
         <div className="border-b border-line px-5 py-3"><p className="truncate text-sm font-semibold">{orgName}</p><p className="truncate text-xs text-ink-3">{userName}</p></div>
         <nav className="flex-1 space-y-0.5 p-3" aria-label={`${kind} navigation`}>
@@ -41,7 +43,7 @@ export function PortalShell({ kind, orgName, userName, nav, children, banner }: 
       </aside>
       <div className="min-w-0">
         <header className="sticky top-0 z-30 border-b border-line bg-white lg:hidden">
-          <div className="flex h-14 items-center gap-2 px-4"><LogoMark className="h-7 w-7" title="" /><p className="font-semibold">{kind}</p><p className="ml-auto max-w-[50%] truncate text-sm text-ink-3">{orgName}</p></div>
+          <div className="flex h-14 items-center gap-2 px-4"><LogoMark className="h-7 w-7" title="Goroada" /><p className="font-semibold">{kind} portal</p><p className="ml-auto max-w-[50%] truncate text-sm text-ink-3">{orgName}</p></div>
           <nav className="no-scrollbar flex gap-1 overflow-x-auto px-3 pb-2" aria-label={`${kind} navigation`}>
             {nav.map((i) => <Link key={i.href} href={i.href} className={cn("flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium", isActive(i) ? "bg-navy-600 text-white" : "bg-surface-2 text-ink-2")}><NavIcon name={i.icon} className="h-4 w-4" />{i.label}</Link>)}
           </nav>

@@ -32,7 +32,7 @@ export function CityImage({ src, alt, name, className, sizes = "(max-width: 768p
           className="absolute inset-0 h-full w-full object-cover"
         />
       ) : (
-        <div aria-hidden className={cn("absolute inset-0", hue === 0 ? "bg-[linear-gradient(135deg,#174363_0%,#2a5d84_100%)]" : hue === 1 ? "bg-[linear-gradient(135deg,#123651_0%,#174363_60%,#4d7fa6_130%)]" : "bg-[linear-gradient(160deg,#0e2a40_0%,#174363_70%)]")}>
+        <div aria-hidden className={cn("absolute inset-0", hue === 0 ? "bg-[linear-gradient(135deg,#194466_0%,#2a5d84_100%)]" : hue === 1 ? "bg-[linear-gradient(135deg,#123651_0%,#194466_60%,#4d7fa6_130%)]" : "bg-[linear-gradient(160deg,#0e2a40_0%,#194466_70%)]")}>
           <svg className="absolute inset-0 h-full w-full opacity-[0.12]" preserveAspectRatio="none" viewBox="0 0 200 120">
             <path d="M-10 110 C 40 80, 80 95, 120 60 S 190 20, 220 10" stroke="#fff" strokeWidth="0.8" fill="none" />
             <path d="M-10 118 C 50 95, 90 105, 130 75 S 200 35, 220 28" stroke="#fff" strokeWidth="0.5" fill="none" strokeDasharray="3 3" />

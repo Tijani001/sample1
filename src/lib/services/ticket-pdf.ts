@@ -1,10 +1,13 @@
+import fs from "node:fs";
+import path from "node:path";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { LOGO_RATIO } from "@/components/brand/logo";
 import type { BookingView } from "./bookings";
 import { qrPng } from "./tickets";
 import { formatDate, formatTime, formatDuration } from "@/lib/domain/time";
 
-const NAVY = rgb(0x17 / 255, 0x43 / 255, 0x63 / 255);
-const CORAL = rgb(1, 0x63 / 255, 0x47 / 255);
+const NAVY = rgb(0x19 / 255, 0x44 / 255, 0x66 / 255);
+const CORAL = rgb(0xc9 / 255, 0x4c / 255, 0x08 / 255);
 const INK = rgb(0x10 / 255, 0x2a / 255, 0x43 / 255);
 const MUTED = rgb(0x64 / 255, 0x74 / 255, 0x8b / 255);
 const LINE = rgb(0xe2 / 255, 0xe8 / 255, 0xf0 / 255);
@@ -17,6 +20,7 @@ export async function renderTicketsPdf(b: NonNullable<BookingView>, opts: { sand
   pdf.setAuthor("Goroada");
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  const logo = await pdf.embedPng(fs.readFileSync(path.join(process.cwd(), "public", "brand", "logo-inverted-1200.png")));
   for (const seg of b.segments) {
     for (const tk of seg.tickets) {
       const p = b.passengers.find((x) => x.seq === tk.passenger_seq)!;
@@ -24,10 +28,9 @@ export async function renderTicketsPdf(b: NonNullable<BookingView>, opts: { sand
       const page = pdf.addPage([420, 640]);
       const { width, height } = page.getSize();
       page.drawRectangle({ x: 0, y: height - 86, width, height: 86, color: NAVY });
-      // Brand mark (pin above road), drawn as vectors
-      page.drawSvgPath("M13 63 27.6 35.5h8.8L51 63Z", { x: 24, y: height - 14, scale: 0.9, color: rgb(1, 1, 1) });
-      page.drawSvgPath("M32 33.5s-12.5-11.6-12.5-19a12.5 12.5 0 0 1 25 0c0 7.4-12.5 19-12.5 19Z", { x: 24, y: height - 14, scale: 0.9, color: CORAL });
-      page.drawText("goroada", { x: 84, y: height - 52, size: 24, font: bold, color: rgb(1, 1, 1) });
+      // Official Goroada logo (inverted variant for the navy header).
+      const logoW = 150;
+      page.drawImage(logo, { x: 24, y: height - 43 - (logoW / LOGO_RATIO) / 2, width: logoW, height: logoW / LOGO_RATIO });
       page.drawText("BOARDING PASS", { x: width - 140, y: height - 40, size: 10, font: bold, color: rgb(1, 1, 1) });
       page.drawText(seg.direction === "outbound" ? "OUTBOUND" : "RETURN", { x: width - 140, y: height - 56, size: 9, font, color: rgb(0.85, 0.9, 0.95) });
       let y = height - 130;

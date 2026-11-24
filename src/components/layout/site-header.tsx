@@ -28,7 +28,8 @@ export function SiteHeader({ user, unread }: { user: HeaderUser; unread: number 
     <header className="sticky top-0 z-40 border-b border-line/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85 pt-safe no-print">
       <div className="container-page flex h-14 items-center gap-6 md:h-16">
         <Link href="/" aria-label="Goroada home" className="-ml-1 rounded-lg p-1">
-          <Logo markClassName="h-7 w-7 md:h-8 md:w-8" className="[&>span:last-child]:text-[21px] md:[&>span:last-child]:text-[23px]" />
+          <Logo height={26} priority className="md:hidden" />
+          <Logo height={30} priority className="hidden md:block" />
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => {
