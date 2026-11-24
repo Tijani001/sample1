@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test --trace off",
+    "check": "npm run typecheck && npm run lint && npm test"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.6.0",

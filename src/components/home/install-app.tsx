@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useClientValue } from "@/hooks/use-now";
 import { Download, Share, Smartphone, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "@/components/brand/logo";
@@ -8,14 +9,14 @@ type BIPEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ out
 
 export function InstallApp() {
   const [evt, setEvt] = useState<BIPEvent | null>(null);
-  const [installed, setInstalled] = useState(false);
-  const [ios, setIos] = useState(false);
+  const [justInstalled, setInstalled] = useState(false);
+  const standalone = useClientValue(() => window.matchMedia("(display-mode: standalone)").matches, false);
+  const ios = useClientValue(() => /iphone|ipad|ipod/i.test(navigator.userAgent), false);
+  const installed = justInstalled || standalone;
   useEffect(() => {
     const onPrompt = (e: Event) => { e.preventDefault(); setEvt(e as BIPEvent); };
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", () => setInstalled(true));
-    setInstalled(window.matchMedia("(display-mode: standalone)").matches);
-    setIos(/iphone|ipad|ipod/i.test(navigator.userAgent));
     return () => window.removeEventListener("beforeinstallprompt", onPrompt);
   }, []);
   if (installed) return null;

@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { getDb, getSessionUser } from "@/lib/server";
 import { canAccessBooking } from "@/lib/auth/session";
 import { findBookingIdByReference, getBookingView } from "@/lib/services/bookings";
+import { nowMs } from "@/lib/domain/time";
 import { getJourneyState } from "@/lib/services/journey";
 import { JourneyTracker } from "@/components/map/journey-tracker";
 import { AutoRefresh } from "../../../checkout/return/auto-refresh";
@@ -18,7 +19,7 @@ export default async function TrackPage({ params }: { params: Promise<{ ref: str
   if (!id) notFound();
   const b = await getBookingView(db, id);
   if (!b || !(await canAccessBooking({ id: b.id, userId: b.userId }, await getSessionUser()))) redirect(`/trips/${ref}`);
-  const seg = b.segments.find((s) => new Date(s.trip.arrivalEstAt).getTime() > Date.now() - 6 * 3600_000) ?? b.segments[b.segments.length - 1];
+  const seg = b.segments.find((s) => new Date(s.trip.arrivalEstAt).getTime() > nowMs() - 6 * 3600_000) ?? b.segments[b.segments.length - 1];
   const state = await getJourneyState(db, seg.trip.id, b.confirmedAt);
   if (!state) notFound();
   return (

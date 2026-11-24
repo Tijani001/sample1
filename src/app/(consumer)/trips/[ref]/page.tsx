@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { OperatorLogo } from "@/components/operator-badge";
 import { JOURNEY_STATUS_META } from "@/lib/domain/status";
 import { formatMoney } from "@/lib/domain/money";
-import { formatDate, formatTime } from "@/lib/domain/time";
+import { formatDate, formatTime, nowMs } from "@/lib/domain/time";
 import { BookingActions, ConfirmedHero, ManageBooking, DepartureCountdown, CopyRef } from "./client";
 import { FindBookingForm } from "../find/form";
 import { AutoRefresh } from "../../checkout/return/auto-refresh";
@@ -46,7 +46,8 @@ export default async function TripPage({ params, searchParams }: { params: Promi
   const demo = sandbox || b.segments.some((s) => s.trip.operator.isDemo);
   const qrs: Record<string, string> = {};
   for (const s of b.segments) for (const t of s.tickets) qrs[t.id] = await qrSvg(t.verification_token);
-  const upcoming = isConfirmed && new Date(seg0.trip.departureAt).getTime() > Date.now();
+  const now = nowMs();
+  const upcoming = isConfirmed && new Date(seg0.trip.departureAt).getTime() > now;
   const completed = isConfirmed && status === "arrived";
 
   return (
@@ -122,7 +123,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
 
             {isConfirmed && (
               <ManageBooking bookingId={b.id} reference={b.reference} upcoming={upcoming} completed={completed} review={b.review}
-                allowsReschedule={seg0.trip.policy.allowsReschedule} rebookHref={`/search?from=${seg0.trip.origin.cityId}&to=${seg0.trip.destination.cityId}&date=${new Date(Date.now() + 86400000).toISOString().slice(0, 10)}&pax=${b.passengerCount}`} />
+                allowsReschedule={seg0.trip.policy.allowsReschedule} rebookHref={`/search?from=${seg0.trip.origin.cityId}&to=${seg0.trip.destination.cityId}&date=${new Date(now + 86400000).toISOString().slice(0, 10)}&pax=${b.passengerCount}`} />
             )}
           </div>
 

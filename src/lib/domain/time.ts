@@ -42,3 +42,6 @@ export function dayOffsetLabel(departure: Date, arrival: Date, tz = DEFAULT_TZ) 
   const d = diffDaysIso(isoDateInTz(departure, tz), isoDateInTz(arrival, tz));
   return d > 0 ? `+${d}` : "";
 }
+
+/** Current time in ms. Wrapped so server components read "now" once per render explicitly. */
+export const nowMs = () => Date.now();

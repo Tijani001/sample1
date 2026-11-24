@@ -45,8 +45,9 @@ async function createPglite(dataDir: string): Promise<Db> {
 
 async function createPostgres(url: string): Promise<Db> {
   const { default: postgres } = await import("postgres");
+  type PgTx = import("postgres").TransactionSql;
   const sql = postgres(url, { max: Number(process.env.DATABASE_POOL_MAX ?? 10), prepare: false, onnotice: () => {} });
-  const wrap = (exec: typeof sql | postgres.TransactionSql): Queryable => ({
+  const wrap = (exec: typeof sql | PgTx): Queryable => ({
     async query<T>(text: string, params: unknown[] = []) {
       const rows = await exec.unsafe(text, params as never[]);
       return rows as unknown as T[];
@@ -126,8 +127,10 @@ export function getDb(): Promise<Db> {
       const url = process.env.DATABASE_URL;
       const db = url ? await createPostgres(url) : await createPglite(process.env.PGLITE_DATA_DIR ?? path.join(process.cwd(), ".data", "pglite"));
       await migrate(db);
-      const { seedIfEmpty } = await import("./seed");
-      await seedIfEmpty(db);
+      if (process.env.SEED_DEMO_DATA !== "false") {
+        const { seedIfEmpty } = await import("./seed");
+        await seedIfEmpty(db);
+      }
       return db;
     })().catch((err) => {
       g.__goroadaDb = undefined;

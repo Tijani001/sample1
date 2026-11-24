@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import * as Popover from "@radix-ui/react-popover";
 import { AnimatePresence, motion } from "motion/react";
@@ -84,9 +84,6 @@ export function SearchWidget({ places, initial, today, variant = "hero", onSubmi
   const [submitting, setSubmitting] = useState(false);
   const maxDate = useMemo(() => addDays(today, 120), [today]);
 
-  useEffect(() => {
-    if (returnDate && returnDate < date) setReturnDate(null);
-  }, [date, returnDate]);
 
   const swap = () => {
     setSwapTurns((t) => t + 1);

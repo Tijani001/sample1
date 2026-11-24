@@ -26,14 +26,13 @@ export function PlacePicker({
   places: Place[]; value: Place | null; onSelect: (p: Place) => void; excludeCityId?: string | null; side: "from" | "to"; autoFocus?: boolean;
 }) {
   const [query, setQuery] = useState("");
-  const [active, setActive] = useState(0);
-  const [recent, setRecent] = useState<RecentSearch[]>([]);
+  const [active, setActive] = useState(-1);
+  const [recent] = useState<RecentSearch[]>(() => (typeof window === "undefined" ? [] : readRecent()));
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const listId = useId();
 
   useEffect(() => {
-    setRecent(readRecent());
     if (autoFocus) setTimeout(() => inputRef.current?.focus(), 60);
   }, [autoFocus]);
 
@@ -66,7 +65,11 @@ export function PlacePicker({
     return scored.sort((a, b) => b.score - a.score).slice(0, 12).map((s) => mark(s.p, "results"));
   }, [query, places, recent, side, excludeCityId]);
 
-  useEffect(() => setActive(items.findIndex((i) => !i.disabled)), [items]);
+  const [prevItems, setPrevItems] = useState(items);
+  if (prevItems !== items) {
+    setPrevItems(items);
+    setActive(items.findIndex((i) => !i.disabled));
+  }
   useEffect(() => {
     listRef.current?.querySelector(`[data-index="${active}"]`)?.scrollIntoView({ block: "nearest" });
   }, [active]);

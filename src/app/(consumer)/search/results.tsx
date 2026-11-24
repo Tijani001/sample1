@@ -162,7 +162,10 @@ export function SearchResults({ places, today, query, leg, legDate, outbound, tr
 
   const hrefWith = (changes: Record<string, string | null>) => {
     const p = new URLSearchParams(sp.toString());
-    for (const [k, v] of Object.entries(changes)) (v == null ? p.delete(k) : p.set(k, v));
+    for (const [k, v] of Object.entries(changes)) {
+      if (v == null) p.delete(k);
+      else p.set(k, v);
+    }
     return `${pathname}?${p.toString()}`;
   };
   const dateHref = (d: string) => {
@@ -248,7 +251,7 @@ export function SearchResults({ places, today, query, leg, legDate, outbound, tr
             const disabled = leg === "return" && c.date < query.date;
             const cheapestDay = c.minFare != null && c.minFare === Math.min(...calendar.filter((x) => x.minFare != null).map((x) => x.minFare!));
             return (
-              <Link key={c.date} role="listitem" href={disabled ? "#" : dateHref(c.date)} scroll={false} aria-current={active ? "date" : undefined} aria-disabled={disabled || undefined}
+              <Link key={c.date} role="listitem" href={disabled ? "#" : dateHref(c.date)} scroll={false} aria-current={active ? "date" : undefined} tabIndex={disabled ? -1 : undefined}
                 className={cn("relative flex min-w-[92px] shrink-0 snap-center flex-col items-center rounded-xl border px-3 py-2 text-center transition-colors",
                   active ? "border-navy-600 bg-navy-600 text-white" : "border-line bg-white hover:border-line-strong", disabled && "pointer-events-none opacity-40")}>
                 <span className={cn("text-xs", active ? "text-white/80" : "text-ink-3")}>{c.date === today ? "Today" : formatDate(`${c.date}T12:00:00Z`, "UTC", "weekday").split(" ")[0]}</span>

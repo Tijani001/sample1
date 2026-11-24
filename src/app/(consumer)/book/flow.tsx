@@ -74,9 +74,6 @@ export function BookingFlow(props: {
   const left = useCountdown(booking?.status === "awaiting_payment" ? booking.holdExpiresAt : null);
   const dirty = useRef<Set<number>>(new Set());
 
-  useEffect(() => {
-    if (left === 0) setExpired(true);
-  }, [left]);
 
   const goto = useCallback((s: Step, id?: string) => {
     setStep(s);
@@ -280,7 +277,7 @@ export function BookingFlow(props: {
     setBusy(true);
     try {
       const r = await api<{ redirectUrl: string }>(`/api/bookings/${booking.id}/pay`, "POST", { provider });
-      window.location.href = r.redirectUrl;
+      window.location.assign(r.redirectUrl);
     } catch (e) {
       const err = e as Error & { code?: string };
       if (err.code === "hold_expired") setExpired(true);
@@ -556,7 +553,7 @@ export function BookingFlow(props: {
 
       <HelpSheet open={helpOpen} onOpenChange={setHelpOpen} />
 
-      <Overlay open={expired} onOpenChange={() => {}} title="Your seat reservation expired" size="sm" sheetOnly={false}>
+      <Overlay open={expired || left === 0} onOpenChange={() => {}} title="Your seat reservation expired" size="sm" sheetOnly={false}>
         <div className="text-center">
           <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-warning-bg text-warning"><TimerReset className="h-7 w-7" /></span>
           <p className="mt-4 text-[15px] text-ink-3">We held your seats for 12 minutes so other travellers can book too. Seats may still be available, so start again and we&apos;ll keep the same journey.</p>
@@ -568,7 +565,7 @@ export function BookingFlow(props: {
   );
 }
 
-function fromView(b: BookingView) {
+function fromView(b: NonNullable<BookingView>) {
   return { fareTotal: b.amounts.fareTotal, seatCharges: b.amounts.seatCharges, addonsTotal: b.amounts.addonsTotal, serviceFee: b.amounts.serviceFee, discount: b.amounts.discount, total: b.amounts.total, discountableSubtotal: b.amounts.fareTotal + b.amounts.seatCharges, addonLines: b.addons.map((a) => ({ code: a.code, label: a.label, quantity: a.quantity, unitPrice: a.unit_price, amount: a.total })) };
 }
 

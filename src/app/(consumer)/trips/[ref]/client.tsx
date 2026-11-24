@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNow } from "@/hooks/use-now";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
@@ -22,12 +23,7 @@ export function CopyRef({ reference }: { reference: string }) {
 }
 
 export function DepartureCountdown({ iso }: { iso: string }) {
-  const [now, setNow] = useState<number | null>(null);
-  useEffect(() => {
-    setNow(Date.now());
-    const id = setInterval(() => setNow(Date.now()), 30000);
-    return () => clearInterval(id);
-  }, []);
+  const now = useNow();
   if (now == null) return null;
   const mins = Math.max(0, Math.round((new Date(iso).getTime() - now) / 60000));
   const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;

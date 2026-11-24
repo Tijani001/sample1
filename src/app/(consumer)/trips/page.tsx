@@ -5,7 +5,7 @@ import { getDb, getSessionUser } from "@/lib/server";
 import { grantedBookingIds } from "@/lib/auth/session";
 import { getBookingView, listBookingsForUser, type BookingView } from "@/lib/services/bookings";
 import { JOURNEY_STATUS_META } from "@/lib/domain/status";
-import { formatDate, formatTime } from "@/lib/domain/time";
+import { formatDate, formatTime, nowMs } from "@/lib/domain/time";
 import { Badge, EmptyState } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { OperatorLogo } from "@/components/operator-badge";
@@ -18,7 +18,7 @@ type B = NonNullable<BookingView>;
 function bucket(b: B): "upcoming" | "completed" | "cancelled" {
   if (["cancelled", "refunded", "refund_pending", "expired", "needs_reconciliation"].includes(b.status)) return "cancelled";
   const last = b.segments[b.segments.length - 1];
-  if (b.status === "confirmed" && (last.journeyStatus === "arrived" || new Date(last.trip.arrivalEstAt).getTime() < Date.now() - 3 * 3600_000)) return "completed";
+  if (b.status === "confirmed" && (last.journeyStatus === "arrived" || new Date(last.trip.arrivalEstAt).getTime() < nowMs() - 3 * 3600_000)) return "completed";
   return "upcoming";
 }
 
@@ -76,7 +76,7 @@ export default async function TripsPage({ searchParams }: { searchParams: Promis
 function TripListCard({ b }: { b: B }) {
   const s = b.segments[0];
   const meta = JOURNEY_STATUS_META[s.journeyStatus];
-  const hours = (new Date(s.trip.departureAt).getTime() - Date.now()) / 3600_000;
+  const hours = (new Date(s.trip.departureAt).getTime() - nowMs()) / 3600_000;
   const tone = meta.tone === "neutral" ? "neutral" : meta.tone;
   return (
     <li>
