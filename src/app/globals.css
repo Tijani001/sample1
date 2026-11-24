@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Goroada design tokens
+   Brand: navy #174363 · coral #FF6347 (from the official logo).
+   Coral fails WCAG AA as text/button fill with white (2.95:1), so interactive coral uses
+   darker "action" variants (#D23F22 → 4.69:1) while the brand coral stays for accents.
+   ───────────────────────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-navy-50: #eef4f9;
+  --color-navy-100: #d9e6f0;
+  --color-navy-200: #b3cde0;
+  --color-navy-300: #82aac8;
+  --color-navy-400: #4d7fa6;
+  --color-navy-500: #2a5d84;
+  --color-navy-600: #174363; /* brand */
+  --color-navy-700: #123651;
+  --color-navy-800: #0e2a40;
+  --color-navy-900: #102a43; /* primary text */
+  --color-navy-950: #081a2b;
+
+  --color-coral-50: #fff3f0;
+  --color-coral-100: #ffe3dc;
+  --color-coral-200: #ffc5b8;
+  --color-coral-300: #ff9d87;
+  --color-coral-400: #ff7a5f;
+  --color-coral-500: #ff6347; /* brand */
+  --color-coral-600: #d23f22; /* action: 4.69:1 on white */
+  --color-coral-700: #b3331a; /* hover / text: 5.9:1 */
+  --color-coral-800: #922a16;
+
+  --color-ink: #102a43;
+  --color-ink-2: #475569;
+  --color-ink-3: #64748b; /* secondary text, 4.76:1 */
+  --color-ink-4: #94a3b8; /* decorative / placeholder only */
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f7fa;
+  --color-surface-3: #eef2f6;
+
+  --color-success: #047857;
+  --color-success-bg: #ecfdf5;
+  --color-success-line: #a7f3d0;
+  --color-warning: #b45309;
+  --color-warning-bg: #fffbeb;
+  --color-warning-line: #fde68a;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --color-danger-line: #fecaca;
+  --color-info: #1d4ed8;
+  --color-info-bg: #eff6ff;
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+
+  --shadow-xs: 0 1px 2px rgb(16 42 67 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(16 42 67 / 0.06), 0 1px 3px rgb(16 42 67 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(16 42 67 / 0.08), 0 2px 4px -2px rgb(16 42 67 / 0.05);
+  --shadow-lg: 0 16px 40px -12px rgb(16 42 67 / 0.18), 0 4px 10px -4px rgb(16 42 67 / 0.06);
+  --shadow-pop: 0 24px 64px -16px rgb(16 42 67 / 0.28), 0 6px 16px -6px rgb(16 42 67 / 0.1);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 80px;
+  }
+  body {
+    @apply bg-surface text-ink antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: var(--color-coral-100);
+    color: var(--color-navy-900);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-navy-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-ink-4);
+  }
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+@utility skeleton {
+  background: linear-gradient(90deg, var(--color-surface-3) 0px, #f8fafc 120px, var(--color-surface-3) 240px);
+  background-size: 800px 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-sm);
+}
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1200px;
+  padding-inline: 16px;
+  @media (width >= 640px) {
+    padding-inline: 24px;
+  }
+  @media (width >= 1024px) {
+    padding-inline: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dialog-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
