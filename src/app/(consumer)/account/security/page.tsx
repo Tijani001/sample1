@@ -1,3 +1,4 @@
+import { requireUser } from "@/lib/auth/guards";
 import { revalidatePath } from "next/cache";
 import { Monitor } from "lucide-react";
 import { getDb, getSessionUser } from "@/lib/server";
@@ -19,7 +20,7 @@ async function signOutOthers() {
 }
 
 export default async function Security() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/security");
   const sessions = await (await getDb()).query<{ created_at: Date; user_agent: string | null }>(`select created_at, user_agent from sessions where user_id = $1 and expires_at > now() order by created_at desc`, [user.id]);
   return (
     <div>

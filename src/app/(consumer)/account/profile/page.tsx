@@ -1,9 +1,10 @@
-import { getDb, getSessionUser } from "@/lib/server";
+import { requireUser } from "@/lib/auth/guards";
+import { getDb } from "@/lib/server";
 import { ProfileForm } from "../forms";
 
 export const metadata = { title: "Personal info" };
 export default async function Profile() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/profile");
   const db = await getDb();
   const [p] = await db.query<{ home_city_id: string | null }>(`select home_city_id from user_profiles where user_id = $1`, [user.id]);
   const cities = await db.query<{ id: string; name: string }>(`select id, name from cities order by name`);

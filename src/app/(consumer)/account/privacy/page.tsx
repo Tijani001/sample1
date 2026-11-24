@@ -1,10 +1,11 @@
+import { requireUser } from "@/lib/auth/guards";
 import Link from "next/link";
-import { getSessionUser } from "@/lib/server";
+
 import { DataRequestForm } from "../forms";
 
 export const metadata = { title: "Privacy" };
 export default async function Privacy() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/privacy");
   return (
     <div>
       <h1 className="text-2xl font-semibold">Privacy</h1>

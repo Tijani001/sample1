@@ -1,6 +1,7 @@
+import { requireUser } from "@/lib/auth/guards";
 import Link from "next/link";
 import { ArrowRight, Heart, Star } from "lucide-react";
-import { getDb, getSessionUser } from "@/lib/server";
+import { getDb } from "@/lib/server";
 import { toggleFavouriteOperatorAction, toggleFavouriteRouteAction } from "../actions";
 import { OperatorLogo } from "@/components/operator-badge";
 import { Select } from "@/components/ui/primitives";
@@ -10,7 +11,7 @@ import { addDaysIso, todayIso } from "@/lib/domain/time";
 
 export const metadata = { title: "Favourites" };
 export default async function Favourites() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/favourites");
   const db = await getDb();
   const routes = await db.query<{ o: string; oname: string; d: string; dname: string }>(`select f.origin_city_id o, oc.name oname, f.destination_city_id d, dc.name dname from favourite_routes f join cities oc on oc.id = f.origin_city_id join cities dc on dc.id = f.destination_city_id where f.user_id = $1 order by f.created_at`, [user.id]);
   const ops = await db.query<{ id: string; name: string; initials: string; brand_color: string; rating_avg: string; fav: boolean }>(`select o.id, o.name, o.initials, o.brand_color, o.rating_avg, exists(select 1 from favourite_operators f where f.user_id = $1 and f.operator_id = o.id) fav from operators o where o.status = 'verified' order by o.name`, [user.id]);

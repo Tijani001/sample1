@@ -78,6 +78,15 @@ Copy `.env.example` to `.env.local`. Everything is optional for local developmen
 
 ## Deployment
 
+### Staging on Render
+
+Live at **https://goroada-staging.onrender.com** (Render web service `goroada-staging`, free plan, Frankfurt). It auto-deploys every push to `claude/goroada-travel-platform-lsaz7f`. See `render.yaml`.
+
+* Free plan: the instance sleeps after 15 minutes idle (first visit then takes about a minute), and it uses the embedded database, so demo data is recreated on each start and test bookings are reset. Add Render Postgres (see `render.yaml`) for persistent data.
+* Demo account logins are shown on the sign-in page (`SHOW_DEMO_ACCOUNTS=true`).
+
+### Production
+
 Vercel (or any Node host):
 
 1. Set `APP_SECRET`, `DATABASE_URL` (Supabase), `NEXT_PUBLIC_SITE_URL`, payment keys and `DISABLE_DEMO_PAYMENTS=true`.

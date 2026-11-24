@@ -1,14 +1,15 @@
+import { requireUser } from "@/lib/auth/guards";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Bell, CreditCard, Heart, LifeBuoy, LogOut, Lock, ShieldCheck, Ticket, User, Users, Wallet } from "lucide-react";
-import { getDb, getSessionUser } from "@/lib/server";
+import { getDb } from "@/lib/server";
 import { signOutAction } from "./actions";
 import { formatMoney } from "@/lib/domain/money";
 
 export const metadata: Metadata = { title: "Account" };
 
 export default async function AccountPage() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account");
   const db = await getDb();
   const [[{ trips }], [{ pax }]] = await Promise.all([
     db.query<{ trips: number }>(`select count(*)::int trips from bookings where user_id = $1 and status = 'confirmed'`, [user.id]),

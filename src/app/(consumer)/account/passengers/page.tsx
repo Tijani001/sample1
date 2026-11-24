@@ -1,12 +1,13 @@
+import { requireUser } from "@/lib/auth/guards";
 import { Trash2, UserRound } from "lucide-react";
-import { getDb, getSessionUser } from "@/lib/server";
+import { getDb } from "@/lib/server";
 import { PassengerForm } from "../forms";
 import { deletePassengerAction } from "../actions";
 import { EmptyState } from "@/components/ui/primitives";
 
 export const metadata = { title: "Saved passengers" };
 export default async function Passengers() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/passengers");
   const rows = await (await getDb()).query<{ id: string; full_name: string; phone: string | null; email: string | null; next_of_kin_name: string | null }>(`select id, full_name, phone, email, next_of_kin_name from saved_passengers where user_id = $1 order by created_at`, [user.id]);
   return (
     <div>

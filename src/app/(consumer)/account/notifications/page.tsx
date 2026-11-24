@@ -1,10 +1,11 @@
-import { getDb, getSessionUser } from "@/lib/server";
+import { requireUser } from "@/lib/auth/guards";
+import { getDb } from "@/lib/server";
 import { updateNotificationPrefsAction } from "../actions";
 import { Button } from "@/components/ui/button";
 
 export const metadata = { title: "Notification preferences" };
 export default async function NotificationPrefs() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/account/notifications");
   const [p] = await (await getDb()).query<{ notification_prefs: Record<string, boolean> }>(`select notification_prefs from user_profiles where user_id = $1`, [user.id]);
   const prefs = p.notification_prefs;
   const row = (name: string, label: string, desc: string) => (

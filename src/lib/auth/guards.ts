@@ -17,3 +17,10 @@ export async function requireAdmin(...roles: AdminRole[]): Promise<SessionUser> 
   if (roles.length && !hasAdminRole(u, ...roles)) redirect("/admin?denied=1");
   return u;
 }
+
+/** Signed-in traveller, or a redirect to sign-in that returns to `next`. */
+export async function requireUser(next = "/account"): Promise<SessionUser> {
+  const u = await getSessionUser();
+  if (!u) redirect(`/signin?next=${encodeURIComponent(next)}`);
+  return u;
+}

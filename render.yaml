@@ -1,31 +1,35 @@
-# Render Blueprint for a Goroada staging environment.
-# Creates a Postgres database and a Node web service wired to it.
-databases:
-  - name: goroada-db
-    plan: basic-256mb
-    region: frankfurt
-    postgresMajorVersion: "16"
+# Render Blueprint for Goroada.
+#
+# Current staging (https://goroada-staging.onrender.com) runs on the free plan with the embedded
+# database (no DATABASE_URL): demo data is recreated on each start and test bookings reset when the
+# free instance sleeps or redeploys.
+#
+# For persistent data, uncomment the database block and the DATABASE_URL variable
+# (Render Postgres basic-256mb, ~$6/month).
+#
+# databases:
+#   - name: goroada-db
+#     plan: basic-256mb
+#     region: frankfurt
+#     postgresMajorVersion: "16"
 
 services:
   - type: web
     name: goroada-staging
     runtime: node
-    plan: starter
+    plan: free
     region: frankfurt
     branch: claude/goroada-travel-platform-lsaz7f
     buildCommand: npm ci && npm run build
-    startCommand: npm start -- -p $PORT
-    healthCheckPath: /trips/find
+    startCommand: npm start
     envVars:
       - key: NODE_VERSION
         value: "22"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: goroada-db
-          property: connectionString
       - key: APP_SECRET
         generateValue: true
-      - key: DATABASE_POOL_MAX
-        value: "5"
       - key: SHOW_DEMO_ACCOUNTS
         value: "true"
+      # - key: DATABASE_URL
+      #   fromDatabase:
+      #     name: goroada-db
+      #     property: connectionString
