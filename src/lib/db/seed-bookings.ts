@@ -72,7 +72,7 @@ export async function seedSampleBookings(db: Db) {
     if (!u) return;
     await bookUpcoming(db, u.id, "lagos", "abuja", 5, 2, "atlantic-coaches");
     await bookUpcoming(db, u.id, "lagos", "ibadan", 1, 1);
-    const toCancel = await bookUpcoming(db, u.id, "abuja", "kano", 9, 1);
+    const toCancel = await bookUpcoming(db, u.id, "abuja", "kano", 9, 1, "savannah-line");
     if (toCancel) {
       await cancelBooking(db, toCancel, { userId: u.id, label: "traveller" }, "Change of plans");
       const [r] = await db.query<{ id: string }>(`select id from refunds where booking_id = $1`, [toCancel]);

@@ -46,10 +46,18 @@ async function createPglite(dataDir: string): Promise<Db> {
 async function createPostgres(url: string): Promise<Db> {
   const { default: postgres } = await import("postgres");
   type PgTx = import("postgres").TransactionSql;
-  const sql = postgres(url, { max: Number(process.env.DATABASE_POOL_MAX ?? 10), prepare: false, onnotice: () => {} });
+  const sql = postgres(url, {
+    max: Number(process.env.DATABASE_POOL_MAX ?? 10),
+    prepare: false,
+    onnotice: () => {},
+    // Our queries pass JSON as pre-serialised strings (same as with PGlite). Don't stringify them twice.
+    types: { json: { to: 114, from: [114, 3802], serialize: (x: unknown) => (typeof x === "string" ? x : JSON.stringify(x)), parse: (x: string) => JSON.parse(x) } },
+    // Managed Postgres (Render, Supabase) requires TLS for external connections.
+    ssl: /sslmode=require|render\.com|supabase\.co/.test(url) && !/localhost|127\.0\.0\.1/.test(url) ? "require" : undefined,
+  });
   const wrap = (exec: typeof sql | PgTx): Queryable => ({
     async query<T>(text: string, params: unknown[] = []) {
-      const rows = await exec.unsafe(text, params as never[]);
+      const rows = await (exec.unsafe as (q: string, p: unknown[]) => Promise<unknown>)(text, params);
       return rows as unknown as T[];
     },
   });
