@@ -24,7 +24,7 @@ export default async function SharedTrack({ params }: { params: Promise<{ token:
     <div className="container-page py-6 sm:py-10">
       <p className="text-sm font-medium text-coral-700">Shared journey</p>
       <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{state.trip.origin.cityName} → {state.trip.destination.cityName}</h1>
-      <p className="text-[15px] text-ink-3">{state.trip.operator.name} · {formatDate(state.trip.departureAt, state.trip.tz, "long")} · link expires {formatDate(s.expires_at, state.trip.tz, "weekday")}</p>
+      <p className="text-base text-ink-3">{state.trip.operator.name} · {formatDate(state.trip.departureAt, state.trip.tz, "long")} · link expires {formatDate(s.expires_at, state.trip.tz, "weekday")}</p>
       <div className="mt-6"><JourneyTracker state={state} shared /></div>
       <AutoRefresh seconds={30} />
     </div>

@@ -12,7 +12,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   return (
     <div className="container-page max-w-2xl py-6 sm:py-10">
       <h1 className="text-2xl font-semibold sm:text-3xl">Contact support</h1>
-      <p className="mt-1 text-[15px] text-ink-3">Tell us what you need. Include your booking reference so we can help faster.</p>
+      <p className="mt-1 text-base text-ink-3">Tell us what you need. Include your booking reference so we can help faster.</p>
       <div className="mt-6 rounded-2xl border border-line bg-white p-5 sm:p-6"><ContactForm email={user?.email ?? ""} booking={sp.booking ?? ""} topic={topic ?? "booking"} subject={subject} /></div>
     </div>
   );

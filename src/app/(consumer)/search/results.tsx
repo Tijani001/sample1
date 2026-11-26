@@ -195,10 +195,10 @@ export function SearchResults({ places, today, query, leg, legDate, outbound, tr
           <Link href="/" aria-label="Back to home" className="-ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full hover:bg-surface-2 md:hidden"><ArrowLeft className="h-5 w-5" /></Link>
           <button onClick={() => setEditOpen(true)} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-1 py-1 text-left hover:bg-surface-2 md:flex-none md:px-3" aria-label="Edit search">
             <div className="min-w-0">
-              <p className="flex items-center gap-1.5 truncate text-[15px] font-semibold">
+              <p className="flex items-center gap-1.5 truncate text-base font-semibold">
                 {fromName}{query.returnDate ? <ArrowUpDown className="h-3.5 w-3.5 rotate-90 text-ink-3" /> : <ArrowRight className="h-3.5 w-3.5 text-ink-3" />}{toName}
               </p>
-              <p className="truncate text-[13px] text-ink-3 tabular">
+              <p className="truncate text-sm text-ink-3 tabular">
                 {formatDate(`${query.date}T12:00:00Z`, "UTC", "weekday")}{query.returnDate && ` – ${formatDate(`${query.returnDate}T12:00:00Z`, "UTC", "weekday")}`} · <Users className="inline h-3 w-3 align-[-1px]" /> {query.pax} · {query.returnDate ? "Round trip" : "One-way"}
               </p>
             </div>
@@ -266,7 +266,7 @@ export function SearchResults({ places, today, query, leg, legDate, outbound, tr
           <aside className="hidden lg:block" aria-label="Filters">
             <div className="sticky top-36 max-h-[calc(100vh-10rem)] overflow-y-auto pr-2">
               <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-[15px] font-semibold">Filters</h2>
+                <h2 className="text-base font-semibold">Filters</h2>
                 {activeCount > 0 && <button onClick={() => setFilters(emptyFilters())} className="text-sm font-medium text-coral-700 hover:text-coral-800">Clear all ({activeCount})</button>}
               </div>
               {filterPanel}
@@ -281,7 +281,7 @@ export function SearchResults({ places, today, query, leg, legDate, outbound, tr
               </p>
               <div className="hidden gap-1 rounded-xl bg-surface-2 p-1 md:flex" role="tablist" aria-label="Sort by">
                 {SORTS.map((s) => (
-                  <button key={s.key} role="tab" aria-selected={sort === s.key} onClick={() => setSort(s.key)} className={cn("relative h-8 rounded-lg px-3 text-[13px] font-medium transition-colors", sort === s.key ? "text-ink" : "text-ink-3 hover:text-ink")}>
+                  <button key={s.key} role="tab" aria-selected={sort === s.key} onClick={() => setSort(s.key)} className={cn("relative h-8 rounded-lg px-3 text-sm font-medium transition-colors", sort === s.key ? "text-ink" : "text-ink-3 hover:text-ink")}>
                     {sort === s.key && <motion.span layoutId="sort-pill" className="absolute inset-0 rounded-lg bg-white shadow-sm" />}
                     <span className="relative">{s.label}</span>
                   </button>
@@ -360,13 +360,13 @@ function FilterGroup({ title, children }: { title: string; children: React.React
 
 function Check2({ checked, onChange, label, meta }: { checked: boolean; onChange: () => void; label: React.ReactNode; meta?: React.ReactNode }) {
   return (
-    <label className="flex min-h-[40px] cursor-pointer items-center gap-3 rounded-lg py-1.5 text-[14px]">
+    <label className="flex min-h-[40px] cursor-pointer items-center gap-3 rounded-lg py-1.5 text-sm">
       <input type="checkbox" checked={checked} onChange={onChange} className="peer sr-only" />
       <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-navy-400", checked ? "border-navy-600 bg-navy-600 text-white" : "border-line-strong bg-white")}>
         {checked && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
       </span>
       <span className="min-w-0 flex-1 truncate">{label}</span>
-      {meta && <span className="text-[13px] text-ink-3 tabular">{meta}</span>}
+      {meta && <span className="text-sm text-ink-3 tabular">{meta}</span>}
     </label>
   );
 }

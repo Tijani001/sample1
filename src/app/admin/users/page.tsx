@@ -28,7 +28,7 @@ export default async function AdminUsers() {
           <tr key={u.id} className="align-top">
             <td className="font-medium">{u.name}<span className="block text-xs text-ink-3">{u.email} · joined {formatDate(u.created_at)}</span></td>
             <td className="text-xs">{u.operator ? `Operator · ${u.operator}` : u.roles?.length ? "Staff" : "Traveller"}</td>
-            <td><div className="flex max-w-xs flex-wrap gap-1">{ROLES.map((r) => { const has = u.roles?.includes(r); return <ActionButton key={r} size="sm" variant={has ? "navy" : "outline"} className="h-7 px-2 text-[11px]" action={grantRoleAction.bind(null, u.id, r, !has)} confirmText={`${has ? "Remove" : "Grant"} ${r.replace(/_/g, " ")} for ${u.name}?`}>{r.replace(/_/g, " ")}</ActionButton>; })}</div></td>
+            <td><div className="flex max-w-xs flex-wrap gap-1">{ROLES.map((r) => { const has = u.roles?.includes(r); return <ActionButton key={r} size="sm" variant={has ? "navy" : "outline"} className="h-7 px-2 text-xs" action={grantRoleAction.bind(null, u.id, r, !has)} confirmText={`${has ? "Remove" : "Grant"} ${r.replace(/_/g, " ")} for ${u.name}?`}>{r.replace(/_/g, " ")}</ActionButton>; })}</div></td>
             <td className="tabular">{u.bookings}</td>
             <td><Badge tone={u.status === "active" ? "success" : "danger"}>{u.status}</Badge></td>
             <td><ActionButton size="sm" variant="ghost" action={setUserStatusAction.bind(null, u.id, u.status === "active" ? "suspended" : "active")} confirmText={`${u.status === "active" ? "Suspend" : "Reactivate"} ${u.name}?`}>{u.status === "active" ? "Suspend" : "Reactivate"}</ActionButton></td>

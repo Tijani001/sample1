@@ -29,7 +29,7 @@ export default async function AccountPage() {
     <div>
       <div className="flex items-center gap-4">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-navy-600 text-lg font-semibold text-white">{user.name.split(" ").map((x) => x[0]).slice(0, 2).join("")}</span>
-        <div><h1 className="text-2xl font-semibold">{user.name}</h1><p className="text-[15px] text-ink-3">{user.email}</p></div>
+        <div><h1 className="text-2xl font-semibold">{user.name}</h1><p className="text-base text-ink-3">{user.email}</p></div>
       </div>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <div className="flex items-center gap-3 rounded-2xl border border-line bg-white p-4"><Wallet className="h-5 w-5 text-navy-500" /><div><p className="text-sm text-ink-3">Travel credit</p><p className="font-semibold tabular">{formatMoney(0)}</p></div><p className="ml-auto max-w-[150px] text-right text-xs text-ink-3">Credits from goodwill gestures or referrals appear here.</p></div>
@@ -37,7 +37,7 @@ export default async function AccountPage() {
       </div>
       <ul className="mt-6 divide-y divide-line rounded-2xl border border-line bg-white">
         {links.map(({ href, icon: Icon, t, d }) => (
-          <li key={href}><Link href={href} className="flex items-center gap-4 px-4 py-3.5 hover:bg-surface-2"><span className="grid h-10 w-10 place-items-center rounded-xl bg-surface-2 text-navy-600"><Icon className="h-5 w-5" /></span><span className="flex-1"><span className="block font-medium">{t}</span><span className="block text-[13px] text-ink-3">{d}</span></span><ArrowRight className="h-4 w-4 text-ink-3" /></Link></li>
+          <li key={href}><Link href={href} className="flex items-center gap-4 px-4 py-3.5 hover:bg-surface-2"><span className="grid h-10 w-10 place-items-center rounded-xl bg-surface-2 text-navy-600"><Icon className="h-5 w-5" /></span><span className="flex-1"><span className="block font-medium">{t}</span><span className="block text-sm text-ink-3">{d}</span></span><ArrowRight className="h-4 w-4 text-ink-3" /></Link></li>
         ))}
       </ul>
       {(user.operator || user.adminRoles.length > 0) && (

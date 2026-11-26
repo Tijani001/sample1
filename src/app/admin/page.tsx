@@ -55,7 +55,7 @@ export default async function AdminOverview({ searchParams }: { searchParams: Pr
         <section className="rounded-2xl border border-line bg-white p-5">
           <h2 className="font-semibold">Confirmed bookings · 14 days</h2>
           <div className="mt-4 flex h-40 items-end gap-1.5" role="img" aria-label="Bookings per day">
-            {series.map((s) => <div key={s.d} className="group relative flex-1"><div className="rounded-t-md bg-navy-600 group-hover:bg-coral-600" style={{ height: `${Math.max(2, (s.n / max) * 150)}px` }} /><span className="absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-ink px-1.5 py-0.5 text-[11px] text-white group-hover:block">{s.n} · {formatMoney(s.gmv)}</span></div>)}
+            {series.map((s) => <div key={s.d} className="group relative flex-1"><div className="rounded-t-md bg-navy-600 group-hover:bg-coral-600" style={{ height: `${Math.max(2, (s.n / max) * 150)}px` }} /><span className="absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-ink px-1.5 py-0.5 text-xs text-white group-hover:block">{s.n} · {formatMoney(s.gmv)}</span></div>)}
           </div>
           <p className="mt-1 text-xs text-ink-3">{formatDate(`${series[0].d}T12:00:00Z`, "UTC", "weekday")} – today</p>
         </section>

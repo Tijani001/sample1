@@ -116,7 +116,7 @@ export function PlacePicker({
           placeholder={side === "from" ? "Leaving from: city or terminal" : "Going to: city or terminal"}
           autoComplete="off"
           enterKeyHint="search"
-          className="h-12 w-full rounded-xl border border-line-strong bg-surface-2/60 pl-10 pr-10 text-[16px] outline-none transition focus:border-navy-500 focus:bg-white focus:shadow-[0_0_0_3px_rgb(42_93_132/0.12)]"
+          className="h-12 w-full rounded-xl border border-line-strong bg-surface-2/60 pl-10 pr-10 text-base outline-none transition focus:border-navy-500 focus:bg-white focus:shadow-[0_0_0_3px_rgb(42_93_132/0.12)]"
         />
         {query && (
           <button type="button" onClick={() => { setQuery(""); inputRef.current?.focus(); }} className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-ink-3 hover:bg-surface-3" aria-label="Clear search">
@@ -126,7 +126,7 @@ export function PlacePicker({
       </div>
       <ul ref={listRef} id={listId} role="listbox" aria-label="Suggestions" className="mt-2 max-h-[min(420px,60dvh)] overflow-y-auto overscroll-contain py-1">
         {items.length === 0 && (
-          <li className="px-3 py-10 text-center text-[15px] text-ink-3">
+          <li className="px-3 py-10 text-center text-base text-ink-3">
             <p className="font-medium text-ink">No matches for “{query}”</p>
             <p className="mt-1">Try a city name like Lagos, Abuja or Enugu.</p>
           </li>
@@ -160,8 +160,8 @@ export function PlacePicker({
                         {it.place.kind === "city" ? <MapPin className="h-[18px] w-[18px]" /> : <Building2 className="h-[18px] w-[18px]" />}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[15px] font-medium text-ink">{highlight(it.place.name, query.trim())}</span>
-                        <span className="block truncate text-[13px] text-ink-3">
+                        <span className="block truncate text-base font-medium text-ink">{highlight(it.place.name, query.trim())}</span>
+                        <span className="block truncate text-sm text-ink-3">
                           {it.disabled ? `Already selected as ${side === "from" ? "destination" : "departure"}` : it.place.kind === "city" ? `${it.place.region} · All terminals` : it.place.address}
                         </span>
                       </span>

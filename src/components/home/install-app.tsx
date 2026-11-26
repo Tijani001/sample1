@@ -26,7 +26,7 @@ export function InstallApp() {
         <LogoMark className="h-14 w-14 rounded-2xl bg-white p-2 shadow-sm" />
         <div className="flex-1">
           <h2 id="app-heading" className="text-xl font-semibold">Goroada on your home screen</h2>
-          <p className="mt-1 max-w-xl text-[15px] text-ink-3">Install the app for one-tap access to your tickets, even when you&apos;re offline at the terminal. It&apos;s light on data and storage.</p>
+          <p className="mt-1 max-w-xl text-base text-ink-3">Install the app for one-tap access to your tickets, even when you&apos;re offline at the terminal. It&apos;s light on data and storage.</p>
           <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-ink-2">
             <li className="flex items-center gap-1.5"><WifiOff className="h-4 w-4 text-navy-500" />Offline tickets</li>
             <li className="flex items-center gap-1.5"><Smartphone className="h-4 w-4 text-navy-500" />Under 1 MB to install</li>

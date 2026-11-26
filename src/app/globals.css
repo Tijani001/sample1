@@ -7,7 +7,7 @@
    selected states use the darker action shade #C94C08 (4.65:1 with white text); text links use #B8450A.
    ───────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --color-navy-50: #eef4f9;
@@ -91,7 +91,6 @@
   body {
     @apply bg-surface text-ink antialiased;
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
   }
   ::selection {
     background: var(--color-coral-100);
@@ -111,7 +110,7 @@
     color: var(--color-ink-4);
   }
   h1, h2, h3, h4 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
   p {

@@ -139,11 +139,11 @@ export function SearchWidget({ places, initial, today, variant = "hero", onSubmi
             <span className="text-xs font-medium text-ink-3">{side === "from" ? "From" : "To"}</span>
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span key={`${value?.id ?? "none"}-${swapTurns}`} initial={{ opacity: 0, y: side === "from" ? 8 : -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: side === "from" ? -8 : 8 }} transition={{ duration: 0.18 }}
-                className={cn("block truncate text-[17px] font-semibold leading-tight", value ? "text-ink" : "text-ink-4")}>
+                className={cn("block truncate text-lg font-semibold leading-tight", value ? "text-ink" : "text-ink-4")}>
                 {value ? value.cityName : side === "from" ? "Departure city" : "Destination city"}
               </motion.span>
             </AnimatePresence>
-            <span className="block truncate text-[13px] text-ink-3">{value ? (value.kind === "terminal" ? value.name : "All terminals") : "City or terminal"}</span>
+            <span className="block truncate text-sm text-ink-3">{value ? (value.kind === "terminal" ? value.name : "All terminals") : "City or terminal"}</span>
             {err && <span id={`err-${side}`} className="sr-only">{err}</span>}
           </button>
         }
@@ -173,10 +173,10 @@ export function SearchWidget({ places, initial, today, variant = "hero", onSubmi
             aria-haspopup="dialog"
             className={cn(fieldBase, "min-h-[64px] py-2.5", which === "return" && errors.return && "bg-danger-bg/60")}>
             <span className="flex items-center gap-1.5 text-xs font-medium text-ink-3"><CalendarDays className="h-3.5 w-3.5" />{which === "date" ? "Departure" : "Return"}</span>
-            <span className={cn("block truncate text-[17px] font-semibold leading-tight tabular", value ? "text-ink" : "text-ink-4")}>
+            <span className={cn("block truncate text-lg font-semibold leading-tight tabular", value ? "text-ink" : "text-ink-4")}>
               {value ? fmtDate(value) : disabledReturn ? "Add return" : "Choose date"}
             </span>
-            <span className="block truncate text-[13px] text-ink-3">{value === today ? "Today" : value === addDays(today, 1) ? "Tomorrow" : disabledReturn ? "Optional" : value ? new Date(`${value}T12:00:00Z`).getUTCFullYear() : "Required"}</span>
+            <span className="block truncate text-sm text-ink-3">{value === today ? "Today" : value === addDays(today, 1) ? "Tomorrow" : disabledReturn ? "Optional" : value ? new Date(`${value}T12:00:00Z`).getUTCFullYear() : "Required"}</span>
           </button>
         }
         footer={
@@ -227,8 +227,8 @@ export function SearchWidget({ places, initial, today, variant = "hero", onSubmi
       trigger={
         <button type="button" onClick={() => setPanel("pax")} aria-haspopup="dialog" className={cn(fieldBase, "min-h-[64px] py-2.5")}>
           <span className="flex items-center gap-1.5 text-xs font-medium text-ink-3"><Users className="h-3.5 w-3.5" />Passengers</span>
-          <span className="block text-[17px] font-semibold leading-tight tabular">{pax} {pax === 1 ? "passenger" : "passengers"}</span>
-          <span className="block truncate text-[13px] text-ink-3">{VEHICLES.find((v) => v.id === vehicle)?.label}</span>
+          <span className="block text-lg font-semibold leading-tight tabular">{pax} {pax === 1 ? "passenger" : "passengers"}</span>
+          <span className="block truncate text-sm text-ink-3">{VEHICLES.find((v) => v.id === vehicle)?.label}</span>
         </button>
       }
       footer={<Button type="button" variant="navy" className="w-full" onClick={() => setPanel(null)}>Done</Button>}
@@ -323,8 +323,8 @@ export function PassengerStepper({ value, onChange, min = 1, max = 10 }: { value
   return (
     <div className="flex items-center justify-between gap-4">
       <div>
-        <p className="text-[15px] font-medium">Passengers</p>
-        <p className="text-[13px] text-ink-3">Everyone needs a seat, including children</p>
+        <p className="text-base font-medium">Passengers</p>
+        <p className="text-sm text-ink-3">Everyone needs a seat, including children</p>
       </div>
       <div className="flex items-center gap-3">
         <button type="button" onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min} aria-label="Remove a passenger" className="grid h-10 w-10 place-items-center rounded-full border border-line-strong text-ink transition hover:border-ink-3 disabled:opacity-30">

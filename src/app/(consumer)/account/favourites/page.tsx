@@ -22,7 +22,7 @@ export default async function Favourites() {
       <h1 className="text-2xl font-semibold">Favourites</h1>
       <h2 className="mt-6 text-lg font-semibold">Favourite routes</h2>
       <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-white">
-        {routes.length === 0 && <li className="p-4 text-[15px] text-ink-3">No favourite routes yet.</li>}
+        {routes.length === 0 && <li className="p-4 text-base text-ink-3">No favourite routes yet.</li>}
         {routes.map((r) => (
           <li key={`${r.o}-${r.d}`} className="flex items-center gap-3 px-4 py-3">
             <Link href={searchHref({ from: r.o, to: r.d, date, pax: 1 })} className="flex flex-1 items-center gap-1.5 font-medium hover:underline">{r.oname}<ArrowRight className="h-4 w-4 text-ink-3" />{r.dname}</Link>

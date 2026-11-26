@@ -76,10 +76,10 @@ export function Verifier() {
               className={cn("rounded-2xl border-2 p-6", result.ok ? "border-success bg-success-bg" : result.reason === "already_boarded" ? "border-warning bg-warning-bg" : "border-danger bg-danger-bg")}>
               <div className="flex items-center gap-3">
                 {result.ok ? <CheckCircle2 className="h-10 w-10 text-success" /> : result.reason === "already_boarded" ? <AlertTriangle className="h-10 w-10 text-warning" /> : <XCircle className="h-10 w-10 text-danger" />}
-                <div><p className="text-xl font-semibold">{result.ok ? (result.status === "boarded_now" ? "Boarded" : "Valid ticket") : result.reason === "already_boarded" ? "Already used" : "Not valid"}</p>{!result.ok && <p className="text-[15px]">{result.message}</p>}</div>
+                <div><p className="text-xl font-semibold">{result.ok ? (result.status === "boarded_now" ? "Boarded" : "Valid ticket") : result.reason === "already_boarded" ? "Already used" : "Not valid"}</p>{!result.ok && <p className="text-base">{result.message}</p>}</div>
               </div>
               {t && (
-                <dl className="mt-5 grid grid-cols-2 gap-3 text-[15px]">
+                <dl className="mt-5 grid grid-cols-2 gap-3 text-base">
                   <div className="col-span-2"><dt className="text-xs uppercase text-ink-3">Passenger</dt><dd className="text-lg font-semibold">{t.passenger}</dd></div>
                   <div><dt className="text-xs uppercase text-ink-3">Seat</dt><dd className="text-lg font-semibold">{t.seat ?? "Open"}</dd></div>
                   <div><dt className="text-xs uppercase text-ink-3">Booking</dt><dd className="font-mono">{t.reference}</dd></div>

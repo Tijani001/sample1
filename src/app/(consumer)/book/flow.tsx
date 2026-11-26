@@ -325,7 +325,7 @@ export function BookingFlow(props: {
             })}
           </ol>
           {left != null && booking && (
-            <div role="timer" aria-live={left < 120 ? "assertive" : "off"} className={cn("flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold tabular", left < 120 ? "bg-danger-bg text-danger" : "bg-warning-bg text-warning")}>
+            <div role="timer" aria-live={left < 120 ? "assertive" : "off"} className={cn("flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold tabular", left < 120 ? "bg-danger-bg text-danger" : "bg-warning-bg text-warning")}>
               <Clock className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Seats held for</span> {formatCountdown(left)}
             </div>
@@ -341,7 +341,7 @@ export function BookingFlow(props: {
               {step === "seats" && (
                 <section aria-labelledby="seats-h">
                   <h1 id="seats-h" className="text-2xl font-semibold">Choose your seats</h1>
-                  <p className="mt-1 text-[15px] text-ink-3">Select {pax} seat{pax > 1 ? "s" : ""}{segments.length > 1 ? " for each journey" : ""}. We&apos;ll hold them for 12 minutes while you finish booking.</p>
+                  <p className="mt-1 text-base text-ink-3">Select {pax} seat{pax > 1 ? "s" : ""}{segments.length > 1 ? " for each journey" : ""}. We&apos;ll hold them for 12 minutes while you finish booking.</p>
                   {segments.length > 1 && (
                     <div className="mt-5 grid grid-cols-2 gap-2" role="tablist" aria-label="Journeys">
                       {segments.map((s, i) => (
@@ -359,7 +359,7 @@ export function BookingFlow(props: {
                         <OperatorLogo initials={seg.trip.operator.initials} color={seg.trip.operator.color} size="sm" />
                         <div>
                           <p className="text-sm font-semibold">{seg.trip.operator.name} · {seg.trip.vehicle.typeName}</p>
-                          <p className="text-[13px] text-ink-3 tabular">{formatDate(seg.trip.departureAt, seg.trip.tz, "weekday")} · {formatTime(seg.trip.departureAt, seg.trip.tz)} from {seg.trip.origin.terminalName}</p>
+                          <p className="text-sm text-ink-3 tabular">{formatDate(seg.trip.departureAt, seg.trip.tz, "weekday")} · {formatTime(seg.trip.departureAt, seg.trip.tz)} from {seg.trip.origin.terminalName}</p>
                         </div>
                       </div>
                       <Badge tone="navy" className="tabular">{seg.seatMap.available} of {seg.seatMap.capacity} seats free</Badge>
@@ -383,7 +383,7 @@ export function BookingFlow(props: {
                     ) : (
                       <div className="mt-5 rounded-xl bg-surface-2 p-5">
                         <p className="flex items-center gap-2 font-semibold"><Users className="h-5 w-5 text-navy-600" />Seats are assigned at boarding</p>
-                        <p className="mt-1.5 text-[15px] text-ink-3">{seg.trip.operator.name} doesn&apos;t use reserved seat numbers. Your booking guarantees {pax} seat{pax > 1 ? "s" : ""} on this departure; the operator assigns seat numbers when you check in at the terminal.</p>
+                        <p className="mt-1.5 text-base text-ink-3">{seg.trip.operator.name} doesn&apos;t use reserved seat numbers. Your booking guarantees {pax} seat{pax > 1 ? "s" : ""} on this departure; the operator assigns seat numbers when you check in at the terminal.</p>
                         <p className="mt-3 text-sm font-medium text-success tabular">{seg.seatMap.available} seats currently available</p>
                       </div>
                     )}
@@ -394,15 +394,15 @@ export function BookingFlow(props: {
               {step === "details" && (
                 <form onSubmit={submitDetails} noValidate aria-labelledby="details-h">
                   <h1 id="details-h" className="text-2xl font-semibold">Passenger details</h1>
-                  <p className="mt-1 text-[15px] text-ink-3">Enter names exactly as on a valid ID. Operators check IDs at boarding.</p>
+                  <p className="mt-1 text-base text-ink-3">Enter names exactly as on a valid ID. Operators check IDs at boarding.</p>
                   {!props.user && (
                     <Notice tone="neutral" className="mt-4">
                       Booking as a guest. <Link href={`/signin?next=/book/${booking?.id}?step=details`} className="font-semibold text-coral-700 underline-offset-2 hover:underline">Sign in</Link> to use saved passengers.
                     </Notice>
                   )}
                   <fieldset className="mt-5 rounded-2xl border border-line bg-white p-4 sm:p-6">
-                    <legend className="px-1 text-[15px] font-semibold">Contact details</legend>
-                    <p className="mb-4 text-[13px] text-ink-3">We&apos;ll send your tickets and trip updates here.</p>
+                    <legend className="px-1 text-base font-semibold">Contact details</legend>
+                    <p className="mb-4 text-sm text-ink-3">We&apos;ll send your tickets and trip updates here.</p>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <Field label="Full name" htmlFor="c-name" error={errs.contact?.name?.message} className="sm:col-span-2">
                         <Input id="c-name" autoComplete="name" invalid={!!errs.contact?.name} {...form.register("contact.name")} />
@@ -419,14 +419,14 @@ export function BookingFlow(props: {
                     const pe = errs.passengers?.[i];
                     return (
                       <fieldset key={f.id} className="mt-4 rounded-2xl border border-line bg-white p-4 sm:p-6">
-                        <legend className="flex items-center gap-2 px-1 text-[15px] font-semibold">
+                        <legend className="flex items-center gap-2 px-1 text-base font-semibold">
                           Passenger {i + 1}{i === 0 && <Badge tone="navy">Lead passenger</Badge>}
                           {segments.map((s) => s.seats[i] && <Badge key={s.direction} tone="coral">{segments.length > 1 ? (s.direction === "outbound" ? "Out" : "Return") + " " : ""}Seat {s.seats[i]}</Badge>)}
                         </legend>
                         {props.savedPassengers.length > 0 && (
                           <div className="no-scrollbar -mx-1 mb-4 mt-1 flex gap-2 overflow-x-auto px-1">
                             {props.savedPassengers.map((p) => (
-                              <button type="button" key={p.id} onClick={() => fillSaved(i, p)} className="h-8 shrink-0 rounded-full border border-line-strong px-3 text-[13px] hover:border-navy-500 hover:bg-navy-50">
+                              <button type="button" key={p.id} onClick={() => fillSaved(i, p)} className="h-8 shrink-0 rounded-full border border-line-strong px-3 text-sm hover:border-navy-500 hover:bg-navy-50">
                                 {p.full_name}
                               </button>
                             ))}
@@ -455,7 +455,7 @@ export function BookingFlow(props: {
                       </fieldset>
                     );
                   })}
-                  <p className="mt-4 flex items-start gap-2 text-[13px] text-ink-3"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />We share passenger names and the emergency contact only with your operator, for the manifest. See our <Link href="/legal/privacy" className="underline">privacy notice</Link>.</p>
+                  <p className="mt-4 flex items-start gap-2 text-sm text-ink-3"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />We share passenger names and the emergency contact only with your operator, for the manifest. See our <Link href="/legal/privacy" className="underline">privacy notice</Link>.</p>
                   <button type="submit" className="sr-only">Continue</button>
                 </form>
               )}
@@ -463,7 +463,7 @@ export function BookingFlow(props: {
               {step === "extras" && (
                 <section aria-labelledby="extras-h">
                   <h1 id="extras-h" className="text-2xl font-semibold">Extras and review</h1>
-                  <p className="mt-1 text-[15px] text-ink-3">Optional add-ons. Nothing is pre-selected.</p>
+                  <p className="mt-1 text-base text-ink-3">Optional add-ons. Nothing is pre-selected.</p>
                   <div className="mt-5 space-y-3">
                     <AddonRow icon={<Luggage className="h-5 w-5" />} title={ADDONS.extra_luggage.label} desc={ADDONS.extra_luggage.description} price={`${formatMoney(ADDONS.extra_luggage.price(0))} per bag, per journey`}
                       control={<Qty value={addons.extra_luggage ?? 0} max={addonQuantityLimits("extra_luggage", pax).max} onChange={(q) => setAddon("extra_luggage", q)} label="extra bags" />} />
@@ -475,7 +475,7 @@ export function BookingFlow(props: {
                     )}
                   </div>
                   <div className="mt-6 rounded-2xl border border-line bg-white p-4 sm:p-5">
-                    <label htmlFor="promo" className="flex items-center gap-2 text-[15px] font-semibold"><Tag className="h-4 w-4 text-coral-600" />Promo code</label>
+                    <label htmlFor="promo" className="flex items-center gap-2 text-base font-semibold"><Tag className="h-4 w-4 text-coral-600" />Promo code</label>
                     <form className="mt-3 flex gap-2" onSubmit={async (e) => { e.preventDefault(); if (!promo.trim()) return; setBusy(true); await saveExtras({ promoCode: promo.trim() }); setBusy(false); }}>
                       <Input id="promo" value={promo} onChange={(e) => { setPromo(e.target.value.toUpperCase()); if (promoState && !promoState.ok) setPromoState(null); }} placeholder="e.g. FIRSTTRIP" className="font-mono uppercase" autoCapitalize="characters" autoComplete="off" invalid={promoState?.ok === false} aria-describedby="promo-msg" disabled={promoState?.ok} />
                       {promoState?.ok ? (
@@ -491,7 +491,7 @@ export function BookingFlow(props: {
                         </motion.p>
                       )}
                     </AnimatePresence>
-                    <Link href="/offers" target="_blank" className="mt-2 inline-block text-[13px] text-ink-3 underline-offset-2 hover:underline">See available offers</Link>
+                    <Link href="/offers" target="_blank" className="mt-2 inline-block text-sm text-ink-3 underline-offset-2 hover:underline">See available offers</Link>
                   </div>
                   <ReviewTrips segments={segments} booking={booking} />
                 </section>
@@ -500,7 +500,7 @@ export function BookingFlow(props: {
               {step === "pay" && (
                 <section aria-labelledby="pay-h">
                   <h1 id="pay-h" className="text-2xl font-semibold">Payment</h1>
-                  <p className="mt-1 text-[15px] text-ink-3">Your booking is confirmed only after we verify your payment with the payment provider.</p>
+                  <p className="mt-1 text-base text-ink-3">Your booking is confirmed only after we verify your payment with the payment provider.</p>
                   <div className="mt-5 space-y-3" role="radiogroup" aria-label="Payment method">
                     {props.providers.map((p) => (
                       <button key={p.id} type="button" role="radio" aria-checked={provider === p.id} onClick={() => setProvider(p.id)}
@@ -515,11 +515,11 @@ export function BookingFlow(props: {
                     ))}
                     {props.providers.length === 0 && <Notice tone="warning" title="Payments unavailable">No payment provider is configured. Please try again later.</Notice>}
                   </div>
-                  <label className="mt-5 flex cursor-pointer items-start gap-3 text-[14px]">
+                  <label className="mt-5 flex cursor-pointer items-start gap-3 text-sm">
                     <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-navy-600)]" />
                     <span className="text-ink-2">I accept the operator&apos;s fare rules ({segments.map((s) => s.trip.policy.name).join(" / ")}) and Goroada&apos;s <Link href="/legal/terms" target="_blank" className="underline">terms of service</Link>.</span>
                   </label>
-                  <p className="mt-4 flex items-center gap-2 text-[13px] text-ink-3"><Lock className="h-4 w-4" />Payments are processed by licensed providers. Goroada never sees or stores your card details.</p>
+                  <p className="mt-4 flex items-center gap-2 text-sm text-ink-3"><Lock className="h-4 w-4" />Payments are processed by licensed providers. Goroada never sees or stores your card details.</p>
                 </section>
               )}
             </motion.div>
@@ -531,7 +531,7 @@ export function BookingFlow(props: {
           <div className="sticky top-36 space-y-4">
             <Summary segments={segments} pax={pax} quote={shownQuote} step={step} />
             <Button size="lg" className="w-full" onClick={primary.onClick} loading={busy}>{primary.label}</Button>
-            {step === "seats" && !allSeatsChosen && <p className="text-center text-[13px] text-ink-3">Select {pax} seat{pax > 1 ? "s" : ""} per journey to continue</p>}
+            {step === "seats" && !allSeatsChosen && <p className="text-center text-sm text-ink-3">Select {pax} seat{pax > 1 ? "s" : ""} per journey to continue</p>}
             <button onClick={() => setHelpOpen(true)} className="flex w-full items-center justify-center gap-1.5 text-sm text-ink-3 hover:text-ink"><LifeBuoy className="h-4 w-4" />Questions? Get help without leaving checkout</button>
           </div>
         </aside>
@@ -556,7 +556,7 @@ export function BookingFlow(props: {
       <Overlay open={expired || left === 0} onOpenChange={() => {}} title="Your seat reservation expired" size="sm" sheetOnly={false}>
         <div className="text-center">
           <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-warning-bg text-warning"><TimerReset className="h-7 w-7" /></span>
-          <p className="mt-4 text-[15px] text-ink-3">We held your seats for 12 minutes so other travellers can book too. Seats may still be available, so start again and we&apos;ll keep the same journey.</p>
+          <p className="mt-4 text-base text-ink-3">We held your seats for 12 minutes so other travellers can book too. Seats may still be available, so start again and we&apos;ll keep the same journey.</p>
           <Button className="mt-5 w-full" size="lg" onClick={() => router.push(props.restartHref)}>Choose seats again</Button>
           <Link href="/" className="mt-3 inline-block text-sm text-ink-3 hover:text-ink">Start a new search</Link>
         </div>
@@ -597,17 +597,17 @@ export function AnimatedAmount({ value, className }: { value: number; className?
 }
 
 function Summary({ segments, pax, quote, step, bare }: { segments: Segment[]; pax: number; quote: Quote; step: Step; bare?: boolean }) {
-  const row = "flex items-baseline justify-between gap-4 text-[14px]";
+  const row = "flex items-baseline justify-between gap-4 text-sm";
   return (
     <div className={cn(!bare && "rounded-2xl border border-line bg-white p-5")}>
-      {!bare && <h2 className="text-[15px] font-semibold">Your trip</h2>}
+      {!bare && <h2 className="text-base font-semibold">Your trip</h2>}
       <ul className={cn("space-y-3", !bare && "mt-3")}>
         {segments.map((s) => (
           <li key={s.direction} className="rounded-xl bg-surface-2/70 p-3">
             <p className="text-xs font-medium text-ink-3">{s.direction === "outbound" ? "Outbound" : "Return"} · {formatDate(s.trip.departureAt, s.trip.tz, "weekday")}</p>
             <p className="mt-0.5 text-sm font-semibold">{s.trip.origin.cityName} → {s.trip.destination.cityName}</p>
-            <p className="text-[13px] text-ink-3 tabular">{formatTime(s.trip.departureAt, s.trip.tz)} – ~{formatTime(s.trip.arrivalEstAt, s.trip.tz)} · {s.trip.operator.name}</p>
-            <p className="mt-1 text-[13px] tabular">
+            <p className="text-sm text-ink-3 tabular">{formatTime(s.trip.departureAt, s.trip.tz)} – ~{formatTime(s.trip.arrivalEstAt, s.trip.tz)} · {s.trip.operator.name}</p>
+            <p className="mt-1 text-sm tabular">
               {s.seatMap.seatingMode === "open" ? <span className="text-ink-3">Seats assigned at boarding</span> : s.seats.filter(Boolean).length ? <>Seat{s.seats.filter(Boolean).length > 1 ? "s" : ""} <b>{s.seats.filter(Boolean).join(", ")}</b></> : <span className="text-ink-3">No seats selected yet</span>}
             </p>
           </li>
@@ -634,15 +634,15 @@ function Summary({ segments, pax, quote, step, bare }: { segments: Segment[]; pa
 function ReviewTrips({ segments, booking }: { segments: Segment[]; booking: BookingView | null }) {
   return (
     <div className="mt-6 space-y-3">
-      <h2 className="text-[17px] font-semibold">Review your journey{segments.length > 1 ? "s" : ""}</h2>
+      <h2 className="text-lg font-semibold">Review your journey{segments.length > 1 ? "s" : ""}</h2>
       {segments.map((s) => (
         <div key={s.direction} className="rounded-2xl border border-line bg-white p-4 sm:p-5">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-semibold">{s.direction === "outbound" ? "Outbound" : "Return"} · {formatDate(s.trip.departureAt, s.trip.tz, "long")}</p>
-            <span className="text-[13px] text-ink-3">{formatDuration(s.trip.durationMin)}</span>
+            <span className="text-sm text-ink-3">{formatDuration(s.trip.durationMin)}</span>
           </div>
           <div className="mt-4"><JourneyLine trip={s.trip} compact /></div>
-          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-dashed border-line pt-3 text-[13px] text-ink-3">
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-dashed border-line pt-3 text-sm text-ink-3">
             <span>{s.trip.operator.name} · {s.trip.vehicle.model}</span>
             <span>{s.trip.policy.name}: {s.trip.policy.summary}</span>
           </div>
@@ -665,8 +665,8 @@ function AddonRow({ icon, title, desc, price, control }: { icon: React.ReactNode
       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-navy-50 text-navy-600">{icon}</span>
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{title}</p>
-        <p className="text-[13.5px] text-ink-3">{desc}</p>
-        <p className="mt-1 text-[13px] font-medium text-ink-2 tabular">{price}</p>
+        <p className="text-sm text-ink-3">{desc}</p>
+        <p className="mt-1 text-sm font-medium text-ink-2 tabular">{price}</p>
       </div>
       {control}
     </div>
@@ -695,7 +695,7 @@ function Qty({ value, max, onChange, label }: { value: number; max: number; onCh
 function HelpSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   return (
     <Overlay open={open} onOpenChange={onOpenChange} title="Help with your booking" description="Your progress is saved while you read.">
-      <div className="space-y-4 text-[15px]">
+      <div className="space-y-4 text-base">
         {[
           ["How long are my seats held?", "12 minutes from when you reserve them. The timer at the top shows the time left. If it runs out, you can pick seats again."],
           ["When am I charged?", "Only when you complete payment with the provider. Your booking is confirmed after we verify the payment."],

@@ -33,14 +33,14 @@ export default async function LegalPage({ params }: { params: Promise<{ doc: str
   if (!d) notFound();
   const credits = doc === "credits" ? await (await getDb()).query<{ name: string; image_source_url: string }>(`select name, image_source_url from cities where image_source_url is not null order by name`) : [];
   return (
-    <article className="container-page max-w-3xl py-8 sm:py-12 [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-semibold [&_p]:mt-3 [&_p]:text-[15.5px] [&_p]:leading-relaxed [&_p]:text-ink-2">
+    <article className="container-page max-w-3xl py-8 sm:py-12 [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-semibold [&_p]:mt-3 [&_p]:text-base [&_p]:leading-relaxed [&_p]:text-ink-2">
       <h1 className="text-3xl font-semibold">{d.title}</h1>
       <p className="!text-sm !text-ink-3">Last updated November 2026</p>
       {d.body}
       {doc === "cookies" && <CookiePrefs />}
       {doc === "credits" && (<>
         <p>Destination photographs are from Wikimedia Commons and are used under their respective free licences (mostly CC BY-SA). Each source page lists the author and licence.</p>
-        <ul className="mt-4 list-disc pl-5 text-[15px]">{credits.map((c) => <li key={c.name} className="mt-1"><a className="underline" href={c.image_source_url} target="_blank" rel="noopener noreferrer">{c.name}</a></li>)}</ul>
+        <ul className="mt-4 list-disc pl-5 text-base">{credits.map((c) => <li key={c.name} className="mt-1"><a className="underline" href={c.image_source_url} target="_blank" rel="noopener noreferrer">{c.name}</a></li>)}</ul>
       </>)}
     </article>
   );

@@ -14,7 +14,7 @@ export function BoardingPass({ trip, passenger, seat, ticketNo, reference, qr, s
     <article className={cn("relative w-full overflow-hidden rounded-[22px] border border-line bg-white shadow-md print:break-inside-avoid print:shadow-none", voided && "opacity-60")} aria-label={`Ticket for ${passenger}`}>
       <header className="flex items-center justify-between bg-navy-600 px-5 py-3.5 text-white">
         <Logo inverted height={24} />
-        <span className="text-right text-[11px] font-medium uppercase tracking-[0.14em] text-white/80">
+        <span className="text-right text-xs font-medium uppercase tracking-[0.14em] text-white/80">
           Boarding pass<br /><span className="text-white">{direction === "outbound" ? "Outbound" : "Return"}</span>
         </span>
       </header>
@@ -22,22 +22,22 @@ export function BoardingPass({ trip, passenger, seat, ticketNo, reference, qr, s
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[26px] font-semibold leading-none tracking-tight">{trip.origin.cityName}</p>
-            <p className="mt-1.5 truncate text-[13px] text-ink-3">{trip.origin.terminalName}</p>
+            <p className="mt-1.5 truncate text-sm text-ink-3">{trip.origin.terminalName}</p>
           </div>
           <svg viewBox="0 0 60 12" className="mt-2 h-3 w-14 shrink-0 text-coral-500" aria-hidden><path d="M0 6h52" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" /><path d="m50 1 6 5-6 5" fill="none" stroke="currentColor" strokeWidth="2" /></svg>
           <div className="min-w-0 text-right">
             <p className="text-[26px] font-semibold leading-none tracking-tight">{trip.destination.cityName}</p>
-            <p className="mt-1.5 truncate text-[13px] text-ink-3">{trip.destination.terminalName}</p>
+            <p className="mt-1.5 truncate text-sm text-ink-3">{trip.destination.terminalName}</p>
           </div>
         </div>
-        <dl className="mt-5 grid grid-cols-3 gap-x-3 gap-y-4 text-[13px]">
-          <div className="col-span-2"><dt className="text-[11px] uppercase tracking-wide text-ink-3">Passenger</dt><dd className="mt-0.5 truncate text-[15px] font-semibold">{passenger}</dd></div>
-          <div><dt className="text-[11px] uppercase tracking-wide text-ink-3">Seat</dt><dd className="mt-0.5 text-[15px] font-semibold tabular">{trip.seatingMode === "open" ? "At boarding" : seat ?? "—"}</dd></div>
-          <div><dt className="text-[11px] uppercase tracking-wide text-ink-3">Date</dt><dd className="mt-0.5 text-[15px] font-semibold tabular">{formatDate(trip.departureAt, trip.tz, "weekday")}</dd></div>
-          <div><dt className="text-[11px] uppercase tracking-wide text-ink-3">Departs</dt><dd className="mt-0.5 text-[15px] font-semibold tabular">{formatTime(trip.departureAt, trip.tz)}</dd></div>
-          <div><dt className="text-[11px] uppercase tracking-wide text-ink-3">Arrives (est.)</dt><dd className="mt-0.5 text-[15px] font-semibold tabular">~{formatTime(trip.arrivalEstAt, trip.tz)}{plus && <sup className="text-[10px] text-coral-700">{plus}</sup>}</dd></div>
-          <div className="col-span-2"><dt className="text-[11px] uppercase tracking-wide text-ink-3">Operator</dt><dd className="mt-0.5 truncate font-medium">{trip.operator.name} · {trip.vehicle.typeName}</dd></div>
-          <div><dt className="text-[11px] uppercase tracking-wide text-ink-3">Booking</dt><dd className="mt-0.5 font-mono font-medium">{reference}</dd></div>
+        <dl className="mt-5 grid grid-cols-3 gap-x-3 gap-y-4 text-sm">
+          <div className="col-span-2"><dt className="text-xs uppercase tracking-wide text-ink-3">Passenger</dt><dd className="mt-0.5 truncate text-base font-semibold">{passenger}</dd></div>
+          <div><dt className="text-xs uppercase tracking-wide text-ink-3">Seat</dt><dd className="mt-0.5 text-base font-semibold tabular">{trip.seatingMode === "open" ? "At boarding" : seat ?? "—"}</dd></div>
+          <div><dt className="text-xs uppercase tracking-wide text-ink-3">Date</dt><dd className="mt-0.5 text-base font-semibold tabular">{formatDate(trip.departureAt, trip.tz, "weekday")}</dd></div>
+          <div><dt className="text-xs uppercase tracking-wide text-ink-3">Departs</dt><dd className="mt-0.5 text-base font-semibold tabular">{formatTime(trip.departureAt, trip.tz)}</dd></div>
+          <div><dt className="text-xs uppercase tracking-wide text-ink-3">Arrives (est.)</dt><dd className="mt-0.5 text-base font-semibold tabular">~{formatTime(trip.arrivalEstAt, trip.tz)}{plus && <sup className="text-[10px] text-coral-700">{plus}</sup>}</dd></div>
+          <div className="col-span-2"><dt className="text-xs uppercase tracking-wide text-ink-3">Operator</dt><dd className="mt-0.5 truncate font-medium">{trip.operator.name} · {trip.vehicle.typeName}</dd></div>
+          <div><dt className="text-xs uppercase tracking-wide text-ink-3">Booking</dt><dd className="mt-0.5 font-mono font-medium">{reference}</dd></div>
         </dl>
       </div>
       <div className="relative my-5 h-0 border-t-2 border-dashed border-line" aria-hidden>
@@ -48,11 +48,11 @@ export function BoardingPass({ trip, passenger, seat, ticketNo, reference, qr, s
         <div className={cn("relative h-[132px] w-[132px] shrink-0 rounded-xl bg-white p-1.5 ring-1 ring-line", (boarded || voided) && "opacity-30")}>
           <div className="h-full w-full [&>svg]:h-full [&>svg]:w-full" dangerouslySetInnerHTML={{ __html: qr }} role="img" aria-label={`QR code for ticket ${ticketNo}`} />
         </div>
-        <div className="min-w-0 text-[13px]">
+        <div className="min-w-0 text-sm">
           {voided ? <p className="font-semibold text-danger">Cancelled ticket</p> : boarded ? <p className="font-semibold text-info">Boarded</p> : <p className="font-semibold text-success">Valid for boarding</p>}
           <p className="mt-1 font-mono text-ink-2">{ticketNo}</p>
           <p className="mt-2 text-ink-3">Show this code at the {trip.operator.name} desk. Arrive 45 minutes early with a valid photo ID.</p>
-          {demo && <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-coral-700">Demo ticket · not valid for travel</p>}
+          {demo && <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-coral-700">Demo ticket · not valid for travel</p>}
         </div>
       </div>
     </article>

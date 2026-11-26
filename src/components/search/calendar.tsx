@@ -99,7 +99,7 @@ export function Calendar({
               exit={{ opacity: 0, x: dir * -24 }}
               transition={{ duration: 0.2 }}
             >
-              <p className="mb-3 text-center text-[15px] font-semibold" aria-live="polite">{MONTHS[m]} {y}</p>
+              <p className="mb-3 text-center text-base font-semibold" aria-live="polite">{MONTHS[m]} {y}</p>
               <div className="grid grid-cols-7 text-center text-xs font-medium text-ink-3">
                 {WEEKDAYS.map((w) => <span key={w} className="pb-2">{w}</span>)}
               </div>
@@ -125,7 +125,7 @@ export function Calendar({
                         aria-pressed={isStart || isEnd}
                         aria-label={`${new Date(`${d}T12:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}${isToday ? ", today" : ""}${disabled ? ", unavailable" : ""}`}
                         className={cn(
-                          "relative grid h-10 w-10 place-items-center rounded-full text-[14px] tabular transition-colors duration-100",
+                          "relative grid h-10 w-10 place-items-center rounded-full text-sm tabular transition-colors duration-100",
                           disabled ? "cursor-not-allowed text-ink-4 line-through decoration-ink-4/40" : "text-ink hover:bg-surface-3",
                           (isStart || isEnd) && "bg-coral-600 font-semibold text-white hover:bg-coral-700",
                           isHoverEnd && "ring-2 ring-coral-300",

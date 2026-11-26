@@ -37,7 +37,7 @@ export default async function DepartureDetail({ params }: { params: Promise<{ tr
           <DepartureControls tripId={tripId} status={trip.status} delayMin={trip.delayMin} />
           <section className="rounded-2xl border border-line bg-white p-5">
             <h2 className="font-semibold">Journey log</h2>
-            <ul className="mt-3 space-y-3 text-[14px]">
+            <ul className="mt-3 space-y-3 text-sm">
               {events.length === 0 && <li className="text-ink-3">No updates posted yet.</li>}
               {events.map((e, i) => <li key={i}><p>{e.message}</p><p className="text-xs text-ink-3">{formatTime(e.created_at)} · {formatDate(e.created_at, undefined, "weekday")}</p></li>)}
             </ul>

@@ -48,7 +48,7 @@ export function SeatMap({
     <div className="flex justify-center">
       <div className="relative rounded-[36px] border-2 border-line-strong bg-white px-4 pb-6 pt-3 shadow-[inset_0_0_0_6px_var(--color-surface-2)] sm:px-6">
         {/* Front of vehicle */}
-        <div className="mx-auto mb-3 flex h-7 items-center justify-center rounded-t-[28px] border-b border-dashed border-line-strong px-10 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3" aria-hidden>
+        <div className="mx-auto mb-3 flex h-7 items-center justify-center rounded-t-[28px] border-b border-dashed border-line-strong px-10 text-xs font-medium uppercase tracking-[0.12em] text-ink-3" aria-hidden>
           Front
         </div>
         <div role="grid" aria-label="Seat map, front of vehicle at the top" className="flex flex-col gap-2">
@@ -86,7 +86,7 @@ export function SeatMap({
                       transition={{ duration: 0.25 }}
                       className={cn(
                         cell,
-                        "relative flex flex-col items-center justify-center rounded-t-[14px] rounded-b-[8px] border text-[13px] font-semibold tabular transition-colors",
+                        "relative flex flex-col items-center justify-center rounded-t-[14px] rounded-b-[8px] border text-sm font-semibold tabular transition-colors",
                         "after:absolute after:inset-x-1.5 after:bottom-1 after:h-1 after:rounded-full",
                         isSelected
                           ? "border-coral-600 bg-coral-600 text-white after:bg-white/30"
@@ -123,7 +123,7 @@ export function SeatMap({
           ))}
         </div>
         <div className="mx-auto mt-4 h-1.5 w-16 rounded-full bg-line" aria-hidden />
-        <p className="mt-1 text-center text-[11px] font-medium uppercase tracking-[0.12em] text-ink-3" aria-hidden>Rear</p>
+        <p className="mt-1 text-center text-xs font-medium uppercase tracking-[0.12em] text-ink-3" aria-hidden>Rear</p>
       </div>
     </div>
   );
@@ -140,7 +140,7 @@ function DoorMark({ side }: { side: "left" | "right" }) {
 }
 
 export function SeatLegend({ premium }: { premium?: number }) {
-  const item = "flex items-center gap-2 text-[13px] text-ink-2";
+  const item = "flex items-center gap-2 text-sm text-ink-2";
   const box = "h-5 w-5 rounded-t-[6px] rounded-b-[4px] border grid place-items-center";
   return (
     <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Seat legend">

@@ -43,13 +43,13 @@ export function ConfirmedHero({ destination, email, isGuest, sandbox }: { destin
         <motion.path d="M15 27l7 7 15-16" fill="none" stroke="var(--color-success)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { delay: 0.4, duration: 0.35 } } }} />
       </motion.svg>
       <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-4 text-2xl font-semibold">You&apos;re going to {destination}!</motion.h2>
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }} className="mx-auto mt-1.5 max-w-md px-4 text-[15px] text-ink-3">
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }} className="mx-auto mt-1.5 max-w-md px-4 text-base text-ink-3">
         Booking confirmed{email && <> and tickets sent to <b className="text-ink">{email}</b></>}.{sandbox && " (Sandbox payment: no money was charged.)"}
       </motion.p>
       {isGuest && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mx-auto mt-5 flex max-w-md flex-col items-center gap-2 px-4 sm:flex-row sm:justify-center">
           <Button asChild variant="navy" size="sm"><Link href="/register?next=/trips">Create an account</Link></Button>
-          <span className="text-[13px] text-ink-3">to keep all your trips in one place. Optional.</span>
+          <span className="text-sm text-ink-3">to keep all your trips in one place. Optional.</span>
         </motion.div>
       )}
     </section>
@@ -81,7 +81,7 @@ export function BookingActions({ bookingId, reference, upcoming, terminal }: { b
     toast.success("Tracking link copied", { description: `Anyone with the link can follow this journey until ${new Date(data.expiresAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}.` });
   };
   const directions = terminal.lat != null ? `https://www.google.com/maps/dir/?api=1&destination=${terminal.lat},${terminal.lng}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(terminal.address)}`;
-  const item = "flex min-w-[88px] flex-col items-center gap-1.5 rounded-2xl border border-line bg-white px-3 py-3 text-[13px] font-medium text-ink transition hover:border-line-strong hover:shadow-sm";
+  const item = "flex min-w-[88px] flex-col items-center gap-1.5 rounded-2xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink transition hover:border-line-strong hover:shadow-sm";
   const icon = "grid h-9 w-9 place-items-center rounded-full bg-surface-2 text-navy-600";
   return (
     <div className="no-scrollbar -mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 no-print">
@@ -159,15 +159,15 @@ export function ManageBooking({ bookingId, reference, upcoming, completed, revie
         {!quote ? <div className="space-y-2 py-4"><div className="skeleton h-4" /><div className="skeleton h-4 w-2/3" /></div> : !quote.allowed ? (
           <Notice tone="warning">{quote.reason}</Notice>
         ) : (
-          <div className="space-y-3 text-[15px]">
+          <div className="space-y-3 text-base">
             {quote.lines.map((l) => (
               <div key={l.direction} className="flex justify-between gap-4 rounded-xl bg-surface-2 p-3">
-                <div><p className="font-medium">{l.label}</p><p className="text-[13px] text-ink-3">{l.reason}</p></div>
+                <div><p className="font-medium">{l.label}</p><p className="text-sm text-ink-3">{l.reason}</p></div>
                 <p className="shrink-0 font-semibold tabular">{formatMoney(l.amount)}</p>
               </div>
             ))}
             <div className="flex justify-between border-t border-line pt-3 font-semibold"><span>Refund</span><span className="tabular">{formatMoney(quote.refund)}</span></div>
-            <p className="text-[13px] text-ink-3">The Goroada booking fee is non-refundable. Refunds go back to your original payment method, usually within 5–10 working days. Your seats will be released.</p>
+            <p className="text-sm text-ink-3">The Goroada booking fee is non-refundable. Refunds go back to your original payment method, usually within 5–10 working days. Your seats will be released.</p>
           </div>
         )}
       </Overlay>

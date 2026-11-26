@@ -26,7 +26,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
   const date = addDaysIso(todayIso(), 1);
   const Row = ({ r, label }: { r: (typeof all)[number]; label: string }) => (
     <li><Link href={searchHref({ from: r.from, to: r.to, date, pax: 1 })} className="flex items-center justify-between gap-3 px-4 py-3.5 hover:bg-surface-2">
-      <span><span className="font-medium">{label}</span><span className="block text-[13px] text-ink-3">{formatDuration(r.minDuration)} · {r.operators} operator{r.operators > 1 ? "s" : ""}</span></span>
+      <span><span className="font-medium">{label}</span><span className="block text-sm text-ink-3">{formatDuration(r.minDuration)} · {r.operators} operator{r.operators > 1 ? "s" : ""}</span></span>
       <span className="flex items-center gap-3 text-sm">from <b className="tabular">{formatMoney(r.minFare)}</b><ArrowRight className="h-4 w-4 text-ink-3" /></span></Link></li>
   );
   return (

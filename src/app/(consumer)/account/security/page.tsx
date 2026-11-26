@@ -29,7 +29,7 @@ export default async function Security() {
       <div className="mt-3 rounded-2xl border border-line bg-white p-5 sm:p-6"><PasswordForm /></div>
       <h2 className="mt-8 text-lg font-semibold">Signed-in devices</h2>
       <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-white">
-        {sessions.map((s, i) => <li key={i} className="flex items-center gap-3 px-4 py-3 text-[14px]"><Monitor className="h-4 w-4 text-ink-3" /><span className="flex-1 truncate">{s.user_agent?.match(/\(([^)]+)\)/)?.[1] ?? "Unknown device"}</span><span className="text-ink-3">{formatDate(s.created_at)}</span></li>)}
+        {sessions.map((s, i) => <li key={i} className="flex items-center gap-3 px-4 py-3 text-sm"><Monitor className="h-4 w-4 text-ink-3" /><span className="flex-1 truncate">{s.user_agent?.match(/\(([^)]+)\)/)?.[1] ?? "Unknown device"}</span><span className="text-ink-3">{formatDate(s.created_at)}</span></li>)}
       </ul>
       {sessions.length > 1 && <form action={signOutOthers} className="mt-3"><Button variant="outline" size="sm">Sign out of other devices</Button></form>}
     </div>

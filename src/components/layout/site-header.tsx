@@ -36,7 +36,7 @@ export function SiteHeader({ user, unread }: { user: HeaderUser; unread: number 
             const active = item.match(pathname);
             return (
               <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined}
-                className={cn("relative rounded-lg px-3 py-2 text-[14.5px] font-medium transition-colors", active ? "text-ink" : "text-ink-3 hover:text-ink")}>
+                className={cn("relative rounded-lg px-3 py-2 text-sm font-medium transition-colors", active ? "text-ink" : "text-ink-3 hover:text-ink")}>
                 {item.label}
                 {active && <motion.span layoutId="nav-underline" className="absolute inset-x-3 -bottom-[13px] h-[2px] rounded-full bg-coral-500" />}
               </Link>
@@ -55,8 +55,8 @@ export function SiteHeader({ user, unread }: { user: HeaderUser; unread: number 
             <AccountMenu user={user} />
           ) : (
             <>
-              <Link href="/signin" className="hidden h-10 items-center rounded-lg px-3 text-[14.5px] font-medium text-ink hover:bg-surface-2 md:inline-flex">Sign in</Link>
-              <Link href="/register" className="hidden h-10 items-center rounded-lg bg-navy-600 px-4 text-[14.5px] font-semibold text-white hover:bg-navy-700 md:inline-flex">Register</Link>
+              <Link href="/signin" className="hidden h-10 items-center rounded-lg px-3 text-sm font-medium text-ink hover:bg-surface-2 md:inline-flex">Sign in</Link>
+              <Link href="/register" className="hidden h-10 items-center rounded-lg bg-navy-600 px-4 text-sm font-semibold text-white hover:bg-navy-700 md:inline-flex">Register</Link>
               <Link href="/signin" aria-label="Sign in" className="grid h-10 w-10 place-items-center rounded-full text-ink-2 hover:bg-surface-2 md:hidden"><User className="h-5 w-5" /></Link>
             </>
           )}
@@ -69,7 +69,7 @@ export function SiteHeader({ user, unread }: { user: HeaderUser; unread: number 
 function CurrencySelector() {
   return (
     <Popover.Root>
-      <Popover.Trigger className="hidden h-10 items-center gap-1 rounded-lg px-2.5 text-[14px] font-medium text-ink-2 hover:bg-surface-2 md:inline-flex" aria-label="Currency: Nigerian naira">
+      <Popover.Trigger className="hidden h-10 items-center gap-1 rounded-lg px-2.5 text-sm font-medium text-ink-2 hover:bg-surface-2 md:inline-flex" aria-label="Currency: Nigerian naira">
         <span className="tabular">₦ NGN</span>
         <ChevronDown className="h-3.5 w-3.5" />
       </Popover.Trigger>
@@ -132,7 +132,7 @@ export function BottomNav() {
           const active = match(pathname);
           return (
             <li key={href}>
-              <Link href={href} aria-current={active ? "page" : undefined} className="relative flex h-full flex-col items-center justify-center gap-1 text-[11px] font-medium">
+              <Link href={href} aria-current={active ? "page" : undefined} className="relative flex h-full flex-col items-center justify-center gap-1 text-xs font-medium">
                 {active && <motion.span layoutId="bottom-pill" className="absolute top-1.5 h-8 w-14 rounded-full bg-coral-50" transition={{ type: "spring", stiffness: 500, damping: 38 }} />}
                 <Icon active={active} />
                 <span className={cn("relative", active ? "text-ink" : "text-ink-3")}>{label}</span>

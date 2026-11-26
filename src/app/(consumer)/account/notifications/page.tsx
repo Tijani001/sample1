@@ -10,14 +10,14 @@ export default async function NotificationPrefs() {
   const prefs = p.notification_prefs;
   const row = (name: string, label: string, desc: string) => (
     <label className="flex cursor-pointer items-start justify-between gap-4 py-4">
-      <span><span className="block font-medium">{label}</span><span className="block text-[13px] text-ink-3">{desc}</span></span>
+      <span><span className="block font-medium">{label}</span><span className="block text-sm text-ink-3">{desc}</span></span>
       <input type="checkbox" name={name} defaultChecked={!!prefs[name]} className="mt-1 h-5 w-5 accent-[var(--color-navy-600)]" />
     </label>
   );
   return (
     <div>
       <h1 className="text-2xl font-semibold">Notifications</h1>
-      <p className="mt-1 text-[15px] text-ink-3">Booking confirmations, payment receipts, cancellations and safety-critical journey changes are always sent. Choose the channels you prefer.</p>
+      <p className="mt-1 text-base text-ink-3">Booking confirmations, payment receipts, cancellations and safety-critical journey changes are always sent. Choose the channels you prefer.</p>
       <form action={updateNotificationPrefsAction} className="mt-6 rounded-2xl border border-line bg-white px-5">
         <div className="divide-y divide-line">
           {row("email", "Email", "Tickets, receipts and trip reminders")}

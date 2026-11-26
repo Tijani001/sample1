@@ -25,9 +25,9 @@ export default async function Finance() {
       <section className="mt-6 rounded-2xl border border-line bg-white p-5">
         <h2 className="font-semibold">Daily gross sales (14 days)</h2>
         <div className="mt-4 flex h-40 items-end gap-1.5" role="img" aria-label="Bar chart of daily sales">
-          {f.series.map((s) => <div key={s.d} className="group relative flex-1"><div className="w-full rounded-t-md bg-navy-600 transition-colors group-hover:bg-coral-600" style={{ height: `${Math.max(2, (s.gross / max) * 150)}px` }} /><span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-ink px-1.5 py-0.5 text-[11px] text-white group-hover:block">{formatMoney(s.gross)}</span></div>)}
+          {f.series.map((s) => <div key={s.d} className="group relative flex-1"><div className="w-full rounded-t-md bg-navy-600 transition-colors group-hover:bg-coral-600" style={{ height: `${Math.max(2, (s.gross / max) * 150)}px` }} /><span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-ink px-1.5 py-0.5 text-xs text-white group-hover:block">{formatMoney(s.gross)}</span></div>)}
         </div>
-        <div className="mt-1 flex justify-between text-[11px] text-ink-3"><span>{formatDate(`${f.series[0].d}T12:00:00Z`, "UTC", "weekday")}</span><span>Today</span></div>
+        <div className="mt-1 flex justify-between text-xs text-ink-3"><span>{formatDate(`${f.series[0].d}T12:00:00Z`, "UTC", "weekday")}</span><span>Today</span></div>
       </section>
       <section className="mt-6"><h2 className="mb-3 text-lg font-semibold">Settlements</h2>
         <Table head={["Period", "Gross", "Commission", "Refunds", "Net payout", "Status"]} empty={f.settlements.length ? undefined : "No settlements yet. Goroada runs settlements weekly."}>

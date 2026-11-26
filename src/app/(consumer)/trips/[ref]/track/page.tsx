@@ -28,7 +28,7 @@ export default async function TrackPage({ params }: { params: Promise<{ ref: str
       <div className="mt-2 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl">{seg.trip.origin.cityName} → {seg.trip.destination.cityName}</h1>
-          <p className="text-[15px] text-ink-3">{seg.trip.operator.name} · {seg.trip.vehicle.model}</p>
+          <p className="text-base text-ink-3">{seg.trip.operator.name} · {seg.trip.vehicle.model}</p>
         </div>
         <ShareJourney bookingId={b.id} />
       </div>

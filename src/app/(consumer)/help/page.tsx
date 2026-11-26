@@ -53,13 +53,13 @@ export default async function HelpPage() {
           {TOPICS.map((t) => <section key={t.id} id={t.id} className="scroll-mt-24"><h2 className="mb-3 flex items-center gap-2 text-lg font-semibold"><t.icon className="h-5 w-5 text-navy-500" />{t.title}</h2><FaqList items={t.faqs} /></section>)}
         </div>
         <aside className="space-y-4">
-          <div className="rounded-2xl border border-line bg-white p-5 text-[14px]">
+          <div className="rounded-2xl border border-line bg-white p-5 text-sm">
             <h2 className="font-semibold">Goroada support</h2>
             <p className="mt-2 flex items-center gap-2"><Phone className="h-4 w-4 text-ink-3" />+234 201 000 0000 <span className="text-ink-3">(demo)</span></p>
             <p className="mt-1 flex items-center gap-2"><Mail className="h-4 w-4 text-ink-3" />support@goroada.app</p>
             <p className="mt-2 text-ink-3">Every day, 6am – 10pm WAT. Emergencies: call 112.</p>
           </div>
-          <div className="rounded-2xl border border-line bg-white p-5 text-[14px]">
+          <div className="rounded-2xl border border-line bg-white p-5 text-sm">
             <h2 className="font-semibold">Operator contacts</h2>
             <ul className="mt-3 space-y-2.5">{ops.map((o) => <li key={o.name}><p className="font-medium">{o.name}</p><p className="text-ink-3">{o.support_phone} · {o.support_email}</p></li>)}</ul>
             <p className="mt-3 text-xs text-ink-3">Demonstration operators and contact details.</p>

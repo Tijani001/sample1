@@ -13,7 +13,7 @@ export const AMENITIES: Record<string, { label: string; icon: LucideIcon }> = {
 
 export function AmenityIcons({ items, className, max = 7 }: { items: string[]; className?: string; max?: number }) {
   const list = items.filter((a) => AMENITIES[a]).slice(0, max);
-  if (!list.length) return <span className={cn("text-[13px] text-ink-3", className)}>No listed amenities</span>;
+  if (!list.length) return <span className={cn("text-sm text-ink-3", className)}>No listed amenities</span>;
   return (
     <ul className={cn("flex items-center gap-2.5 text-ink-3", className)} aria-label="Amenities">
       {list.map((a) => {
@@ -31,13 +31,13 @@ export function AmenityIcons({ items, className, max = 7 }: { items: string[]; c
 
 export function AmenityList({ items }: { items: string[] }) {
   const list = items.filter((a) => AMENITIES[a]);
-  if (!list.length) return <p className="text-[15px] text-ink-3">The operator hasn&apos;t listed any on-board amenities for this vehicle.</p>;
+  if (!list.length) return <p className="text-base text-ink-3">The operator hasn&apos;t listed any on-board amenities for this vehicle.</p>;
   return (
     <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
       {list.map((a) => {
         const { icon: Icon, label } = AMENITIES[a];
         return (
-          <li key={a} className="flex items-center gap-2.5 text-[15px]">
+          <li key={a} className="flex items-center gap-2.5 text-base">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-surface-2 text-navy-600"><Icon className="h-[18px] w-[18px]" /></span>
             {label}
           </li>

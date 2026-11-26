@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
+import "@fontsource-variable/plus-jakarta-sans";
 import { GeistMono } from "geist/font/mono";
 import { Toaster } from "sonner";
 import { MotionProvider } from "@/components/motion-provider";
@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-NG" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en-NG" className={GeistMono.variable}>
       <body className="min-h-dvh">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow-lg">
           Skip to content
@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           position="top-center"
           toastOptions={{
             classNames: {
-              toast: "!rounded-xl !border-line !shadow-lg !font-sans !text-[14px]",
+              toast: "!rounded-xl !border-line !shadow-lg !font-sans !text-sm",
               title: "!font-semibold !text-ink",
               description: "!text-ink-3",
             },

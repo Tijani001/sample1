@@ -47,7 +47,7 @@ Promo codes to try at checkout: `FIRSTTRIP`, `HARMATTAN8`, `LAGIBA1K` (Lagos →
 
 ## Stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Tailwind CSS 4 with a custom token system · Radix primitives (dialog, popover, slider) · Vaul bottom sheets · Motion · Lucide · React Hook Form + Zod · PostgreSQL (PGlite locally, Supabase/Postgres in production via `postgres`) · `qrcode` + `pdf-lib` for tickets · Vitest · Playwright.
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Tailwind CSS 4 with a custom token system · Plus Jakarta Sans · Radix primitives (dialog, popover, slider) · Vaul bottom sheets · Motion · Lucide · React Hook Form + Zod · PostgreSQL (PGlite locally, Supabase/Postgres in production via `postgres`) · `qrcode` + `pdf-lib` for tickets · Vitest · Playwright.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for decisions, the booking engine's invariants, payments, security and the integration layer, and [`docs/CHECKLIST.md`](docs/CHECKLIST.md) for what is implemented and what remains.
 

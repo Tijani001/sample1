@@ -16,11 +16,11 @@ export function FaqList({ items }: { items: Faq[] }) {
     <div className="divide-y divide-line rounded-2xl border border-line bg-white">
       {items.map((f) => (
         <details key={f.q} className="group px-5 [&_summary::-webkit-details-marker]:hidden">
-          <summary className="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 py-4 text-[15.5px] font-medium">
+          <summary className="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 py-4 text-base font-medium">
             {f.q}
             <ChevronDown className="h-5 w-5 shrink-0 text-ink-3 transition-transform duration-200 group-open:rotate-180" aria-hidden />
           </summary>
-          <div className="pb-5 pr-8 text-[15px] leading-relaxed text-ink-3">{f.a}</div>
+          <div className="pb-5 pr-8 text-base leading-relaxed text-ink-3">{f.a}</div>
         </details>
       ))}
     </div>

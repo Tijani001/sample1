@@ -41,7 +41,7 @@ export default async function NotificationsPage() {
                 <span className={cn("mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full", n.read_at ? "bg-surface-2 text-ink-3" : "bg-coral-100 text-coral-700")}><BellRing className="h-4 w-4" /></span>
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-2 font-medium">{n.title}{n.category === "marketing" && <Badge>Offer</Badge>}{!n.read_at && <span className="h-2 w-2 rounded-full bg-coral-600" aria-label="Unread" />}</span>
-                  <span className="mt-0.5 block text-[14px] text-ink-3">{n.body}</span>
+                  <span className="mt-0.5 block text-sm text-ink-3">{n.body}</span>
                   <span className="mt-1 block text-xs text-ink-3">{formatDate(n.created_at, undefined, "weekday")} · {formatTime(n.created_at)}</span>
                 </span>
               </Link>

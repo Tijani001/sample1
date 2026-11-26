@@ -44,7 +44,7 @@ export default async function TripsPage({ searchParams }: { searchParams: Promis
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold sm:text-3xl">My Trips</h1>
-          <p className="mt-1 text-[15px] text-ink-3">{user ? "All your Goroada bookings." : "Bookings made in this browser. Sign in to see trips from all your devices."}</p>
+          <p className="mt-1 text-base text-ink-3">{user ? "All your Goroada bookings." : "Bookings made in this browser. Sign in to see trips from all your devices."}</p>
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm"><Link href="/trips/find"><Search className="h-4 w-4" />Find a booking</Link></Button>
@@ -85,18 +85,18 @@ function TripListCard({ b }: { b: B }) {
         <div className="min-w-0 flex-1 p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="flex items-center gap-1.5 truncate text-[17px] font-semibold">{s.trip.origin.cityName}<ArrowRight className="h-4 w-4 text-ink-3" />{s.trip.destination.cityName}</p>
-              <p className="mt-0.5 text-[13.5px] text-ink-3 tabular">{formatDate(s.trip.departureAt, s.trip.tz, "weekday")} · {formatTime(s.trip.departureAt, s.trip.tz)}{b.tripType === "round_trip" && ` · Return ${formatDate(b.segments[1]?.trip.departureAt ?? s.trip.departureAt, s.trip.tz, "weekday")}`}</p>
+              <p className="flex items-center gap-1.5 truncate text-lg font-semibold">{s.trip.origin.cityName}<ArrowRight className="h-4 w-4 text-ink-3" />{s.trip.destination.cityName}</p>
+              <p className="mt-0.5 text-sm text-ink-3 tabular">{formatDate(s.trip.departureAt, s.trip.tz, "weekday")} · {formatTime(s.trip.departureAt, s.trip.tz)}{b.tripType === "round_trip" && ` · Return ${formatDate(b.segments[1]?.trip.departureAt ?? s.trip.departureAt, s.trip.tz, "weekday")}`}</p>
             </div>
             <Badge tone={tone as "neutral"}>{meta.label}</Badge>
           </div>
-          <div className="mt-3 flex items-center gap-2 text-[13px] text-ink-2">
+          <div className="mt-3 flex items-center gap-2 text-sm text-ink-2">
             <OperatorLogo initials={s.trip.operator.initials} color={s.trip.operator.color} size="sm" className="h-6 w-6 rounded-md text-[9px]" />
             <span className="truncate">{s.trip.operator.name}</span>
             <span className="text-ink-4">·</span>
             <span className="font-mono">{b.reference}</span>
           </div>
-          <div className="mt-3 flex items-center justify-between gap-3 border-t border-dashed border-line pt-3 text-[13px]">
+          <div className="mt-3 flex items-center justify-between gap-3 border-t border-dashed border-line pt-3 text-sm">
             <span className="text-ink-3 tabular">{s.trip.seatingMode === "open" ? "Seats at boarding" : `Seat${s.seats.length > 1 ? "s" : ""} ${s.seats.map((x) => x.seatNo).join(", ")}`} · {b.passengerCount} pax</span>
             {b.status === "confirmed" && hours > 0 ? (
               <span className="inline-flex items-center gap-1 font-semibold text-coral-700"><Clock className="h-3.5 w-3.5" />{hours < 48 ? `in ${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m` : `in ${Math.round(hours / 24)} days`} · View ticket</span>

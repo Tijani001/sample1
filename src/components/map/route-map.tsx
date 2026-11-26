@@ -72,7 +72,7 @@ export function RouteMap({ origin, destination, stops = [], estimate, className,
           </g>
         )}
       </svg>
-      {est && <figcaption className="absolute bottom-2 left-2 rounded-md bg-white/90 px-2 py-1 text-[11px] text-ink-2 shadow-sm">○ Estimated position from schedule, not live GPS</figcaption>}
+      {est && <figcaption className="absolute bottom-2 left-2 rounded-md bg-white/90 px-2 py-1 text-xs text-ink-2 shadow-sm">○ Estimated position from schedule, not live GPS</figcaption>}
     </figure>
   );
 }

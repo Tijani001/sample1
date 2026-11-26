@@ -44,12 +44,12 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(8_26_43/0.55)_0%,rgb(8_26_43/0.35)_55%,rgb(8_26_43/0.6)_100%)]" />
           <div className="container-page relative flex h-full flex-col justify-center pb-16 pt-4 text-white md:pb-24">
             <h1 className="max-w-2xl text-[30px] font-semibold leading-[1.1] tracking-[-0.03em] sm:text-4xl md:text-[46px]">Where are you going next?</h1>
-            <p className="mt-3 max-w-xl text-[15.5px] leading-relaxed text-white/85 sm:text-[17px]">Search, compare and book road trips from trusted transport operators, all in one place.</p>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">Search, compare and book road trips from trusted transport operators, all in one place.</p>
           </div>
         </div>
         <div className="container-page relative -mt-14 md:-mt-20">
           <SearchWidget places={places} today={today} />
-          <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 px-1 text-[13.5px] text-ink-2 md:flex md:justify-center md:gap-8">
+          <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 px-1 text-sm text-ink-2 md:flex md:justify-center md:gap-8">
             <li className="flex items-center gap-2"><BadgeCheck className="h-[18px] w-[18px] shrink-0 text-navy-500" />Verified operators only</li>
             <li className="flex items-center gap-2"><LockKeyhole className="h-[18px] w-[18px] shrink-0 text-navy-500" />Payments via licensed providers</li>
             <li className="flex items-center gap-2"><ReceiptText className="h-[18px] w-[18px] shrink-0 text-navy-500" />Full price shown before you pay</li>
@@ -69,9 +69,9 @@ export default async function HomePage() {
               <Link href={searchHref({ from: r.from, to: r.to, date: tomorrow, pax: 1 })} className="group block overflow-hidden rounded-2xl border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
                 <CityImage src={r.image} alt={`${r.toName}`} name={r.toName} className="aspect-[16/9] w-full transition-transform duration-500 group-hover:scale-[1.03]" sizes="(max-width: 640px) 78vw, (max-width: 1024px) 45vw, 230px" />
                 <div className="p-3.5">
-                  <p className="flex items-center gap-1.5 text-[15px] font-semibold">{r.fromName}<ArrowRight className="h-3.5 w-3.5 text-ink-3" />{r.toName}</p>
-                  <p className="mt-1 flex items-center gap-1.5 text-[13px] text-ink-3"><Clock className="h-3.5 w-3.5" />from {formatDuration(r.minDuration)} · {r.operators} operator{r.operators > 1 ? "s" : ""}</p>
-                  <p className="mt-2.5 text-[13px] text-ink-3">From <span className="text-[17px] font-semibold text-ink tabular">{formatMoney(r.minFare)}</span></p>
+                  <p className="flex items-center gap-1.5 text-base font-semibold">{r.fromName}<ArrowRight className="h-3.5 w-3.5 text-ink-3" />{r.toName}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-3"><Clock className="h-3.5 w-3.5" />from {formatDuration(r.minDuration)} · {r.operators} operator{r.operators > 1 ? "s" : ""}</p>
+                  <p className="mt-2.5 text-sm text-ink-3">From <span className="text-lg font-semibold text-ink tabular">{formatMoney(r.minFare)}</span></p>
                 </div>
               </Link>
             </li>
@@ -91,8 +91,8 @@ export default async function HomePage() {
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgb(8_26_43/0.78)_100%)] transition-opacity group-hover:opacity-95" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-white">
                   <p className="text-lg font-semibold leading-tight">{d.name}</p>
-                  <p className="mt-0.5 line-clamp-1 text-[13px] text-white/80">{d.blurb}</p>
-                  {d.min_fare && <p className="mt-2 text-[13px] text-white/85">Trips from <span className="font-semibold text-white tabular">{formatMoney(d.min_fare)}</span></p>}
+                  <p className="mt-0.5 line-clamp-1 text-sm text-white/80">{d.blurb}</p>
+                  {d.min_fare && <p className="mt-2 text-sm text-white/85">Trips from <span className="font-semibold text-white tabular">{formatMoney(d.min_fare)}</span></p>}
                 </div>
               </Link>
             </li>
@@ -112,9 +112,9 @@ export default async function HomePage() {
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-coral-50 text-coral-700"><Tag className="h-5 w-5" /></span>
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold">{p.title}</span>
-                    <span className="block truncate text-[13.5px] text-ink-3">{p.description}</span>
+                    <span className="block truncate text-sm text-ink-3">{p.description}</span>
                   </span>
-                  <span className="hidden rounded-lg border border-dashed border-coral-300 px-2.5 py-1 font-mono text-[13px] font-semibold text-coral-700 sm:block">{p.code}</span>
+                  <span className="hidden rounded-lg border border-dashed border-coral-300 px-2.5 py-1 font-mono text-sm font-semibold text-coral-700 sm:block">{p.code}</span>
                 </Link>
               </li>
             ))}
@@ -128,9 +128,9 @@ export default async function HomePage() {
                 <Link href={searchHref({ from: r.from, to: r.to, date: tomorrow, pax: 1 })} className="flex items-center justify-between gap-3 px-4 py-3.5 transition hover:bg-surface-2">
                   <span>
                     <span className="flex items-center gap-1.5 font-medium">{r.fromName}<ArrowRight className="h-3.5 w-3.5 text-ink-3" />{r.toName}</span>
-                    <span className="text-[13px] text-ink-3">{formatDuration(r.minDuration)} · {r.distanceKm} km</span>
+                    <span className="text-sm text-ink-3">{formatDuration(r.minDuration)} · {r.distanceKm} km</span>
                   </span>
-                  <span className="text-right text-[13px] text-ink-3">from<br /><span className="text-[15px] font-semibold text-ink tabular">{formatMoney(r.minFare)}</span></span>
+                  <span className="text-right text-sm text-ink-3">from<br /><span className="text-base font-semibold text-ink tabular">{formatMoney(r.minFare)}</span></span>
                 </Link>
               </li>
             ))}
@@ -152,8 +152,8 @@ export default async function HomePage() {
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-navy-50 text-navy-600"><Icon className="h-5 w-5" /></span>
                 <span className="text-sm font-medium text-ink-3 tabular">Step {i + 1}</span>
               </div>
-              <h3 className="mt-4 text-[17px] font-semibold">{t}</h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-ink-3">{d}</p>
+              <h3 className="mt-4 text-lg font-semibold">{t}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-ink-3">{d}</p>
             </li>
           ))}
         </ol>
@@ -168,7 +168,7 @@ export default async function HomePage() {
               <Link href={`/operators/${o.id}`} className="flex h-full flex-col rounded-2xl border border-line bg-white p-4 transition hover:border-line-strong hover:shadow-md">
                 <OperatorLogo initials={o.initials} color={o.brand_color} />
                 <p className="mt-3 font-semibold">{o.name}</p>
-                <p className="mt-0.5 flex items-center gap-1 text-[13px] text-ink-3">
+                <p className="mt-0.5 flex items-center gap-1 text-sm text-ink-3">
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
                   <span className="font-medium text-ink tabular">{Number(o.rating_avg).toFixed(1)}</span>
                   <span className="tabular">({o.rating_count.toLocaleString()})</span> · {o.routes} routes
@@ -182,7 +182,7 @@ export default async function HomePage() {
       <section aria-labelledby="faq-heading" className="container-page mt-16 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
         <div>
           <h2 id="faq-heading" className="text-2xl font-semibold">Questions, answered</h2>
-          <p className="mt-2 text-[15px] text-ink-3">Can&apos;t find what you need? Our support team is here for bookings, payments and anything on the road.</p>
+          <p className="mt-2 text-base text-ink-3">Can&apos;t find what you need? Our support team is here for bookings, payments and anything on the road.</p>
           <Link href="/help" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-coral-700 hover:text-coral-800">Visit the help centre<ArrowRight className="h-4 w-4" /></Link>
         </div>
         <FaqList items={CORE_FAQS.slice(0, 5)} />

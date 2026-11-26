@@ -27,10 +27,10 @@ export default async function OperatorProfile({ params }: { params: Promise<{ id
         <OperatorLogo initials={o.initials} color={o.brand_color} size="lg" />
         <div>
           <h1 className="flex items-center gap-2 text-2xl font-semibold sm:text-3xl">{o.name}<BadgeCheck className="h-6 w-6 text-navy-500" aria-label="Verified" /></h1>
-          <p className="flex flex-wrap items-center gap-2 text-[15px] text-ink-3"><Star className="h-4 w-4 fill-amber-400 text-amber-400" />{Number(o.rating_avg).toFixed(1)} · {o.rating_count.toLocaleString()} ratings · Based in {o.hq} · Since {o.founded_year}{o.is_demo && <Badge tone="warning">Demo operator</Badge>}</p>
+          <p className="flex flex-wrap items-center gap-2 text-base text-ink-3"><Star className="h-4 w-4 fill-amber-400 text-amber-400" />{Number(o.rating_avg).toFixed(1)} · {o.rating_count.toLocaleString()} ratings · Based in {o.hq} · Since {o.founded_year}{o.is_demo && <Badge tone="warning">Demo operator</Badge>}</p>
         </div>
       </div>
-      <p className="mt-4 max-w-2xl text-[15px] text-ink-2">{o.description}</p>
+      <p className="mt-4 max-w-2xl text-base text-ink-2">{o.description}</p>
       {o.is_demo && <Notice tone="neutral" className="mt-4 max-w-2xl">This is a fictional operator used for demonstration. It is not affiliated with any real transport company.</Notice>}
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <section><h2 className="text-lg font-semibold">Routes ({routes.length})</h2>
@@ -38,7 +38,7 @@ export default async function OperatorProfile({ params }: { params: Promise<{ id
             {routes.map((r) => <li key={`${r.from}-${r.to}`}><Link href={searchHref({ from: r.from, to: r.to, date, pax: 1 })} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-surface-2"><span className="flex items-center gap-1.5 font-medium">{r.fromName}<ArrowRight className="h-3.5 w-3.5 text-ink-3" />{r.toName}<span className="font-normal text-ink-3">· {formatDuration(r.minDuration)}</span></span><span className="text-sm">from <b className="tabular">{formatMoney(r.minFare)}</b></span></Link></li>)}
           </ul></section>
         <section><h2 className="text-lg font-semibold">Recent reviews</h2>
-          <ul className="mt-3 space-y-3">{reviews.map((r) => <li key={r.id} className="rounded-xl border border-line bg-white p-4 text-[14px]"><div className="flex justify-between"><b className="font-medium">{r.author_name}</b><span className="flex">{[1, 2, 3, 4, 5].map((n) => <Star key={n} className={n <= r.rating ? "h-3.5 w-3.5 fill-amber-400 text-amber-400" : "h-3.5 w-3.5 text-line-strong"} />)}</span></div><p className="mt-1 text-ink-2">{r.comment}</p><p className="mt-1 text-xs text-ink-3">{r.route_label} · {formatDate(r.created_at)}</p></li>)}</ul></section>
+          <ul className="mt-3 space-y-3">{reviews.map((r) => <li key={r.id} className="rounded-xl border border-line bg-white p-4 text-sm"><div className="flex justify-between"><b className="font-medium">{r.author_name}</b><span className="flex">{[1, 2, 3, 4, 5].map((n) => <Star key={n} className={n <= r.rating ? "h-3.5 w-3.5 fill-amber-400 text-amber-400" : "h-3.5 w-3.5 text-line-strong"} />)}</span></div><p className="mt-1 text-ink-2">{r.comment}</p><p className="mt-1 text-xs text-ink-3">{r.route_label} · {formatDate(r.created_at)}</p></li>)}</ul></section>
       </div>
     </div>
   );

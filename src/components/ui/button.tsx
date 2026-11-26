@@ -15,7 +15,7 @@ const variants = {
 
 const sizes = {
   sm: "h-9 px-3 text-sm gap-1.5 rounded-md",
-  md: "h-11 px-4 text-[15px] gap-2 rounded-lg",
+  md: "h-11 px-4 text-base gap-2 rounded-lg",
   lg: "h-12 px-5 text-base gap-2 rounded-lg",
   xl: "h-14 px-6 text-base gap-2.5 rounded-xl",
   icon: "h-10 w-10 rounded-full",
@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <Comp
       ref={ref}
       className={cn(
-        "relative inline-flex select-none items-center justify-center whitespace-nowrap font-semibold tracking-[-0.01em] transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out",
+        "relative inline-flex select-none items-center justify-center whitespace-nowrap font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out",
         "active:scale-[0.98] disabled:pointer-events-none disabled:active:scale-100",
         variants[variant],
         sizes[size],

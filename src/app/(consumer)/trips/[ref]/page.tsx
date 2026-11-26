@@ -33,7 +33,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
     return (
       <div className="container-page max-w-lg py-12">
         <h1 className="text-2xl font-semibold">Verify it&apos;s your booking</h1>
-        <p className="mt-2 text-[15px] text-ink-3">For your privacy, confirm the email or phone number used for booking {b.reference}.</p>
+        <p className="mt-2 text-base text-ink-3">For your privacy, confirm the email or phone number used for booking {b.reference}.</p>
         <div className="mt-6"><FindBookingForm defaultReference={b.reference} /></div>
       </div>
     );
@@ -63,7 +63,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
               {sandbox && <Badge tone="warning">Sandbox payment</Badge>}
             </div>
             <h1 className="mt-2 flex items-center gap-2 text-2xl font-semibold sm:text-3xl">{seg0.trip.origin.cityName}<ArrowRight className="h-6 w-6 text-ink-3" />{seg0.trip.destination.cityName}</h1>
-            <p className="mt-1 text-[15px] text-ink-3 tabular">{formatDate(seg0.trip.departureAt, seg0.trip.tz, "long")} · {formatTime(seg0.trip.departureAt, seg0.trip.tz)} · {b.passengerCount} passenger{b.passengerCount > 1 ? "s" : ""}</p>
+            <p className="mt-1 text-base text-ink-3 tabular">{formatDate(seg0.trip.departureAt, seg0.trip.tz, "long")} · {formatTime(seg0.trip.departureAt, seg0.trip.tz)} · {b.passengerCount} passenger{b.passengerCount > 1 ? "s" : ""}</p>
             <CopyRef reference={b.reference} />
           </div>
           {upcoming && <DepartureCountdown iso={seg0.trip.departureAt} />}
@@ -112,7 +112,7 @@ export default async function TripPage({ params, searchParams }: { params: Promi
                   <Link href={`/trip/${s.trip.id}`} className="hidden text-sm font-semibold text-coral-700 sm:block">Trip details</Link>
                 </div>
                 <div className="mt-5"><JourneyLine trip={s.trip} /></div>
-                <div className="mt-5 grid gap-4 border-t border-line pt-5 text-[14px] sm:grid-cols-2">
+                <div className="mt-5 grid gap-4 border-t border-line pt-5 text-sm sm:grid-cols-2">
                   <div className="flex gap-3"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-500" /><div><p className="font-medium">{s.trip.origin.terminalName}</p><p className="text-ink-3">{s.trip.origin.address}</p></div></div>
                   <div className="flex gap-3"><Clock className="mt-0.5 h-4 w-4 shrink-0 text-navy-500" /><div><p className="font-medium">Boarding</p><p className="text-ink-3">Check in at the operator desk from {formatTime(new Date(new Date(s.trip.departureAt).getTime() - 45 * 60000), s.trip.tz)}. Departure is at {formatTime(s.trip.departureAt, s.trip.tz)}.</p></div></div>
                   <div className="flex gap-3"><Phone className="mt-0.5 h-4 w-4 shrink-0 text-navy-500" /><div><p className="font-medium">Operator contact</p><p className="text-ink-3">{s.trip.operator.name} support line (demo)</p></div></div>
@@ -129,8 +129,8 @@ export default async function TripPage({ params, searchParams }: { params: Promi
 
           <aside className="space-y-4">
             <Card className="p-5">
-              <h2 className="flex items-center gap-2 text-[15px] font-semibold"><ReceiptText className="h-4 w-4 text-ink-3" />Payment summary</h2>
-              <dl className="mt-3 space-y-2 text-[14px]">
+              <h2 className="flex items-center gap-2 text-base font-semibold"><ReceiptText className="h-4 w-4 text-ink-3" />Payment summary</h2>
+              <dl className="mt-3 space-y-2 text-sm">
                 <div className="flex justify-between"><dt className="text-ink-3">Fares</dt><dd className="tabular">{formatMoney(b.amounts.fareTotal)}</dd></div>
                 {b.amounts.seatCharges > 0 && <div className="flex justify-between"><dt className="text-ink-3">Premium seats</dt><dd className="tabular">{formatMoney(b.amounts.seatCharges)}</dd></div>}
                 {b.addons.map((a) => <div key={a.code} className="flex justify-between"><dt className="text-ink-3">{a.label}</dt><dd className="tabular">{formatMoney(a.total)}</dd></div>)}
@@ -139,12 +139,12 @@ export default async function TripPage({ params, searchParams }: { params: Promi
                 <div className="flex justify-between border-t border-line pt-2 font-semibold"><dt>Total</dt><dd className="tabular">{formatMoney(b.amounts.total)}</dd></div>
               </dl>
               {b.paidPayment && (
-                <p className="mt-3 flex items-center gap-2 text-[13px] text-ink-3"><CreditCard className="h-4 w-4" />{b.paidPayment.provider === "demo" ? "Sandbox" : b.paidPayment.provider} · {b.paidPayment.channel?.replace("_", " ") ?? "card"} · verified {b.paidPayment.verifiedAt && formatDate(b.paidPayment.verifiedAt)}</p>
+                <p className="mt-3 flex items-center gap-2 text-sm text-ink-3"><CreditCard className="h-4 w-4" />{b.paidPayment.provider === "demo" ? "Sandbox" : b.paidPayment.provider} · {b.paidPayment.channel?.replace("_", " ") ?? "card"} · verified {b.paidPayment.verifiedAt && formatDate(b.paidPayment.verifiedAt)}</p>
               )}
             </Card>
             <Card className="p-5">
-              <h2 className="text-[15px] font-semibold">Passengers</h2>
-              <ul className="mt-3 space-y-2.5 text-[14px]">
+              <h2 className="text-base font-semibold">Passengers</h2>
+              <ul className="mt-3 space-y-2.5 text-sm">
                 {b.passengers.map((p) => (
                   <li key={p.seq} className="flex justify-between gap-3">
                     <span className="truncate">{p.fullName}</span>
@@ -152,10 +152,10 @@ export default async function TripPage({ params, searchParams }: { params: Promi
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-[13px] text-ink-3">Contact: {b.contact.email}</p>
+              <p className="mt-3 text-sm text-ink-3">Contact: {b.contact.email}</p>
             </Card>
-            <Card className="p-5 text-[14px]">
-              <h2 className="text-[15px] font-semibold">Need help?</h2>
+            <Card className="p-5 text-sm">
+              <h2 className="text-base font-semibold">Need help?</h2>
               <p className="mt-1 text-ink-3">Goroada support can help with changes, refunds and anything on the road.</p>
               <div className="mt-3 flex flex-col gap-2">
                 <Button asChild variant="outline" size="sm"><Link href={`/help/contact?booking=${b.reference}`}>Contact Goroada support</Link></Button>

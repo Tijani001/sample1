@@ -71,7 +71,7 @@ export function Overlay({ open, onOpenChange, title, description, children, foot
           <div className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-line-strong" aria-hidden />
           <div className="flex items-center justify-between gap-4 px-5 pb-3 pt-3">
             <div>
-              <Drawer.Title className="text-[17px] font-semibold">{title}</Drawer.Title>
+              <Drawer.Title className="text-lg font-semibold">{title}</Drawer.Title>
               {description && <Drawer.Description className="mt-0.5 text-sm text-ink-3">{description}</Drawer.Description>}
             </div>
             <Drawer.Close className="-mr-2 grid h-10 w-10 place-items-center rounded-full text-ink-3 hover:bg-surface-2" aria-label="Close">
